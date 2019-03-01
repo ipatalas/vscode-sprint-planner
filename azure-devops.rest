@@ -1,0 +1,30 @@
+@apiVersionParam = api-version=5.0
+@apiVersionPreviewParam = api-version=5.0-preview.1
+
+
+# Get current iteration
+# @name currentIteration
+GET {{baseUrl}}/work/teamsettings/iterations?$timeframe=current&{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+
+###
+
+@iterationId = {{currentIteration.response.body.$.value[0].id}}
+
+### Get iteration work items
+# User Story is an item with rel == null
+GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}/workitems?{{apiVersionPreviewParam}}
+Authorization: Basic PAT {{token}}
+
+
+
+### Get titles of User stories
+GET {{baseUrl}}/wit/workitems?ids=1,13,14,17&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
+Authorization: Basic PAT {{token}}
+
+###
+# Microsoft.VSTS.Scheduling.RemainingWork
+# Microsoft.VSTS.Scheduling.OriginalEstimate
+
+# Add work item: https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/create?view=azure-devops-rest-5.0
+# Add link https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0#add_a_link
