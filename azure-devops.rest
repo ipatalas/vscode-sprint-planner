@@ -23,8 +23,63 @@ GET {{baseUrl}}/wit/workitems?ids=1,13,14,17&{{apiVersionParam}}&fields=System.T
 Authorization: Basic PAT {{token}}
 
 ###
+
+GET {{baseUrl}}/wit/workitemrelationtypes?api-version=5.0
+Authorization: Basic PAT {{token}}
+
+###
 # Microsoft.VSTS.Scheduling.RemainingWork
 # Microsoft.VSTS.Scheduling.OriginalEstimate
+
+POST {{baseUrl}}/wit/workitems/$Task?{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+Content-Type: application/json-patch+json
+
+[
+	{
+		"op": "add",
+		"path": "/fields/System.Title",
+		"value": "New sample task"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.AreaPath",
+		"value": "IDEAapp_2018"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.TeamProject",
+		"value": "IDEAapp_2018"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.IterationPath",
+		"value": "IDEAapp_2018\\Iteration 1"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/Microsoft.VSTS.Common.Activity",
+		"value": "Development"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/Microsoft.VSTS.Scheduling.RemainingWork",
+		"value": 7
+  	},
+	{
+		"op": "add",
+		"path": "/fields/Microsoft.VSTS.Scheduling.OriginalEstimate",
+		"value": 7
+  	},
+	{
+		"op": "add",
+		"path": "/relations/-",
+		"value": {
+			"rel": "System.LinkTypes.Hierarchy-Reverse",
+			"url": "https://dev.azure.com/ipatalas0593/_apis/wit/workItems/13"
+		}
+	}
+]
 
 # Add work item: https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/create?view=azure-devops-rest-5.0
 # Add link https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0#add_a_link
