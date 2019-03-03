@@ -7,17 +7,31 @@
 		"vscode": "^1.31.0"
 	},
 	"categories": [
-		"Other"
+		"Other",
+		"Snippets"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:sprintplanner.publish",
+		"onLanguage:planner"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"languages": [
+			{
+				"id": "planner",
+				"extensions": [
+					".plan"
+				],
+				"aliases": [
+					"planner"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "sprintplanner.publish",
+				"title": "Publish planning"
 			}
 		]
 	},
