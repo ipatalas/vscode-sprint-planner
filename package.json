@@ -33,6 +33,12 @@
 				"command": "sprintplanner.publish",
 				"title": "Publish planning"
 			}
+		],
+		"snippets": [
+			{
+				"language": "planner",
+				"path": "./snippets/planner.json"
+			}
 		]
 	},
 	"scripts": {
