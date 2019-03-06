@@ -1,3 +1,4 @@
+export const UserStoryPrefix = 'US#';
 export const UserStoryRegex = /^US#(\d+)/;
 export const EndOfUserStoryRegex = /^(---|\s*)$/;
 

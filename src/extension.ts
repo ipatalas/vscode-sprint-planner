@@ -2,6 +2,9 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vsc from 'vscode';
 import { publish as publish_command } from './commands/publish';
+import { UserStoryCompletionProvider } from './providers/userStoryCompletionProvider';
+import { SessionStore } from './store';
+import { AzureClient } from './utils/azure-client';
 
 const documentSelector = [
 	{ language: 'planner', scheme: 'file' },
@@ -11,9 +14,11 @@ const documentSelector = [
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vsc.ExtensionContext) {
-	let disposable = vsc.commands.registerCommand('sprintplanner.publish', () => publish_command());
+	const azureClient = new AzureClient();
+	const sessionStore = new SessionStore(azureClient);
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(vsc.commands.registerCommand('sprintplanner.publish', () => publish_command()));
+	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore), '#'));
 }
 
 // this method is called when your extension is deactivated
