@@ -8,8 +8,12 @@ GET {{baseUrl}}/work/teamsettings/iterations?$timeframe=current&{{apiVersionPara
 Authorization: Basic PAT {{token}}
 
 ###
-
 @iterationId = {{currentIteration.response.body.$.value[0].id}}
+
+### Get iteration info
+GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}?{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+
 
 ### Get iteration work items
 # User Story is an item with rel == null
