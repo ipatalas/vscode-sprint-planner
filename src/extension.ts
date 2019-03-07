@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vsc from 'vscode';
-import { publish as publish_command } from './commands/publish';
+import { PublishCommand } from './commands/publish';
 import { UserStoryCompletionProvider } from './providers/userStoryCompletionProvider';
 import { SessionStore } from './store';
 import { AzureClient } from './utils/azure-client';
@@ -19,7 +19,9 @@ export function activate(context: vsc.ExtensionContext) {
 	const azureClient = new AzureClient();
 	const sessionStore = new SessionStore(azureClient);
 
-	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, (line: number) => publish_command(line)));
+	const publishCommand = new PublishCommand(sessionStore, azureClient);
+
+	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand));
 	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore), '#'));
 	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));
 }
