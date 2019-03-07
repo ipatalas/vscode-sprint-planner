@@ -1,18 +1,46 @@
 import * as vsc from 'vscode';
-import { Commands } from '../constants';
+import { Commands, NewLineRegex } from '../constants';
+import { TextProcessor } from '../utils/textProcessor';
+import { Task } from '../models/task';
 
 export class PublishCodeLensProvider implements vsc.CodeLensProvider {
 	provideCodeLenses(document: vsc.TextDocument, token: vsc.CancellationToken): vsc.ProviderResult<vsc.CodeLens[]> {
-		console.log("Refresh code lens")
+		console.log("Refresh code lens");
 
-		return [
-			new vsc.CodeLens(
-				new vsc.Range(0, 0, 4, 0),
+		const editor = vsc.window.activeTextEditor!;
+		const lines = editor.document.getText().split(NewLineRegex);
+
+		const userStoryLines = TextProcessor.getUserStoryLineIndices(lines);
+
+		return userStoryLines.map(line => {
+			const us = TextProcessor.getUserStory(lines, line)!;
+
+			return new vsc.CodeLens(
+				new vsc.Range(line, 0, line, lines[line].length),
 				{
-					title: "Publish to Azure DevOps, 3 tasks (24h)",
-					command: Commands.publish
+					title: `Publish to Azure DevOps, ${this.buildExtraInfo(us)}`,
+					command: Commands.publish,
+					arguments: [line]
 				}
-			)
-		]
+			);
+		});
+	}
+
+	private buildExtraInfo({tasks}: {tasks: Task[]}) {
+		const totalHours =
+			tasks.filter(t => t.estimation)
+				 .map(t => t.estimation!)
+				 .reduce((sum, hours) => {
+					 sum += hours;
+					 return sum;
+				}, 0);
+
+		if (tasks.length == 0) {
+			return 'no tasks';
+		}
+
+		const tasksText = tasks.length == 1 ? 'task' : 'tasks';
+
+		return `${tasks.length} ${tasksText} (${totalHours}h)`;
 	}
 }

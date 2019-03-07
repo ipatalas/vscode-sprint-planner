@@ -19,7 +19,7 @@ export function activate(context: vsc.ExtensionContext) {
 	const azureClient = new AzureClient();
 	const sessionStore = new SessionStore(azureClient);
 
-	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, () => publish_command()));
+	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, (line: number) => publish_command(line)));
 	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore), '#'));
 	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));
 }

@@ -3,6 +3,18 @@ import { Task } from '../models/task';
 
 export class TextProcessor {
 
+	public static getUserStoryLineIndices(allLines: string[]) {
+		const results: number[] = [];
+
+		for (let i = 0; i < allLines.length; i++) {
+			if (Constants.UserStoryRegex.test(allLines[i])) {
+				results.push(i);
+			}
+		}
+
+		return results;
+	}
+
 	public static getUserStory(allLines: string[], currentLine: number) {
 		const userStoryInfo = TextProcessor.getUserStoryInfo(allLines, currentLine);
 		if (!userStoryInfo) {
