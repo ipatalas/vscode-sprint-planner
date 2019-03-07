@@ -83,10 +83,15 @@ export class AzureClient {
 			this.addOperation('/fields/System.TeamProject', task.teamProject),
 			this.addOperation('/fields/System.IterationPath', task.iterationPath),
 			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity),
-			this.addOperation('/fields/Microsoft.VSTS.Scheduling.RemainingWork', task.estimation),
-			this.addOperation('/fields/Microsoft.VSTS.Scheduling.OriginalEstimate', task.estimation),
 			this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl)),
 		];
+
+		if (task.estimation) {
+			request.push(...[
+				this.addOperation('/fields/Microsoft.VSTS.Scheduling.RemainingWork', task.estimation),
+				this.addOperation('/fields/Microsoft.VSTS.Scheduling.OriginalEstimate', task.estimation)
+			]);
+		}
 
 		return this.client.post<WorkItemCreatedResponse>(
 			'/wit/workitems/$Task', request, {
@@ -138,6 +143,6 @@ export interface TaskInfo {
 	teamProject: string;
 	iterationPath: string;
 	activity: string;
-	estimation: number;
+	estimation?: number;
 	userStoryUrl: string;
 }
