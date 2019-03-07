@@ -1,3 +1,5 @@
+export const NewLineRegex = /\r?\n/g;
+
 export const UserStoryPrefix = 'US#';
 export const UserStoryRegex = /^US#(\d+)/;
 export const EndOfUserStoryRegex = /^(---|\s*)$/;
