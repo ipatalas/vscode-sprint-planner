@@ -1,0 +1,25 @@
+{
+	"scopeName": "source.planner",
+	"patterns": [{ "include": "#expression" }],
+	"repository": {
+		"expression": {
+			"patterns": [
+				{ "include": "#user-story-id" },
+				{ "include": "#estimation" },
+				{ "include": "#task" }
+			]
+		},
+		"user-story-id": {
+			"match": "^US#\\d+",
+			"name": "entity.name.function"
+		},
+		"estimation": {
+			"match": "\\d+h",
+			"name": "constant.numeric"
+		},
+		"task": {
+			"match": "^- .*?(?=,|$)",
+			"name": "string.unquoted"
+		}
+	}
+}

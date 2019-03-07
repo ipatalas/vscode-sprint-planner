@@ -28,6 +28,13 @@
 				"configuration": "./language-configuration.json"
 			}
 		],
+		"grammars": [
+			{
+				"language": "planner",
+				"scopeName": "source.planner",
+				"path": "./syntaxes/planner.tmGrammar.json"
+			}
+		],
 		"commands": [
 			{
 				"command": "sprintplanner.publish",
