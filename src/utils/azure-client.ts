@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
-import { WorkItemInfoResult } from '../models/azure-client/workItems';
+import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
 
 export class AzureClient {
 
@@ -67,12 +67,48 @@ export class AzureClient {
 		return result.data.value.map(x => (
 			<UserStoryInfo>{
 				id: x.id,
+				url: x.url,
 				title: x.fields["System.Title"],
 				areaPath: x.fields["System.AreaPath"],
 				teamProject: x.fields["System.TeamProject"],
 				iterationPath: x.fields["System.IterationPath"],
 			}
 		));
+	}
+
+	public createTask(task: TaskInfo): Promise<number> {
+		const request = [
+			this.addOperation('/fields/System.Title', task.title),
+			this.addOperation('/fields/System.AreaPath', task.areaPath),
+			this.addOperation('/fields/System.TeamProject', task.teamProject),
+			this.addOperation('/fields/System.IterationPath', task.iterationPath),
+			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity),
+			this.addOperation('/fields/Microsoft.VSTS.Scheduling.RemainingWork', task.estimation),
+			this.addOperation('/fields/Microsoft.VSTS.Scheduling.OriginalEstimate', task.estimation),
+			this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl)),
+		];
+
+		return this.client.post<WorkItemCreatedResponse>(
+			'/wit/workitems/$Task', request, {
+				headers: {
+					'Content-Type': 'application/json-patch+json'
+				}
+			}).then(res => res.data.id);
+	}
+
+	private addOperation(path: string, value: any) {
+		return {
+			op: 'add',
+			path,
+			value
+		}
+	}
+
+	private userStoryLink(url: string) {
+		return {
+			rel: "System.LinkTypes.Hierarchy-Reverse",
+			url
+		}
 	}
 }
 
@@ -89,8 +125,19 @@ export interface UserStoryIdentifier {
 
 export interface UserStoryInfo {
 	id: number;
+	url: string;
 	title: string;
 	areaPath: string;
 	teamProject: string;
 	iterationPath: string;
+}
+
+export interface TaskInfo {
+	title: string;
+	areaPath: string;
+	teamProject: string;
+	iterationPath: string;
+	activity: string;
+	estimation: number;
+	userStoryUrl: string;
 }

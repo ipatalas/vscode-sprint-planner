@@ -15,3 +15,9 @@ export interface WorkItemFields {
 	"System.IterationPath": string;
 	"System.Title":         string;
 }
+
+export interface WorkItemCreatedResponse {
+	id:        number;
+	rev:       number;
+	url:       string;
+}
