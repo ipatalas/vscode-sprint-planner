@@ -98,7 +98,11 @@ export class AzureClient {
 				headers: {
 					'Content-Type': 'application/json-patch+json'
 				}
-			}).then(res => res.data.id);
+			}).then(res => res.data.id)
+			.catch(err => {
+				console.error(err);
+				return -1;
+			});
 	}
 
 	private addOperation(path: string, value: any) {
