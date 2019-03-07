@@ -5,6 +5,8 @@ import { publish as publish_command } from './commands/publish';
 import { UserStoryCompletionProvider } from './providers/userStoryCompletionProvider';
 import { SessionStore } from './store';
 import { AzureClient } from './utils/azure-client';
+import { Commands } from './constants';
+import { PublishCodeLensProvider } from './providers/publishCodeLensProvider';
 
 const documentSelector = [
 	{ language: 'planner', scheme: 'file' },
@@ -17,8 +19,9 @@ export function activate(context: vsc.ExtensionContext) {
 	const azureClient = new AzureClient();
 	const sessionStore = new SessionStore(azureClient);
 
-	context.subscriptions.push(vsc.commands.registerCommand('sprintplanner.publish', () => publish_command()));
+	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, () => publish_command()));
 	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore), '#'));
+	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));
 }
 
 // this method is called when your extension is deactivated
