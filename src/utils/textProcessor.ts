@@ -1,5 +1,6 @@
 import * as Constants from '../constants';
 import { Task } from '../models/task';
+import { EOL } from "os";
 
 export class TextProcessor {
 
@@ -53,24 +54,33 @@ export class TextProcessor {
 		}
 
 		if (firstTaskLine <= lastTaskLine) {
-			return lines.slice(firstTaskLine, lastTaskLine + 1).map(TextProcessor.getTask);
+			const taskLines = lines
+				.slice(firstTaskLine, lastTaskLine + 1)
+				.join(EOL)
+				.split(Constants.TaskLinesSplitter);
+
+			return taskLines.map(this.getTask)
 		}
 
 		return [];
 	}
 
-	private static getTask(line: string): Task {
+	private static getTask(taskLine: string): Task {
+		let [title, ...description] = taskLine.split(EOL);
+
 		const task = <Task>{};
 
-		line = line.replace(Constants.TaskPrefixRegex, '');
+		title = title.replace(Constants.TaskPrefixRegex, '');
 
-		const match = line.match(Constants.TaskEstimationRegex);
+		const match = title.match(Constants.TaskEstimationRegex);
 		if (match != null) {
 			task.estimation = parseInt(match.groups!.estimation);
-			line = line.replace(match[0], '');
+			title = title.replace(match[0], '');
 		}
 
-		task.title = line;
+		task.title = title;
+		task.description = description.map(d => d.trimLeft());
+
 		return task;
 	}
 

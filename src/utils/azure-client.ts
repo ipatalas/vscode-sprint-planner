@@ -95,6 +95,10 @@ export class AzureClient {
 			this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl)),
 		];
 
+		if (task.description && task.description.length > 0) {
+			request.push(this.addOperation('/fields/System.Description', `<div>${task.description.join("</div><div>")}</div>`));
+		}
+
 		if (task.estimation) {
 			request.push(...[
 				this.addOperation('/fields/Microsoft.VSTS.Scheduling.RemainingWork', task.estimation),
@@ -159,6 +163,7 @@ export interface UserStoryInfo {
 
 export interface TaskInfo {
 	title: string;
+	description?: string[];
 	areaPath: string;
 	teamProject: string;
 	iterationPath: string;

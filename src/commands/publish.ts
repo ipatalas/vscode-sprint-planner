@@ -27,7 +27,7 @@ export class PublishCommand {
 			return console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
 		}
 
-		const requests = us.tasks.map(t => this.buildCreateTaskRequest(t, userStoryInfo));
+		const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo));
 
 		await Promise.all(requests.map(r => this.client.createTask(r)));
 
@@ -36,9 +36,10 @@ export class PublishCommand {
 		vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id}`);
 	}
 
-	private buildCreateTaskRequest(task: Task, userStory: UserStoryInfo): TaskInfo {
+	private buildTaskInfo(task: Task, userStory: UserStoryInfo): TaskInfo {
 		return {
 			title: task.title,
+			description: task.description,
 			areaPath: userStory.areaPath,
 			teamProject: userStory.teamProject,
 			iterationPath: userStory.iterationPath,
