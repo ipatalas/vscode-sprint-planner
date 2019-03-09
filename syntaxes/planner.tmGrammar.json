@@ -6,6 +6,7 @@
 			"patterns": [
 				{ "include": "#user-story-id" },
 				{ "include": "#estimation" },
+				{ "include": "#task-description" },
 				{ "include": "#task" }
 			]
 		},
@@ -16,6 +17,10 @@
 		"estimation": {
 			"match": "\\d+h",
 			"name": "constant.numeric"
+		},
+		"task-description": {
+			"match": "^\t.*",
+			"name": "comment.line"
 		},
 		"task": {
 			"match": "^- .*?(?=,|$)",
