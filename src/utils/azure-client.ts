@@ -1,4 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
+import prettyHrtime = require('pretty-hrtime');
+
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
 import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
@@ -101,6 +103,7 @@ export class AzureClient {
 		}
 
 		this.logger.log(`Creating task: ${task.title}...`);
+		let time = process.hrtime();
 
 		return this.client.post<WorkItemCreatedResponse>(
 			'/wit/workitems/$Task', request, {
@@ -108,7 +111,8 @@ export class AzureClient {
 					'Content-Type': 'application/json-patch+json'
 				}
 			}).then(res => {
-				this.logger.log(`Task '${task.title}' created`);
+				time = process.hrtime(time);
+				this.logger.log(`#${res.data.id} Task '${task.title}' created (${prettyHrtime(time)})`);
 				return res.data.id;
 			})
 			.catch(err => {
