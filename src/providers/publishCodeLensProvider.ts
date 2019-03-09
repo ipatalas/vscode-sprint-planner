@@ -4,9 +4,7 @@ import { TextProcessor } from '../utils/textProcessor';
 import { Task } from '../models/task';
 
 export class PublishCodeLensProvider implements vsc.CodeLensProvider {
-	provideCodeLenses(document: vsc.TextDocument, token: vsc.CancellationToken): vsc.ProviderResult<vsc.CodeLens[]> {
-		console.log("Refresh code lens");
-
+	provideCodeLenses(_document: vsc.TextDocument, _token: vsc.CancellationToken): vsc.ProviderResult<vsc.CodeLens[]> {
 		const editor = vsc.window.activeTextEditor!;
 		const lines = editor.document.getText().split(NewLineRegex);
 

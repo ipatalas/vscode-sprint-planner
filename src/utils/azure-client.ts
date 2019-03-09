@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
 import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
+import { Logger } from './logger';
 
 export class AzureClient {
 
@@ -13,7 +14,7 @@ export class AzureClient {
 
 	client: AxiosInstance;
 
-	constructor() {
+	constructor(private logger: Logger) {
 		this.client = axios.create({
 			baseURL: this._baseUrl,
 			auth: {
@@ -27,6 +28,8 @@ export class AzureClient {
 	}
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {
+		this.logger.log('Getting current iteration info...');
+
 		const result = await this.client.get<IterationsResult>("/work/teamsettings/iterations?$timeframe=current");
 
 		if (result.data.count > 0) {
@@ -42,6 +45,8 @@ export class AzureClient {
 	}
 
 	public async getIterationUserStories(iterationId: string): Promise<UserStoryIdentifier[]> {
+		this.logger.log('Getting user stories for iteration...');
+
 		const result = await this.client.get<IterationWorkItemsResult>(`/work/teamsettings/iterations/${iterationId}/workitems`, {
 			params: {
 				...this._apiVersionPreview
@@ -57,6 +62,8 @@ export class AzureClient {
 	}
 
 	public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
+		this.logger.log('Getting user story info...');
+
 		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', {
 			params: {
 				ids: userStoryIds.join(','),
@@ -93,12 +100,17 @@ export class AzureClient {
 			]);
 		}
 
+		this.logger.log(`Creating task: ${task.title}...`);
+
 		return this.client.post<WorkItemCreatedResponse>(
 			'/wit/workitems/$Task', request, {
 				headers: {
 					'Content-Type': 'application/json-patch+json'
 				}
-			}).then(res => res.data.id)
+			}).then(res => {
+				this.logger.log(`Task '${task.title}' created`);
+				return res.data.id;
+			})
 			.catch(err => {
 				console.error(err);
 				return -1;

@@ -1,12 +1,13 @@
 import * as prettyHrTime from 'pretty-hrtime';
 import * as vsc from 'vscode';
 import { UserStoryInfo, AzureClient, IterationInfo } from './utils/azure-client';
+import { Logger } from './utils/logger';
 
 export class SessionStore implements ISessionStore {
 	public currentIteration!: IterationInfo;
 	public userStories?: UserStoryInfo[] = undefined;
 
-	constructor(private azureClient: AzureClient) {
+	constructor(private azureClient: AzureClient, private logger: Logger) {
 	}
 
 	async ensureHasUserStories(): Promise<void> {
@@ -20,6 +21,7 @@ export class SessionStore implements ISessionStore {
 		this.userStories = await this.azureClient.getUserStoryInfo(usIdentifiers.map(x => x.id));
 
 		total = process.hrtime(total);
+		this.logger.log(`User stories fetched in ${prettyHrTime(total)} (3 requests)`);
 		vsc.window.setStatusBarMessage(`User stories fetched in ${prettyHrTime(total)} (3 requests)`, 2000);
 
 		return Promise.resolve();
