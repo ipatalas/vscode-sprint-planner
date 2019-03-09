@@ -23,7 +23,7 @@
 			"name": "comment.line"
 		},
 		"task": {
-			"match": "^- .*?(?=,|$)",
+			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,|$)",
 			"name": "string.unquoted"
 		}
 	}
