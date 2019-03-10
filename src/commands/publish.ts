@@ -27,16 +27,22 @@ export class PublishCommand {
 			return console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
 		}
 
-		const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo));
+		const taskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
+		const maxStackRank = await this.client.getMaxTaskStackRank(taskIds);
+
+		const requests = us.tasks.map((t, i) => this.buildTaskInfo(t, userStoryInfo, maxStackRank + i + 1));
 
 		await Promise.all(requests.map(r => this.client.createTask(r)));
-
-		console.table(us.tasks);
 
 		vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id}`);
 	}
 
-	private buildTaskInfo(task: Task, userStory: UserStoryInfo): TaskInfo {
+	private extractTaskId(url: string): number | null {
+		const m = Constants.WorkItemIdFromUrl.exec(url);
+		return m && parseInt(m[1]);
+	}
+
+	private buildTaskInfo(task: Task, userStory: UserStoryInfo, stackRank: number): TaskInfo {
 		return {
 			title: task.title,
 			description: task.description,
@@ -46,6 +52,7 @@ export class PublishCommand {
 			activity: 'Development',
 			estimation: task.estimation,
 			userStoryUrl: userStory.url,
+			stackRank: stackRank
 		};
 	}
 }

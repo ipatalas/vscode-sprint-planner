@@ -66,12 +66,12 @@ export class AzureClient {
 	public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
 		this.logger.log('Getting user story info...');
 
-		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', {
-			params: {
-				ids: userStoryIds.join(','),
-				fields: ['System.Title', 'System.AreaPath', 'System.TeamProject', 'System.IterationPath'].join(',')
-			}
-		});
+		const params = <any>{
+			ids: userStoryIds.join(','),
+			'$expand': 'Relations'
+		};
+
+		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
 
 		return result.data.value.map(x => (
 			<UserStoryInfo>{
@@ -81,8 +81,26 @@ export class AzureClient {
 				areaPath: x.fields["System.AreaPath"],
 				teamProject: x.fields["System.TeamProject"],
 				iterationPath: x.fields["System.IterationPath"],
+				taskUrls: x.relations && x.relations.filter(r => r.rel == 'System.LinkTypes.Hierarchy-Forward').map(r => r.url)
 			}
 		));
+	}
+
+	public async getMaxTaskStackRank(taskIds: number[], ): Promise<number> {
+		this.logger.log('Getting max stack rank for tasks...');
+
+		const params = <any>{
+			ids: taskIds.join(','),
+			fields: ['Microsoft.VSTS.Common.StackRank'].join(',')
+		};
+
+		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
+		const stackRanks = result.data.value.map(t => t.fields["Microsoft.VSTS.Common.StackRank"]);
+
+		return stackRanks.reduce((acc, current) => {
+			acc = Math.max(acc, current);
+			return acc;
+		}, 0)
 	}
 
 	public createTask(task: TaskInfo): Promise<number> {
@@ -92,6 +110,7 @@ export class AzureClient {
 			this.addOperation('/fields/System.TeamProject', task.teamProject),
 			this.addOperation('/fields/System.IterationPath', task.iterationPath),
 			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity),
+			this.addOperation('/fields/Microsoft.VSTS.Common.StackRank', task.stackRank),
 			this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl)),
 		];
 
@@ -159,6 +178,7 @@ export interface UserStoryInfo {
 	areaPath: string;
 	teamProject: string;
 	iterationPath: string;
+	taskUrls: string[];
 }
 
 export interface TaskInfo {
@@ -170,4 +190,5 @@ export interface TaskInfo {
 	activity: string;
 	estimation?: number;
 	userStoryUrl: string;
+	stackRank: number;
 }
