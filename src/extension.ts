@@ -21,13 +21,13 @@ export function activate(context: vsc.ExtensionContext) {
 	const logger = new Logger();
 	const config = new Configuration(logger);
 	const azureClient = new AzureClient(config, logger);
-	const sessionStore = new SessionStore(azureClient, logger);
+	const sessionStore = new SessionStore(azureClient, config, logger);
 
-	const publishCommand = new PublishCommand(sessionStore, azureClient);
+	const publishCommand = new PublishCommand(sessionStore, azureClient, logger);
 
 	context.subscriptions.push(logger, config);
 	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand));
-	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore), '#'));
+	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'));
 	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));
 }
 

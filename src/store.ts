@@ -2,17 +2,22 @@ import * as vsc from 'vscode';
 import { UserStoryInfo, AzureClient, IterationInfo } from './utils/azure-client';
 import { Logger } from './utils/logger';
 import { Stopwatch } from './utils/stopwatch';
+import { Configuration } from './utils/config';
 
 export class SessionStore implements ISessionStore {
 	public currentIteration!: IterationInfo;
 	public userStories?: UserStoryInfo[] = undefined;
 
-	constructor(private azureClient: AzureClient, private logger: Logger) {
+	constructor(private azureClient: AzureClient, private config: Configuration, private logger: Logger) {
 	}
 
 	async ensureHasUserStories(): Promise<void> {
 		if (this.currentIteration && this.userStories !== undefined) {
 			return Promise.resolve();
+		}
+
+		if (!this.config.isValid) {
+			return Promise.reject("Missing URL or token in configuration");
 		}
 
 		try {
@@ -25,8 +30,8 @@ export class SessionStore implements ISessionStore {
 			this.logger.log(`User stories fetched in ${total.toString()} (3 requests)`);
 			vsc.window.setStatusBarMessage(`User stories fetched in ${total.toString()} (3 requests)`, 2000);
 		} catch (err) {
-			this.logger.log(`[Error] ${err.message}`);
-			this.logger.log(`[Error] ${err.response.data.message}`);
+			this.logger.log(`[Error] ${err.message || err}`);
+			err.response && this.logger.log(`[Error] ${err.response.data.message}`);
 			return Promise.reject();
 		}
 

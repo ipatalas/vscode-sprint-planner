@@ -14,6 +14,10 @@ export class Configuration implements vsc.Disposable {
 		return this._onDidChange.event;
 	}
 
+	get isValid() {
+		return this.url && this.token;
+	}
+
 	constructor(logger: Logger) {
 		this._onDidChange = new vsc.EventEmitter<Configuration>();
 

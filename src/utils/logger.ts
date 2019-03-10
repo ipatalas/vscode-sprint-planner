@@ -4,19 +4,30 @@ import { Stopwatch } from './stopwatch';
 export class Logger implements vsc.Disposable {
 	private logger: vsc.OutputChannel;
 
+	private isLineStillOpen = false;
+
 	constructor() {
 		this.logger = vsc.window.createOutputChannel('Azure DevOps planner');
 	}
 
 	public log(text: string, appendLine: boolean = true) {
+		if (this.isLineStillOpen) {
+			this.logger.appendLine('');
+			this.isLineStillOpen = false;
+		}
+
 		let message = `[${this.buildTimestamp()}] ${text}`;
 
 		if (appendLine) {
 			this.logger.appendLine(message);
 		} else {
 			this.logger.append(message);
+			this.isLineStillOpen = true;
 
-			return (text: string) => this.logger.appendLine(text);
+			return (text: string) => {
+				this.logger.appendLine(text);
+				this.isLineStillOpen = false;
+			}
 		}
 	}
 

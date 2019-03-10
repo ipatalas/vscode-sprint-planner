@@ -36,14 +36,15 @@ export class AzureClient implements vsc.Disposable {
 		url += '_apis/';
 
 		this.client = axios.create({
-			baseURL: config.url,
+			baseURL: url,
 			auth: {
 				username: "PAT",
 				password: config.token || ""
 			},
 			params: {
 				'api-version': "5.0"
-			}
+			},
+			validateStatus: status => status == 200 // Azure returns 203 when auth is incorrect
 		});
 	}
 

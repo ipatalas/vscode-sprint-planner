@@ -1,9 +1,10 @@
 import * as vsc from 'vscode';
 import { ISessionStore } from '../store';
 import { UserStoryPrefix } from '../constants';
+import { Logger } from '../utils/logger';
 
 export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
-	constructor(private sessionStore: ISessionStore) {
+	constructor(private sessionStore: ISessionStore, private logger: Logger) {
 	}
 
 	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext) {
@@ -15,15 +16,23 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 		const text = document.getText(range);
 
 		if (text == UserStoryPrefix) {
-			await this.sessionStore.ensureHasUserStories();
+			try {
+				await this.sessionStore.ensureHasUserStories();
 
-			if (this.sessionStore.userStories) {
-				return this.sessionStore.userStories.map(us => {
-					const item = new vsc.CompletionItem(`${us.id} - ${us.title}`, vsc.CompletionItemKind.Unit);
-					item.sortText = us.title;
+				if (this.sessionStore.userStories) {
+					return this.sessionStore.userStories.map(us => {
+						const item = new vsc.CompletionItem(`${us.id} - ${us.title}`, vsc.CompletionItemKind.Unit);
+						item.sortText = us.title;
 
-					return item;
-				});
+						return item;
+					});
+				}
+			} catch (err) {
+				if (typeof err === 'string') {
+					vsc.window.showErrorMessage(err);
+				} else if (err) {
+					this.logger.log(JSON.stringify(err));
+				}
 			}
 		}
 
