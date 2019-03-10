@@ -1,7 +1,7 @@
 {
 	"name": "vscode-sprint-planner",
 	"displayName": "Azure DevOps planner",
-	"description": "",
+	"description": "Azure DevOps planner",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.31.0"

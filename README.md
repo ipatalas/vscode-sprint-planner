@@ -1,65 +1,36 @@
-# vscode-sprint-planner README
+# Azure DevOps planner
 
-This is the README for your extension "vscode-sprint-planner". After writing up a brief description, we recommend including the following sections.
+This extension features ability to export a planning session into Azure DevOps system. Planning in Azure DevOps itself is hard, way too much clicking. It's so much easier to just type all the tasks in a simple text form and then just export them.
 
-## Features
+## Usage
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+To start a planning session open a new file in vscode and change the language to `planner` (_Change Language mode_ command). This should enable the extension and all its features.
 
-For example if there is an image subfolder under your extension project workspace:
+Before you can start you have to configure connection to your Azure DevOps account. For that you will need a URL and a token for authentication. For details please check the [Configuration](#configuration).
 
-\!\[feature X\]\(images/feature-x.png\)
+Now it's time to start planning your first story. You can start by typing `US#` to get an autocomplete for user stories of current sprint:
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![user story autocomplete](images/planner-1.gif)
 
-## Requirements
+Then it's time to enter some tasks in the following manner:
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![user story autocomplete](images/planner-tasks.png)
 
-## Extension Settings
+> Tip: tasks don't necesarilly have to be prepended with a hyphen but it makes it look better
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The image should be pretty self-explanatory I hope. The numbers following the tasks are estimations. They will be filled in both **Original** and **Remaining Estimation** field in Azure DevOps.
 
-For example:
+At this point there is a Code Lens action above the user story that lets you publish the changes. Check it out. In case of something is not working just open Output panel and pick `Azure DevOps planner` channel to see what might be wrong. If it's not obvious just raise an issue.
+
+## Configuration
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `planner.url`: URL to your Azure DevOps team project (https://dev.azure.com/{organization}/{project}/)
+* `planner.token`: Authentication token (https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops)
 
-## Known Issues
+## Known issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This is a very early stage of development so don't expect everything to work.
+Some stuff is hardcoded for now like the Activity under which the tasks are created. It's always `Development` now.
+Additionally you should not publish your tasks partially just to update them later. They will get duplicated since it's always _Push All_ now.
