@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
-import prettyHrtime = require('pretty-hrtime');
 
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
 import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
 import { Logger } from './logger';
+import { Stopwatch } from './stopwatch';
 
 export class AzureClient {
 
@@ -30,9 +30,9 @@ export class AzureClient {
 	}
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {
-		this.logger.log('Getting current iteration info...');
-
+		const finish = this.logger.perf('Getting current iteration info...');
 		const result = await this.client.get<IterationsResult>("/work/teamsettings/iterations?$timeframe=current");
+		finish();
 
 		if (result.data.count > 0) {
 			const iteration = result.data.value[0];
@@ -47,13 +47,14 @@ export class AzureClient {
 	}
 
 	public async getIterationUserStories(iterationId: string): Promise<UserStoryIdentifier[]> {
-		this.logger.log('Getting user stories for iteration...');
-
+		const finish = this.logger.perf('Getting user stories for iteration...');
 		const result = await this.client.get<IterationWorkItemsResult>(`/work/teamsettings/iterations/${iterationId}/workitems`, {
 			params: {
 				...this._apiVersionPreview
 			}
 		});
+
+		finish();
 
 		return result.data.workItemRelations.filter(x => x.rel == null).map(x => (
 			<UserStoryIdentifier>{
@@ -64,7 +65,7 @@ export class AzureClient {
 	}
 
 	public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
-		this.logger.log('Getting user story info...');
+		const finish = this.logger.perf('Getting user story info...');
 
 		const params = <any>{
 			ids: userStoryIds.join(','),
@@ -72,6 +73,7 @@ export class AzureClient {
 		};
 
 		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
+		finish();
 
 		return result.data.value.map(x => (
 			<UserStoryInfo>{
@@ -87,7 +89,7 @@ export class AzureClient {
 	}
 
 	public async getMaxTaskStackRank(taskIds: number[], ): Promise<number> {
-		this.logger.log('Getting max stack rank for tasks...');
+		const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
 			ids: taskIds.join(','),
@@ -97,10 +99,16 @@ export class AzureClient {
 		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
 		const stackRanks = result.data.value.map(t => t.fields["Microsoft.VSTS.Common.StackRank"]);
 
-		return stackRanks.reduce((acc, current) => {
+		finish();
+
+		const max = stackRanks.reduce((acc, current) => {
 			acc = Math.max(acc, current);
 			return acc;
-		}, 0)
+		}, 0);
+
+		this.logger.log(`Max Stack Rank: ${max}`);
+
+		return max;
 	}
 
 	public createTask(task: TaskInfo): Promise<number> {
@@ -126,7 +134,7 @@ export class AzureClient {
 		}
 
 		this.logger.log(`Creating task: ${task.title}...`);
-		let time = process.hrtime();
+		let stopwatch = Stopwatch.startNew();
 
 		return this.client.post<WorkItemCreatedResponse>(
 			'/wit/workitems/$Task', request, {
@@ -134,8 +142,7 @@ export class AzureClient {
 					'Content-Type': 'application/json-patch+json'
 				}
 			}).then(res => {
-				time = process.hrtime(time);
-				this.logger.log(`#${res.data.id} Task '${task.title}' created (${prettyHrtime(time)})`);
+				this.logger.log(`#${res.data.id} Task '${task.title}' created (${stopwatch.toString()})`);
 				return res.data.id;
 			})
 			.catch(err => {

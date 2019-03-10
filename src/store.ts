@@ -1,7 +1,7 @@
-import * as prettyHrTime from 'pretty-hrtime';
 import * as vsc from 'vscode';
 import { UserStoryInfo, AzureClient, IterationInfo } from './utils/azure-client';
 import { Logger } from './utils/logger';
+import { Stopwatch } from './utils/stopwatch';
 
 export class SessionStore implements ISessionStore {
 	public currentIteration!: IterationInfo;
@@ -15,14 +15,20 @@ export class SessionStore implements ISessionStore {
 			return Promise.resolve();
 		}
 
-		let total = process.hrtime();
-		this.currentIteration = await this.azureClient.getCurrentIterationInfo();
-		const usIdentifiers = await this.azureClient.getIterationUserStories(this.currentIteration.id);
-		this.userStories = await this.azureClient.getUserStoryInfo(usIdentifiers.map(x => x.id));
+		try {
+			let total = Stopwatch.startNew();
+			this.currentIteration = await this.azureClient.getCurrentIterationInfo();
+			const usIdentifiers = await this.azureClient.getIterationUserStories(this.currentIteration.id);
+			this.userStories = await this.azureClient.getUserStoryInfo(usIdentifiers.map(x => x.id));
+			total.stop();
 
-		total = process.hrtime(total);
-		this.logger.log(`User stories fetched in ${prettyHrTime(total)} (3 requests)`);
-		vsc.window.setStatusBarMessage(`User stories fetched in ${prettyHrTime(total)} (3 requests)`, 2000);
+			this.logger.log(`User stories fetched in ${total.toString()} (3 requests)`);
+			vsc.window.setStatusBarMessage(`User stories fetched in ${total.toString()} (3 requests)`, 2000);
+		} catch (err) {
+			this.logger.log(`[Error] ${err.message}`);
+			this.logger.log(`[Error] ${err.response.data.message}`);
+			return Promise.reject();
+		}
 
 		return Promise.resolve();
 	}
