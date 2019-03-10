@@ -1,27 +1,45 @@
 import axios, { AxiosInstance } from 'axios';
+import * as vsc from 'vscode';
 
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
 import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
 import { Logger } from './logger';
 import { Stopwatch } from './stopwatch';
+import { Configuration } from './config';
 
-export class AzureClient {
-
-	private _baseUrl: string = "https://dev.azure.com/ipatalas0593/IDEAapp_2018/_apis/";
-	private _token: string = "drblkz22762qjczvs4vmgafobruj2kttgtjli3phh3hmsdi4nojq";
+export class AzureClient implements vsc.Disposable {
 	private _apiVersionPreview = {
 		'api-version': '5.0-preview.1'
 	}
 
-	client: AxiosInstance;
+	client!: AxiosInstance;
+	_eventHandler: vsc.Disposable;
 
-	constructor(private logger: Logger) {
+	constructor(config: Configuration, private logger: Logger) {
+		this.recreateClient(config);
+
+		this._eventHandler = config.onDidChange(cfg => this.recreateClient(cfg));
+	}
+
+	dispose() {
+		this._eventHandler.dispose();
+	}
+
+	private recreateClient(config: Configuration) {
+		let url = config.url!;
+
+		if (!url.endsWith('/')) {
+			url += '/';
+		}
+
+		url += '_apis/';
+
 		this.client = axios.create({
-			baseURL: this._baseUrl,
+			baseURL: config.url,
 			auth: {
 				username: "PAT",
-				password: this._token
+				password: config.token || ""
 			},
 			params: {
 				'api-version': "5.0"

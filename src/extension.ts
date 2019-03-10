@@ -8,6 +8,7 @@ import { AzureClient } from './utils/azure-client';
 import { Commands } from './constants';
 import { PublishCodeLensProvider } from './providers/publishCodeLensProvider';
 import { Logger } from './utils/logger';
+import { Configuration } from './utils/config';
 
 const documentSelector = [
 	{ language: 'planner', scheme: 'file' },
@@ -18,12 +19,13 @@ const documentSelector = [
 // your extension is activated the very first time the command is executed
 export function activate(context: vsc.ExtensionContext) {
 	const logger = new Logger();
-	const azureClient = new AzureClient(logger);
+	const config = new Configuration(logger);
+	const azureClient = new AzureClient(config, logger);
 	const sessionStore = new SessionStore(azureClient, logger);
 
 	const publishCommand = new PublishCommand(sessionStore, azureClient);
 
-	context.subscriptions.push(logger);
+	context.subscriptions.push(logger, config);
 	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand));
 	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore), '#'));
 	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));

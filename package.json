@@ -46,7 +46,21 @@
 				"language": "planner",
 				"path": "./snippets/planner.json"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Azure DevOps planner",
+			"properties": {
+				"planner.url": {
+					"title": "URL of Azure DevOps to be used",
+					"type": "string",
+					"description": "It should be in the following form: https://dev.azure.com/{organization}/{project}/"
+				},
+				"planner.token": {
+					"title": "PAT token to be used for authentication",
+					"type": "string",
+					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
