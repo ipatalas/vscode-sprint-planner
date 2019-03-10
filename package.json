@@ -2,6 +2,7 @@
 	"name": "vscode-sprint-planner",
 	"displayName": "Azure DevOps planner",
 	"description": "Azure DevOps planner",
+	"publisher": "ipatalas",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.31.0"
@@ -10,6 +11,10 @@
 		"Other",
 		"Snippets"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ipatalas/vscode-sprint-planner"
+	},
 	"activationEvents": [
 		"onCommand:sprintplanner.publish",
 		"onLanguage:planner"
