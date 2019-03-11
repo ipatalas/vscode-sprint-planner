@@ -94,8 +94,9 @@ export class AzureClient implements vsc.Disposable {
 		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
 		finish();
 
-		return result.data.value.map(x => (
-			<UserStoryInfo>{
+		return result.data.value
+			.filter(x => x.fields["System.WorkItemType"] == "User Story")
+			.map(x => (<UserStoryInfo>{
 				id: x.id,
 				url: x.url,
 				title: x.fields["System.Title"],
