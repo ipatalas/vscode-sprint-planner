@@ -1,10 +1,12 @@
 import * as vsc from 'vscode';
 import { Logger } from './logger';
 
-const ConfigurationKey = 'planner';
+const ConfigurationKey = 'planner.azure-devops';
 
 export class Configuration implements vsc.Disposable {
-	public url: string | undefined;
+	public organization: string | undefined;
+	public project: string | undefined;
+	public team: string | undefined;
 	public token: string | undefined;
 
 	private _onDidChange: vsc.EventEmitter<Configuration>;
@@ -15,7 +17,7 @@ export class Configuration implements vsc.Disposable {
 	}
 
 	get isValid() {
-		return this.url && this.token;
+		return this.organization && this.project && this.team && this.token;
 	}
 
 	constructor(logger: Logger) {
@@ -35,7 +37,9 @@ export class Configuration implements vsc.Disposable {
 
 	public load() {
 		const config = vsc.workspace.getConfiguration(ConfigurationKey);
-		this.url = config.get('url');
+		this.organization = config.get('organization');
+		this.project = config.get('project');
+		this.team = config.get('team');
 		this.token = config.get('token');
 	}
 

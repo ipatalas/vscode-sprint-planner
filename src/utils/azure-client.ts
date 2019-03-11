@@ -14,6 +14,7 @@ export class AzureClient implements vsc.Disposable {
 	}
 
 	client!: AxiosInstance;
+	teamClient!: AxiosInstance;
 	_eventHandler: vsc.Disposable;
 
 	constructor(config: Configuration, private logger: Logger) {
@@ -27,16 +28,12 @@ export class AzureClient implements vsc.Disposable {
 	}
 
 	private recreateClient(config: Configuration) {
-		let url = config.url!;
+		let organization = encodeURIComponent(config.organization!);
+		let project = encodeURIComponent(config.project!);
+		let team = encodeURIComponent(config.team!);
 
-		if (!url.endsWith('/')) {
-			url += '/';
-		}
-
-		url += '_apis/';
-
-		this.client = axios.create({
-			baseURL: url,
+		const clientFactory = (baseUrl: string) => axios.create({
+			baseURL: baseUrl,
 			auth: {
 				username: "PAT",
 				password: config.token || ""
@@ -44,13 +41,16 @@ export class AzureClient implements vsc.Disposable {
 			params: {
 				'api-version': "5.0"
 			},
-			validateStatus: status => status == 200 // Azure returns 203 when auth is incorrect
+			validateStatus: status => status == 200
 		});
+
+		this.client = clientFactory(`https://dev.azure.com/${organization}/${project}/_apis/`);
+		this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
 	}
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {
 		const finish = this.logger.perf('Getting current iteration info...');
-		const result = await this.client.get<IterationsResult>("/work/teamsettings/iterations?$timeframe=current");
+		const result = await this.teamClient.get<IterationsResult>("/work/teamsettings/iterations?$timeframe=current");
 		finish();
 
 		if (result.data.count > 0) {
@@ -65,9 +65,9 @@ export class AzureClient implements vsc.Disposable {
 		throw "Current iteration not found";
 	}
 
-	public async getIterationUserStories(iterationId: string): Promise<UserStoryIdentifier[]> {
+	public async getIterationWorkItems(iterationId: string): Promise<UserStoryIdentifier[]> {
 		const finish = this.logger.perf('Getting user stories for iteration...');
-		const result = await this.client.get<IterationWorkItemsResult>(`/work/teamsettings/iterations/${iterationId}/workitems`, {
+		const result = await this.teamClient.get<IterationWorkItemsResult>(`/work/teamsettings/iterations/${iterationId}/workitems`, {
 			params: {
 				...this._apiVersionPreview
 			}

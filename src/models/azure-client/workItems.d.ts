@@ -11,6 +11,7 @@ export interface WorkItemInfo {
 }
 
 export interface WorkItemFields {
+	"System.WorkItemType":             string;
 	"System.AreaPath":                 string;
 	"System.TeamProject":              string;
 	"System.IterationPath":            string;

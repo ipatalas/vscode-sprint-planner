@@ -3,7 +3,7 @@
 	"displayName": "Azure DevOps planner",
 	"description": "Azure DevOps planner",
 	"publisher": "ipatalas",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.31.0"
 	},
@@ -55,15 +55,23 @@
 		"configuration": {
 			"title": "Azure DevOps planner",
 			"properties": {
-				"planner.url": {
-					"title": "URL of Azure DevOps to be used",
-					"type": "string",
-					"description": "It should be in the following form: https://dev.azure.com/{organization}/{project}/"
+				"planner.azure-devops.organization": {
+					"title": "Organization",
+					"type": "string"
 				},
-				"planner.token": {
-					"title": "PAT token to be used for authentication",
+				"planner.azure-devops.project": {
+					"title": "Project",
+					"type": "string"
+				},
+				"planner.azure-devops.team": {
+					"title": "Team",
+					"type": "string"
+				},
+				"planner.azure-devops.token": {
+					"title": "Token",
 					"type": "string",
-					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"				}
+					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"
+				}
 			}
 		}
 	},

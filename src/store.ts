@@ -23,8 +23,8 @@ export class SessionStore implements ISessionStore {
 		try {
 			let total = Stopwatch.startNew();
 			this.currentIteration = await this.azureClient.getCurrentIterationInfo();
-			const usIdentifiers = await this.azureClient.getIterationUserStories(this.currentIteration.id);
-			this.userStories = await this.azureClient.getUserStoryInfo(usIdentifiers.map(x => x.id));
+			const workItemsIds = await this.azureClient.getIterationWorkItems(this.currentIteration.id);
+			this.userStories = await this.azureClient.getUserStoryInfo(workItemsIds.map(x => x.id));
 			total.stop();
 
 			this.logger.log(`User stories fetched in ${total.toString()} (3 requests)`);
