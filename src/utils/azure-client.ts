@@ -122,7 +122,7 @@ export class AzureClient implements vsc.Disposable {
 		finish();
 
 		const max = stackRanks.reduce((acc, current) => {
-			acc = Math.max(acc, current);
+			acc = Math.max(acc, current || 0);
 			return acc;
 		}, 0);
 
