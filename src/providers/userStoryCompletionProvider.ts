@@ -21,7 +21,7 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 
 				if (this.sessionStore.userStories) {
 					return this.sessionStore.userStories.map(us => {
-						const item = new vsc.CompletionItem(`${us.id} - ${us.title}`, vsc.CompletionItemKind.Unit);
+						const item = new vsc.CompletionItem(`${us.id} - ${us.title}`, vsc.CompletionItemKind.Class);
 						item.sortText = us.title;
 
 						return item;
