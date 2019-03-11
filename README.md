@@ -26,8 +26,10 @@ At this point there is a Code Lens action above the user story that lets you pub
 
 This extension contributes the following settings:
 
-* `planner.url`: URL to your Azure DevOps team project (https://dev.azure.com/{organization}/{project}/)
-* `planner.token`: Authentication token (https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops)
+* `planner.azure-devops.organization`: Organization name
+* `planner.azure-devops.project`: Project name
+* `planner.azure-devops.team`: Team name
+* `planner.azure-devops.token`: Authentication token (https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops)
 
 ## Known issues
 
