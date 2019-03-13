@@ -131,6 +131,11 @@ export class AzureClient implements vsc.Disposable {
 	}
 
 	public async getMaxTaskStackRank(taskIds: number[]): Promise<number> {
+		if (taskIds.length == 0) {
+			this.logger.log('No tasks in User Story -> Stack Rank = 0');
+			return 0;
+		}
+
 		const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
