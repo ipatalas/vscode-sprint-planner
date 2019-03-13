@@ -43,15 +43,15 @@ export class AzureClient implements vsc.Disposable {
 
 		const clientFactory = (baseUrl: string) => {
 			const client = axios.create({
-			baseURL: baseUrl,
-			auth: {
-				username: "PAT",
-				password: config.token || ""
-			},
-			params: {
-				'api-version': "5.0"
-			},
-			validateStatus: status => status == 200
+				baseURL: baseUrl,
+				auth: {
+					username: "PAT",
+					password: config.token || ""
+				},
+				params: {
+					'api-version': "5.0"
+				},
+				validateStatus: status => status == 200
 			})
 
 			this._interceptors.push(client.interceptors.response.use(res => this.logRequest(res.request, res), err => this.logRequest(err.request, err)));
@@ -123,12 +123,11 @@ export class AzureClient implements vsc.Disposable {
 				areaPath: x.fields["System.AreaPath"],
 				teamProject: x.fields["System.TeamProject"],
 				iterationPath: x.fields["System.IterationPath"],
-				taskUrls: x.relations && x.relations.filter(r => r.rel == 'System.LinkTypes.Hierarchy-Forward').map(r => r.url)
-			}
-		));
+				taskUrls: (x.relations) && x.relations.filter(r => r.rel == 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
+			}));
 	}
 
-	public async getMaxTaskStackRank(taskIds: number[], ): Promise<number> {
+	public async getMaxTaskStackRank(taskIds: number[]): Promise<number> {
 		const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
