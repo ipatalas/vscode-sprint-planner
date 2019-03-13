@@ -30,6 +30,7 @@ This extension contributes the following settings:
 * `planner.azure-devops.project`: Project name
 * `planner.azure-devops.team`: Team name
 * `planner.azure-devops.token`: Authentication token (https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops)
+* `planner.azure-devops.debug`: whether to turn debug logging on or off
 
 ## Known issues
 
