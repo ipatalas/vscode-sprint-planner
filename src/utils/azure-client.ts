@@ -16,6 +16,7 @@ export class AzureClient implements vsc.Disposable {
 	client!: AxiosInstance;
 	teamClient!: AxiosInstance;
 	_eventHandler: vsc.Disposable;
+	_interceptors: number[] = [];
 
 	constructor(config: Configuration, private logger: Logger) {
 		this.recreateClient(config);
@@ -28,11 +29,20 @@ export class AzureClient implements vsc.Disposable {
 	}
 
 	private recreateClient(config: Configuration) {
+		if (this._interceptors.length > 0) {
+			this._interceptors.forEach(id => {
+				this.client.interceptors.response.eject(id);
+				this.teamClient.interceptors.response.eject(id);
+			});
+			this._interceptors = [];
+		}
+
 		let organization = encodeURIComponent(config.organization!);
 		let project = encodeURIComponent(config.project!);
 		let team = encodeURIComponent(config.team!);
 
-		const clientFactory = (baseUrl: string) => axios.create({
+		const clientFactory = (baseUrl: string) => {
+			const client = axios.create({
 			baseURL: baseUrl,
 			auth: {
 				username: "PAT",
@@ -42,10 +52,20 @@ export class AzureClient implements vsc.Disposable {
 				'api-version': "5.0"
 			},
 			validateStatus: status => status == 200
-		});
+			})
+
+			this._interceptors.push(client.interceptors.response.use(res => this.logRequest(res.request, res), err => this.logRequest(err.request, err)));
+
+			return client;
+		};
 
 		this.client = clientFactory(`https://dev.azure.com/${organization}/${project}/_apis/`);
 		this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
+	}
+
+	private logRequest(request: any, returnValue: any) {
+		console.log(`[DEBUG] ${request.method!.toUpperCase()} ${request.path}`);
+		return returnValue;
 	}
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {

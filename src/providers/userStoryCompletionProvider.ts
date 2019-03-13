@@ -31,7 +31,8 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 				if (typeof err === 'string') {
 					vsc.window.showErrorMessage(err);
 				} else if (err) {
-					this.logger.log(JSON.stringify(err));
+					this.logger.log(err);
+					console.error(err);
 				}
 			}
 		}

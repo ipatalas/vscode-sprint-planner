@@ -41,7 +41,8 @@ export class PublishCommand {
 			if (typeof err === 'string') {
 				vsc.window.showErrorMessage(err);
 			} else {
-				this.logger.log(JSON.stringify(err));
+				this.logger.log(err);
+				console.error(err);
 			}
 		}
 	}
