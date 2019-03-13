@@ -52,6 +52,12 @@
 				"path": "./snippets/planner.json"
 			}
 		],
+		"configurationDefaults": {
+			"[planner]": {
+				"editor.detectIndentation": false,
+				"editor.insertSpaces": false
+			}
+		},
 		"configuration": {
 			"title": "Azure DevOps planner",
 			"properties": {
