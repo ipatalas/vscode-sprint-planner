@@ -15,7 +15,7 @@
 			"name": "entity.name.function"
 		},
 		"estimation": {
-			"match": "\\d+h",
+			"match": "\\d+h?$",
 			"name": "constant.numeric"
 		},
 		"task-description": {
@@ -23,7 +23,7 @@
 			"name": "comment.line"
 		},
 		"task": {
-			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,|$)",
+			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,\\s*\\d+h?$|$)",
 			"name": "string.unquoted"
 		}
 	}
