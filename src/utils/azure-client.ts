@@ -55,7 +55,10 @@ export class AzureClient implements vsc.Disposable {
 			})
 
 			if (config.debug) {
-				const id = client.interceptors.response.use(res => this.logRequest(res.request, res), err => this.logRequest(err.request, err));
+				const id = client.interceptors.response.use(
+					res => this.logRequest(res.request, res),
+					err => this.logRequest(err.request, Promise.reject(err))
+				);
 				this._interceptors.push(id);
 			}
 
