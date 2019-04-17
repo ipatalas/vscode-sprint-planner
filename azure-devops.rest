@@ -1,5 +1,5 @@
 @apiVersionParam = api-version=5.0
-@apiVersionPreviewParam = api-version=5.0-preview.1
+@apiVersionPreviewParam = api-version=5.1-preview.2
 
 
 # Get current iteration
@@ -28,7 +28,11 @@ Authorization: Basic PAT {{token}}
 
 ###
 
-GET {{baseUrl}}/wit/workitemrelationtypes?api-version=5.0
+GET {{baseUrl}}/wit/workitemrelationtypes?{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+
+### Get all possible values for Activity
+GET {{baseUrl}}/wit/workitemtypes/Task/fields/Microsoft.VSTS.Common.Activity?$expand=All&{{apiVersionParam}}
 Authorization: Basic PAT {{token}}
 
 ###
