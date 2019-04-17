@@ -19,6 +19,7 @@
 		"onCommand:sprintplanner.publish",
 		"onLanguage:planner"
 	],
+	"icon": "images/logo128.png",
 	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
