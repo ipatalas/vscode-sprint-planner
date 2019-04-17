@@ -4,11 +4,16 @@
 	"repository": {
 		"expression": {
 			"patterns": [
+				{ "include": "#iteration-id" },
 				{ "include": "#user-story-id" },
 				{ "include": "#estimation" },
 				{ "include": "#task-description" },
 				{ "include": "#task" }
 			]
+		},
+		"iteration-id": {
+			"match": "^IT#(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}(\\}){0,1}",
+			"name": "entity.name.function"
 		},
 		"user-story-id": {
 			"match": "^US#\\d+",

@@ -16,6 +16,34 @@ export class TextProcessor {
 		return results;
 	}
 
+	public static getIteration(allLines: string[], currentLine: number) {
+		const iterationInfo = TextProcessor.getIterationInfo(allLines, currentLine);
+		if (!iterationInfo) {
+			return;
+		}	
+
+		return {
+			line: iterationInfo[0],
+			id: iterationInfo[1]
+		}
+	}
+
+	private static getIterationInfo(lines: string[], currentLine: number) {
+		console.log('Text Processoe -getIterationINfo')
+		for (; currentLine >= 0; currentLine--) {
+			const id = TextProcessor.getIterationID(lines[currentLine]);
+			if (id) {
+				return [currentLine, id];
+			}
+		}
+	}
+
+	private static getIterationID(line: string) {
+		console.log('Getting Iteration Id')
+		const match = Constants.IterationRegex.exec(line);
+		return match != null && match[0];
+	}
+
 	public static getUserStory(allLines: string[], currentLine: number) {
 		const userStoryInfo = TextProcessor.getUserStoryInfo(allLines, currentLine);
 		if (!userStoryInfo) {
@@ -59,7 +87,7 @@ export class TextProcessor {
 				.join(EOL)
 				.split(Constants.TaskLinesSplitter);
 
-			return taskLines.map(this.getTask)
+			return taskLines.map(this.getTask);
 		}
 
 		return [];
@@ -90,7 +118,8 @@ export class TextProcessor {
 	}
 
 	private static isEndOfUserStory(line: string) {
-		return Constants.EndOfUserStoryRegex.test(line) || Constants.UserStoryRegex.test(line);
+		let isEndOfUserStory = Constants.EndOfUserStoryRegex.test(line) || Constants.UserStoryRegex.test(line);
+		return isEndOfUserStory;
 	}
 }
 

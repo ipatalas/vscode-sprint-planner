@@ -1,0 +1,123 @@
+2019-04-17T14:54:01.331Z - info:   [24988] *** FOLDER: e:\code\ipatalas\vscode-sprint-planner ***
+2019-04-17T14:54:01.331Z - info:   [24988] AzureReposVSCode/1.149.2 (VSCode 1.33.1; Windows_NT 10.0.17134; Node 10.2.0)
+2019-04-17T14:54:01.332Z - debug:  [24988] Looking for an External Context at e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T14:54:01.332Z - debug:  [24988] No External Context at e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T14:54:01.347Z - debug:  [24988] Looking for TFVC repository at e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T14:54:01.348Z - debug:  [24988] TFVC Creating Tfvc object with localPath='undefined'
+2019-04-17T14:54:01.348Z - debug:  [24988] Using TFS proxy: 
+2019-04-17T14:54:01.348Z - debug:  [24988] TFVC Retrieved from settings; localPath='E:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\tf.exe'
+2019-04-17T14:54:01.349Z - debug:  [24988] TFVC Repository created with repositoryRootFolder='e:\code\ipatalas\vscode-sprint-planner'
+2019-04-17T14:54:01.350Z - debug:  [24988] TFVC Repository.CheckVersion
+2019-04-17T14:54:01.350Z - debug:  [24988] TFVC: tf add -noprompt -?
+2019-04-17T14:54:01.651Z - debug:  [24988] TFVC: spawned new process (duration: 300ms)
+2019-04-17T14:54:01.730Z - debug:  [24988] TFVC: spawned new process (duration: 78ms)
+2019-04-17T14:54:04.247Z - debug:  [24988] TFVC: add exit code: 0 (duration: 2897ms)
+2019-04-17T14:54:04.248Z - debug:  [24988] TFVC Minimum required version: 14.102.0
+2019-04-17T14:54:04.248Z - debug:  [24988] TFVC (TF.exe, TF.cmd) version: 15.112.26421.0
+2019-04-17T14:54:04.248Z - debug:  [24988] TFVC Repository.FindWorkspace with localPath='e:\code\ipatalas\vscode-sprint-planner'
+2019-04-17T14:54:04.249Z - debug:  [24988] TFVC: tf workfold -noprompt e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T14:54:04.306Z - debug:  [24988] TFVC: spawned new process (duration: 57ms)
+2019-04-17T14:54:05.836Z - debug:  [24988] TFVC: workfold exit code: 0 (duration: 1587ms)
+2019-04-17T14:54:05.837Z - debug:  [24988] Found a TFVC repository for url: 'https://sd-tfs-web-1.sysdev.zen.co.uk/sysdev_current' and team project: 'ipatalas'.
+2019-04-17T14:54:05.837Z - debug:  [24988] Parsing values from repositoryInfo as string url
+2019-04-17T14:54:05.837Z - debug:  [24988] TFVC Creating Tfvc object with localPath='undefined'
+2019-04-17T14:54:05.838Z - debug:  [24988] Using TFS proxy: 
+2019-04-17T14:54:05.840Z - debug:  [24988] TFVC Retrieved from settings; localPath='E:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\tf.exe'
+2019-04-17T14:54:05.841Z - debug:  [24988] TFVC Repository created with repositoryRootFolder='e:\code\ipatalas\vscode-sprint-planner'
+2019-04-17T14:54:05.842Z - debug:  [24988] Could not parse repository url: undefined
+2019-04-17T14:54:05.970Z - debug:  [24988] Started ApplicationInsights telemetry
+2019-04-17T14:54:05.970Z - info:   [24988] Getting repository information with repositoryInfoClient
+2019-04-17T14:54:05.970Z - debug:  [24988] RemoteUrl = https://sd-tfs-web-1.sysdev.zen.co.uk/sysdev_current
+2019-04-17T14:54:05.970Z - debug:  [24988] Getting repository information for a TFVC repository at https://sd-tfs-web-1.sysdev.zen.co.uk/sysdev_current
+2019-04-17T14:54:05.971Z - debug:  [24988] Parsing values from repositoryInfo as string url
+2019-04-17T14:54:05.971Z - debug:  [24988] Starting the validation of the collection. Url: 'https://sd-tfs-web-1.sysdev.zen.co.uk/sysdev_current'
+2019-04-17T14:54:08.808Z - debug:  [24988] Validated the collection and splitting Url and Collection name. Collection name: 'sysdev_current', Url: 'https://sd-tfs-web-1.sysdev.zen.co.uk/'
+2019-04-17T14:54:08.808Z - debug:  [24988] Getting project collection...  url: 'https://sd-tfs-web-1.sysdev.zen.co.uk/', and collection name: 'sysdev_current'
+2019-04-17T14:54:08.809Z - debug:  [24988] Using SOAP to get the project collection information
+2019-04-17T14:54:13.178Z - debug:  [24988] Found a project collection for url: 'https://sd-tfs-web-1.sysdev.zen.co.uk/' and collection name: 'SysDev_Current'.
+2019-04-17T14:54:13.178Z - debug:  [24988] Getting team project...  Url: 'https://sd-tfs-web-1.sysdev.zen.co.uk/', collection name: 'SysDev_Current', and project: 'ipatalas'
+2019-04-17T14:54:16.369Z - error:  [24988] The Azure Repos extension only supports TFS version 2015 Update 2 or later. Please verify your TFS server version.
+2019-04-17T14:54:16.369Z - info:   [24988] Sent TFVC tooling telemetry
+2019-04-17T14:54:16.370Z - debug:  [24988] Initializing the TfvcSCMProvider
+2019-04-17T14:54:16.371Z - debug:  [24988] TFVC Repository.CheckVersion
+2019-04-17T14:54:16.371Z - debug:  [24988] TFVC: tf add -noprompt -?
+2019-04-17T14:54:16.420Z - debug:  [24988] TFVC: spawned new process (duration: 48ms)
+2019-04-17T14:54:16.634Z - debug:  [24988] TFVC: add exit code: 0 (duration: 263ms)
+2019-04-17T14:54:16.635Z - debug:  [24988] TFVC Minimum required version: 14.102.0
+2019-04-17T14:54:16.635Z - debug:  [24988] TFVC (TF.exe, TF.cmd) version: 15.112.26421.0
+2019-04-17T14:54:16.636Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T14:54:16.636Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T14:54:16.719Z - debug:  [24988] TFVC: spawned new process (duration: 81ms)
+2019-04-17T14:54:41.369Z - debug:  [24988] TFVC: status exit code: 0 (duration: 24732ms)
+2019-04-17T14:54:41.582Z - debug:  [24988] Initialized the TfvcSCMProvider
+2019-04-17T15:01:06.118Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:01:06.118Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:01:06.180Z - debug:  [24988] TFVC: spawned new process (duration: 58ms)
+2019-04-17T15:01:11.950Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5832ms)
+2019-04-17T15:08:26.973Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:08:26.974Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:08:27.032Z - debug:  [24988] TFVC: spawned new process (duration: 57ms)
+2019-04-17T15:08:33.184Z - debug:  [24988] TFVC: status exit code: 0 (duration: 6210ms)
+2019-04-17T15:11:13.299Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:11:13.300Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:11:13.341Z - debug:  [24988] TFVC: spawned new process (duration: 41ms)
+2019-04-17T15:11:19.109Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5809ms)
+2019-04-17T15:11:29.642Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:11:29.642Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:11:29.686Z - debug:  [24988] TFVC: spawned new process (duration: 44ms)
+2019-04-17T15:11:35.154Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5512ms)
+2019-04-17T15:13:40.984Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:13:40.985Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:13:41.022Z - debug:  [24988] TFVC: spawned new process (duration: 37ms)
+2019-04-17T15:13:46.453Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5468ms)
+2019-04-17T15:14:51.205Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:14:51.205Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:14:51.243Z - debug:  [24988] TFVC: spawned new process (duration: 37ms)
+2019-04-17T15:14:56.977Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5772ms)
+2019-04-17T15:17:55.298Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:17:55.299Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:17:55.337Z - debug:  [24988] TFVC: spawned new process (duration: 37ms)
+2019-04-17T15:18:00.742Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5443ms)
+2019-04-17T15:19:26.974Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:19:26.975Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:19:27.041Z - debug:  [24988] TFVC: spawned new process (duration: 65ms)
+2019-04-17T15:19:32.424Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5449ms)
+2019-04-17T15:22:55.875Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:22:55.875Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:22:55.924Z - debug:  [24988] TFVC: spawned new process (duration: 48ms)
+2019-04-17T15:23:01.344Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5468ms)
+2019-04-17T15:23:18.857Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:23:18.857Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:23:18.896Z - debug:  [24988] TFVC: spawned new process (duration: 38ms)
+2019-04-17T15:23:24.104Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5247ms)
+2019-04-17T15:25:53.590Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:25:53.590Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:25:53.628Z - debug:  [24988] TFVC: spawned new process (duration: 37ms)
+2019-04-17T15:26:00.696Z - debug:  [24988] TFVC: status exit code: 0 (duration: 7106ms)
+2019-04-17T15:26:26.298Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:26:26.299Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:26:26.348Z - debug:  [24988] TFVC: spawned new process (duration: 48ms)
+2019-04-17T15:26:33.270Z - debug:  [24988] TFVC: status exit code: 0 (duration: 6971ms)
+2019-04-17T15:26:38.590Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:26:38.591Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:26:38.643Z - debug:  [24988] TFVC: spawned new process (duration: 52ms)
+2019-04-17T15:26:45.200Z - debug:  [24988] TFVC: status exit code: 0 (duration: 6609ms)
+2019-04-17T15:26:56.078Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:26:56.078Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:26:56.119Z - debug:  [24988] TFVC: spawned new process (duration: 40ms)
+2019-04-17T15:27:01.930Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5851ms)
+2019-04-17T15:29:29.216Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:29:29.217Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:29:29.254Z - debug:  [24988] TFVC: spawned new process (duration: 37ms)
+2019-04-17T15:29:34.449Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5232ms)
+2019-04-17T15:29:39.073Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:29:39.074Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:29:39.110Z - debug:  [24988] TFVC: spawned new process (duration: 36ms)
+2019-04-17T15:29:44.404Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5330ms)
+2019-04-17T15:30:10.875Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:30:10.875Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:30:10.911Z - debug:  [24988] TFVC: spawned new process (duration: 35ms)
+2019-04-17T15:30:16.192Z - debug:  [24988] TFVC: status exit code: 0 (duration: 5316ms)
+2019-04-17T15:32:31.574Z - debug:  [24988] TFVC Repository.GetStatus
+2019-04-17T15:32:31.574Z - debug:  [24988] TFVC: tf status -noprompt -format:detailed -recursive e:\code\ipatalas\vscode-sprint-planner
+2019-04-17T15:32:31.611Z - debug:  [24988] TFVC: spawned new process (duration: 36ms)
