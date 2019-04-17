@@ -8,6 +8,7 @@ export class Configuration implements vsc.Disposable {
 	public project: string | undefined;
 	public team: string | undefined;
 	public token: string | undefined;
+	public debug!: boolean;
 
 	private _onDidChange: vsc.EventEmitter<Configuration>;
 	private _eventHandler: vsc.Disposable;
@@ -41,6 +42,7 @@ export class Configuration implements vsc.Disposable {
 		this.project = config.get('project');
 		this.team = config.get('team');
 		this.token = config.get('token');
+		this.debug = config.get<boolean>('debug', false);
 	}
 
 	dispose() {

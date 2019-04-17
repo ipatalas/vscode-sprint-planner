@@ -3,7 +3,7 @@
 	"displayName": "Azure DevOps planner",
 	"description": "Azure DevOps planner",
 	"publisher": "ipatalas",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.31.0"
 	},
@@ -19,6 +19,7 @@
 		"onCommand:sprintplanner.publish",
 		"onLanguage:planner"
 	],
+	"icon": "images/logo128.png",
 	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
@@ -52,6 +53,12 @@
 				"path": "./snippets/planner.json"
 			}
 		],
+		"configurationDefaults": {
+			"[planner]": {
+				"editor.detectIndentation": false,
+				"editor.insertSpaces": false
+			}
+		},
 		"configuration": {
 			"title": "Azure DevOps planner",
 			"properties": {
@@ -71,6 +78,12 @@
 					"title": "Token",
 					"type": "string",
 					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"
+				},
+				"planner.azure-devops.debug": {
+					"title": "Debug logging",
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to turn debug logging on or off"
 				}
 			}
 		}

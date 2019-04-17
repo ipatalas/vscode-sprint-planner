@@ -11,11 +11,12 @@ import { Configuration } from './config';
 export class AzureClient implements vsc.Disposable {
 	private _apiVersionPreview = {
 		'api-version': '5.0-preview.1'
-	}
+	};
 
 	client!: AxiosInstance;
 	teamClient!: AxiosInstance;
 	_eventHandler: vsc.Disposable;
+	_interceptors: number[] = [];
 
 	constructor(config: Configuration, private logger: Logger) {
 		this.recreateClient(config);
@@ -28,24 +29,49 @@ export class AzureClient implements vsc.Disposable {
 	}
 
 	private recreateClient(config: Configuration) {
+		if (this._interceptors.length > 0) {
+			this._interceptors.forEach(id => {
+				this.client.interceptors.response.eject(id);
+				this.teamClient.interceptors.response.eject(id);
+			});
+			this._interceptors = [];
+		}
+
 		let organization = encodeURIComponent(config.organization!);
 		let project = encodeURIComponent(config.project!);
 		let team = encodeURIComponent(config.team!);
 
-		const clientFactory = (baseUrl: string) => axios.create({
-			baseURL: baseUrl,
-			auth: {
-				username: "PAT",
-				password: config.token || ""
-			},
-			params: {
-				'api-version': "5.0"
-			},
-			validateStatus: status => status == 200
-		});
+		const clientFactory = (baseUrl: string) => {
+			const client = axios.create({
+				baseURL: baseUrl,
+				auth: {
+					username: "PAT",
+					password: config.token || ""
+				},
+				params: {
+					'api-version': "5.0"
+				},
+				validateStatus: status => status === 200
+			});
+
+			if (config.debug) {
+				const id = client.interceptors.response.use(
+					res => this.logRequest(res.request, res),
+					err => this.logRequest(err.request, Promise.reject(err))
+				);
+				this._interceptors.push(id);
+			}
+
+			return client;
+		};
 
 		this.client = clientFactory(`https://dev.azure.com/${organization}/${project}/_apis/`);
 		this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
+	}
+
+	private logRequest(request: any, returnValue: any) {
+		console.log(`[DEBUG] ${request.method!.toUpperCase()} ${request.path}`);
+		return returnValue;
 	}
 
 	public async getIterationsInfo(): Promise<IterationInfo[]> {
@@ -69,7 +95,7 @@ export class AzureClient implements vsc.Disposable {
 		}
 
 		throw "Iterations not found";
-	}
+  }
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {
 		const finish = this.logger.perf('Getting current iteration info...');
@@ -82,10 +108,10 @@ export class AzureClient implements vsc.Disposable {
 				id: iteration.id,
 				name: iteration.name,
 				path: iteration.path
-			}
+			};
 		}
 
-		throw "Current iteration not found";
+		throw new Error("Current iteration not found");
 	}
 
 	public async getIterationWorkItems(iterationId: string): Promise<UserStoryIdentifier[]> {
@@ -98,7 +124,7 @@ export class AzureClient implements vsc.Disposable {
 
 		finish();
 
-		return result.data.workItemRelations.filter(x => x.rel == null).map(x => (
+		return result.data.workItemRelations.filter(x => x.rel === null).map(x => (
 			<UserStoryIdentifier>{
 				id: x.target.id,
 				url: x.target.url
@@ -118,7 +144,7 @@ export class AzureClient implements vsc.Disposable {
 		finish();
 
 		return result.data.value
-			.filter(x => x.fields["System.WorkItemType"] == "User Story")
+			.filter(x => x.fields["System.WorkItemType"] === "User Story")
 			.map(x => (<UserStoryInfo>{
 				id: x.id,
 				url: x.url,
@@ -126,16 +152,17 @@ export class AzureClient implements vsc.Disposable {
 				areaPath: x.fields["System.AreaPath"],
 				teamProject: x.fields["System.TeamProject"],
 				iterationPath: x.fields["System.IterationPath"],
-				taskUrls: x.relations && x.relations.filter(r => r.rel == 'System.LinkTypes.Hierarchy-Forward').map(r => r.url)
-			}
-		));
+				taskUrls: (x.relations) && x.relations.filter(r => r.rel === 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
+			}));
 	}
 
-	public async getMaxTaskStackRank(taskIds: number[], ): Promise<number> {
-		if (taskIds.length == 0) {
+	public async getMaxTaskStackRank(taskIds: number[]): Promise<number> {
+		if (taskIds.length === 0) {
+			this.logger.log('No tasks in User Story -> Stack Rank = 0');
 			return 0;
 		}
-		const finish = this.logger.perf('Getting max stack rank for tasks...');
+
+    const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
 			ids: taskIds.join(','),
@@ -202,14 +229,14 @@ export class AzureClient implements vsc.Disposable {
 			op: 'add',
 			path,
 			value
-		}
+		};
 	}
 
 	private userStoryLink(url: string) {
 		return {
 			rel: "System.LinkTypes.Hierarchy-Reverse",
 			url
-		}
+		};
 	}
 }
 
