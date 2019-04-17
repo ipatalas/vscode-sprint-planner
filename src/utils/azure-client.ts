@@ -88,7 +88,7 @@ export class AzureClient implements vsc.Disposable {
 			}
 		}
 
-		throw "Current iteration not found";
+		throw new Error("Current iteration not found");
 	}
 
 	public async getIterationWorkItems(iterationId: string): Promise<UserStoryIdentifier[]> {

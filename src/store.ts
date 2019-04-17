@@ -31,8 +31,10 @@ export class SessionStore implements ISessionStore {
 			vsc.window.setStatusBarMessage(`User stories fetched in ${total.toString()} (3 requests)`, 2000);
 		} catch (err) {
 			this.logger.log(`[Error] ${err.message || err}`);
-			err.response && this.logger.log(`[Error] ${err.response.data.message}`);
-			return Promise.reject();
+			if (err.response) {
+				this.logger.log(`[Error] ${err.response.data.message}`);
+			}
+			return Promise.reject(err);
 		}
 
 		return Promise.resolve();

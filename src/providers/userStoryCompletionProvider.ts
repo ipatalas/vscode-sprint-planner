@@ -28,9 +28,8 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 					});
 				}
 			} catch (err) {
-				if (typeof err === 'string') {
+				if (err) {
 					vsc.window.showErrorMessage(err);
-				} else if (err) {
 					this.logger.log(err);
 					console.error(err);
 				}
