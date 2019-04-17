@@ -38,11 +38,9 @@ export class PublishCommand {
 
 			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id}`);
 		} catch (err) {
-			if (typeof err === 'string') {
-				vsc.window.showErrorMessage(err);
-			} else {
+			if (err) {
+				vsc.window.showErrorMessage(err.message);
 				this.logger.log(err);
-				console.error(err);
 			}
 		}
 	}
