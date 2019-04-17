@@ -11,7 +11,7 @@ import { Configuration } from './config';
 export class AzureClient implements vsc.Disposable {
 	private _apiVersionPreview = {
 		'api-version': '5.0-preview.1'
-	}
+	};
 
 	client!: AxiosInstance;
 	teamClient!: AxiosInstance;
@@ -51,8 +51,8 @@ export class AzureClient implements vsc.Disposable {
 				params: {
 					'api-version': "5.0"
 				},
-				validateStatus: status => status == 200
-			})
+				validateStatus: status => status === 200
+			});
 
 			if (config.debug) {
 				const id = client.interceptors.response.use(
@@ -85,7 +85,7 @@ export class AzureClient implements vsc.Disposable {
 				id: iteration.id,
 				name: iteration.name,
 				path: iteration.path
-			}
+			};
 		}
 
 		throw new Error("Current iteration not found");
@@ -101,7 +101,7 @@ export class AzureClient implements vsc.Disposable {
 
 		finish();
 
-		return result.data.workItemRelations.filter(x => x.rel == null).map(x => (
+		return result.data.workItemRelations.filter(x => x.rel === null).map(x => (
 			<UserStoryIdentifier>{
 				id: x.target.id,
 				url: x.target.url
@@ -121,7 +121,7 @@ export class AzureClient implements vsc.Disposable {
 		finish();
 
 		return result.data.value
-			.filter(x => x.fields["System.WorkItemType"] == "User Story")
+			.filter(x => x.fields["System.WorkItemType"] === "User Story")
 			.map(x => (<UserStoryInfo>{
 				id: x.id,
 				url: x.url,
@@ -129,12 +129,12 @@ export class AzureClient implements vsc.Disposable {
 				areaPath: x.fields["System.AreaPath"],
 				teamProject: x.fields["System.TeamProject"],
 				iterationPath: x.fields["System.IterationPath"],
-				taskUrls: (x.relations) && x.relations.filter(r => r.rel == 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
+				taskUrls: (x.relations) && x.relations.filter(r => r.rel === 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
 			}));
 	}
 
 	public async getMaxTaskStackRank(taskIds: number[]): Promise<number> {
-		if (taskIds.length == 0) {
+		if (taskIds.length === 0) {
 			this.logger.log('No tasks in User Story -> Stack Rank = 0');
 			return 0;
 		}
@@ -206,14 +206,14 @@ export class AzureClient implements vsc.Disposable {
 			op: 'add',
 			path,
 			value
-		}
+		};
 	}
 
 	private userStoryLink(url: string) {
 		return {
 			rel: "System.LinkTypes.Hierarchy-Reverse",
 			url
-		}
+		};
 	}
 }
 

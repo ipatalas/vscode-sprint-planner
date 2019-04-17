@@ -7,7 +7,7 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 	constructor(private sessionStore: ISessionStore, private logger: Logger) {
 	}
 
-	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext) {
+	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, _token: vsc.CancellationToken, _context: vsc.CompletionContext) {
 		const range = new vsc.Range(
 			new vsc.Position(position.line, position.character - UserStoryPrefix.length),
 			position
@@ -15,7 +15,7 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 
 		const text = document.getText(range);
 
-		if (text == UserStoryPrefix) {
+		if (text === UserStoryPrefix) {
 			try {
 				await this.sessionStore.ensureHasUserStories();
 
