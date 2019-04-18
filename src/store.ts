@@ -22,7 +22,7 @@ export class SessionStore implements ISessionStore {
 			const lines = editor.document.getText().split(Constants.NewLineRegex);
 			const it = TextProcessor.getIteration(lines, 0);
 			if (!it) {
-				console.log('Iteration not specified - will default to @CurrentIteration');
+				this.logger.log('Iteration not specified - will default to @CurrentIteration');
 			} else {
 				this.customIteration = this.iterations!.find(x => x.id == it.id);
 				if (!this.customIteration) { return Promise.resolve(); }
@@ -45,8 +45,8 @@ export class SessionStore implements ISessionStore {
 			this.iterations = await this.azureClient.getIterationsInfo();		
 			total.stop();
 
-			this.logger.log(`Iterations fetched in ${total.toString()} (3 requests)`);
-			vsc.window.setStatusBarMessage(`Iterations fetched in ${total.toString()} (3 requests)`, 2000);
+			this.logger.log(`Iterations fetched in ${total.toString()} (1 request)`);
+			vsc.window.setStatusBarMessage(`Iterations fetched in ${total.toString()} (1 request)`, 2000);
 
 		} catch (err) {
 			this.logger.log(`[Error] ${err.message || err}`);
@@ -62,10 +62,6 @@ export class SessionStore implements ISessionStore {
 		if (!this.customIteration && this.currentIteration && this.userStories !== undefined) {
 			return Promise.resolve();
 		}
-
-		// if (!this.currentIteration && this.customIteration && this.userStories !== undefined) {
-		// 	return Promise.resolve();
-		// }
 
 		if (!this.config.isValid) {
 			return Promise.reject("Missing URL or token in configuration");

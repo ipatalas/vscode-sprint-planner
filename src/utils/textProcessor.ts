@@ -28,8 +28,7 @@ export class TextProcessor {
 		}
 	}
 
-	private static getIterationInfo(lines: string[], currentLine: number) {
-		console.log('Text Processoe -getIterationINfo')
+	private static getIterationInfo(lines: string[], currentLine: number) {		
 		for (; currentLine >= 0; currentLine--) {
 			const id = TextProcessor.getIterationID(lines[currentLine]);
 			if (id) {

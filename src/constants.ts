@@ -1,7 +1,7 @@
 export const NewLineRegex = /\r?\n/g;
 
 export const IterationPrefix = 'IT#';
-export const IterationRegex = /(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/;
+export const IterationRegex = /^IT#[\da-f]{8}(\-[\da-f]{4}){3}\-[\da-f]{12}/i;
 
 export const UserStoryPrefix = 'US#';
 export const UserStoryRegex = /^US#(\d+)/;
