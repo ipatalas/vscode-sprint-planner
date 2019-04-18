@@ -24,14 +24,14 @@ export class SessionStore implements ISessionStore {
 			if (!it) {
 				this.logger.log('Iteration not specified - will default to @CurrentIteration');
 			} else {
-				this.customIteration = this.iterations!.find(x => x.id == it.id);
+				this.customIteration = this.iterations!.find(x => x.id === it.id);
 				if (!this.customIteration) { return Promise.resolve(); }
 
 				this.logger.log(`Iteration set to ${this.customIteration.path.toString()}`);
 				vsc.window.setStatusBarMessage(`Iteration set to ${this.customIteration.path.toString()}`, 2000);
 			}
-		}		
-	
+		}
+
 		return Promise.resolve();
 	}
 
@@ -42,16 +42,17 @@ export class SessionStore implements ISessionStore {
 
 		try {
 			let total = Stopwatch.startNew();
-			this.iterations = await this.azureClient.getIterationsInfo();		
+			this.iterations = await this.azureClient.getIterationsInfo();
 			total.stop();
 
 			this.logger.log(`Iterations fetched in ${total.toString()} (1 request)`);
 			vsc.window.setStatusBarMessage(`Iterations fetched in ${total.toString()} (1 request)`, 2000);
 
 		} catch (err) {
-			this.logger.log(`[Error] ${err.message || err}`);
-			err.response && this.logger.log(`[Error] ${err.response.data.message}`);
-			return Promise.reject();
+			if (err.response) {
+				console.error(`${err.response.data}`);
+			}
+			return Promise.reject(err);
 		}
 
 		return Promise.resolve();
@@ -81,10 +82,10 @@ export class SessionStore implements ISessionStore {
 				this.currentIteration = undefined;
 				iteration = this.customIteration;
 			}
-				
+
 			const workItemsIds = await this.azureClient.getIterationWorkItems(iteration.id);
 
-			if (workItemsIds.length == 0) {
+			if (workItemsIds.length === 0) {
 				this.logger.log(`No user stories found in iteration`);
 				return Promise.reject();
 			}
