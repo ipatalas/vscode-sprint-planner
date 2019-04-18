@@ -74,7 +74,7 @@ export class SessionStore implements ISessionStore {
 			this.setIteration();
 
 			if (!this.customIteration) {
-				this.currentIteration = await this.azureClient.getCurrentIterationInfo();
+				this.currentIteration = this.currentIteration || await this.azureClient.getCurrentIterationInfo();
 				iteration = this.currentIteration;
 				this.logger.log(`Iteration defaulted to ${this.currentIteration.path.toString()}`);
 			} else {
