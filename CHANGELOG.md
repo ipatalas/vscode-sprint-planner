@@ -3,6 +3,15 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.4]
+### Added
+- ability to select arbitrary iteration (still defaulted to current)
+### Changed
+- make `h` in estimation optional
+### Fixed
+- proper syntax highlighting when task title has commas
+- minor error handling improvements
+
 ## [0.0.3]
 ### Fixed
 - Could not publish tasks to an empty User Story
