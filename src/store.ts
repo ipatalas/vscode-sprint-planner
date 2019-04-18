@@ -36,6 +36,10 @@ export class SessionStore implements ISessionStore {
 	}
 
 	async ensureHasIterations (): Promise<void> {
+		if (this.iterations !== undefined) {
+			return Promise.resolve();
+		}
+
 		if (!this.config.isValid) {
 			return Promise.reject("Missing URL or token in configuration");
 		}
@@ -47,7 +51,6 @@ export class SessionStore implements ISessionStore {
 
 			this.logger.log(`Iterations fetched in ${total.toString()} (1 request)`);
 			vsc.window.setStatusBarMessage(`Iterations fetched in ${total.toString()} (1 request)`, 2000);
-
 		} catch (err) {
 			if (err.response) {
 				console.error(`${err.response.data}`);
@@ -60,10 +63,6 @@ export class SessionStore implements ISessionStore {
 
 
 	async ensureHasUserStories (): Promise<void> {
-		if (!this.customIteration && this.currentIteration && this.userStories !== undefined) {
-			return Promise.resolve();
-		}
-
 		if (!this.config.isValid) {
 			return Promise.reject("Missing URL or token in configuration");
 		}
