@@ -40,7 +40,7 @@ export class TextProcessor {
 	private static getIterationID(line: string) {
 		console.log('Getting Iteration Id');
 		const match = Constants.IterationRegex.exec(line);
-		return match != null && match[0];
+		return match !== null && match[1];
 	}
 
 	public static getUserStory(allLines: string[], currentLine: number) {
