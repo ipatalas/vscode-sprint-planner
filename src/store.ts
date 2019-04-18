@@ -22,6 +22,7 @@ export class SessionStore implements ISessionStore {
 			const lines = editor.document.getText().split(Constants.NewLineRegex);
 			const it = TextProcessor.getIteration(lines, 0);
 			if (!it) {
+				this.customIteration = undefined;
 				this.logger.log('Iteration not specified - will default to @CurrentIteration');
 			} else {
 				this.customIteration = this.iterations!.find(x => x.id === it.id);
