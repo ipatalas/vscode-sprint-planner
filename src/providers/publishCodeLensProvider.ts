@@ -33,11 +33,11 @@ export class PublishCodeLensProvider implements vsc.CodeLensProvider {
 					 return sum;
 				}, 0);
 
-		if (tasks.length == 0) {
+		if (tasks.length === 0) {
 			return 'no tasks';
 		}
 
-		const tasksText = tasks.length == 1 ? 'task' : 'tasks';
+		const tasksText = tasks.length === 1 ? 'task' : 'tasks';
 
 		return `${tasks.length} ${tasksText} (${totalHours}h)`;
 	}

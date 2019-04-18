@@ -91,10 +91,10 @@ export class AzureClient implements vsc.Disposable {
 			});
 
 			return iterations;
-		
+
 		}
 
-		throw "Iterations not found";
+		throw new Error("Iterations not found");
   }
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {

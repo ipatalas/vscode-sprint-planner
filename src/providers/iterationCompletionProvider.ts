@@ -13,9 +13,9 @@ export class IterationCompletionProvider implements vsc.CompletionItemProvider {
 			position
 		);
 
-		const text = document.getText(range);	
+		const text = document.getText(range);
 
-		if (text == IterationPrefix) {
+		if (text === IterationPrefix) {
 			try {
 				await this.sessionStore.ensureHasIterations();
 

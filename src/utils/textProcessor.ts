@@ -20,15 +20,15 @@ export class TextProcessor {
 		const iterationInfo = TextProcessor.getIterationInfo(allLines, currentLine);
 		if (!iterationInfo) {
 			return;
-		}	
+		}
 
 		return {
 			line: iterationInfo[0],
 			id: iterationInfo[1]
-		}
+		};
 	}
 
-	private static getIterationInfo(lines: string[], currentLine: number) {		
+	private static getIterationInfo(lines: string[], currentLine: number) {
 		for (; currentLine >= 0; currentLine--) {
 			const id = TextProcessor.getIterationID(lines[currentLine]);
 			if (id) {
@@ -38,7 +38,7 @@ export class TextProcessor {
 	}
 
 	private static getIterationID(line: string) {
-		console.log('Getting Iteration Id')
+		console.log('Getting Iteration Id');
 		const match = Constants.IterationRegex.exec(line);
 		return match != null && match[0];
 	}
@@ -56,7 +56,7 @@ export class TextProcessor {
 			line: userStoryInfo[0],
 			id: userStoryInfo[1],
 			tasks
-		}
+		};
 	}
 
 	private static getUserStoryInfo(lines: string[], currentLine: number) {
@@ -100,7 +100,7 @@ export class TextProcessor {
 		title = title.replace(Constants.TaskPrefixRegex, '');
 
 		const match = title.match(Constants.TaskEstimationRegex);
-		if (match != null) {
+		if (match !== null) {
 			task.estimation = parseInt(match.groups!.estimation);
 			title = title.replace(match[0], '');
 		}
@@ -113,7 +113,7 @@ export class TextProcessor {
 
 	private static getUserStoryID(line: string) {
 		const match = Constants.UserStoryRegex.exec(line);
-		return match != null && match[1];
+		return match !== null && match[1];
 	}
 
 	private static isEndOfUserStory(line: string) {
