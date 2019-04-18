@@ -1,4 +1,7 @@
 .vscode/settings.json
+/.vscode-test
 /node_modules
 /out
 /responses
+yarn.lock
+team-extension.log

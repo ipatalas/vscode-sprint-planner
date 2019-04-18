@@ -1,4 +1,11 @@
 {
+    "Iteration title": {
+        "prefix": "iteration",
+        "body": [
+            "IT#"
+        ],
+        "description": "Iteration marker"
+    },
     "User story title": {
         "prefix": "user story",
         "body": [

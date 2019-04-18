@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vsc from 'vscode';
 import { PublishCommand } from './commands/publish';
+import { IterationCompletionProvider } from './providers/iterationCompletionProvider';
 import { UserStoryCompletionProvider } from './providers/userStoryCompletionProvider';
 import { SessionStore } from './store';
 import { AzureClient } from './utils/azure-client';
@@ -27,6 +28,7 @@ export function activate(context: vsc.ExtensionContext) {
 
 	context.subscriptions.push(logger, config);
 	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand));
+	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'));
 	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'));
 	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));
 }

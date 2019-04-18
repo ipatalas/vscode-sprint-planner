@@ -74,6 +74,29 @@ export class AzureClient implements vsc.Disposable {
 		return returnValue;
 	}
 
+	public async getIterationsInfo(): Promise<IterationInfo[]> {
+		const finish = this.logger.perf('Getting iterations info...');
+		const result = await this.teamClient.get<IterationsResult>("/work/teamsettings/iterations");
+		finish();
+
+		if (result.data.count > 0) {
+			let iterations: IterationInfo[] = [];
+			result.data.value.forEach(element => {
+				const iteration = <IterationInfo>{
+					id: element.id,
+					name: element.name,
+					path: element.path
+				};
+				iterations.push(iteration);
+			});
+
+			return iterations;
+		
+		}
+
+		throw "Iterations not found";
+  }
+
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {
 		const finish = this.logger.perf('Getting current iteration info...');
 		const result = await this.teamClient.get<IterationsResult>("/work/teamsettings/iterations?$timeframe=current");
@@ -139,7 +162,7 @@ export class AzureClient implements vsc.Disposable {
 			return 0;
 		}
 
-		const finish = this.logger.perf('Getting max stack rank for tasks...');
+    const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
 			ids: taskIds.join(','),
