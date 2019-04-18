@@ -33,7 +33,7 @@ export class Configuration implements vsc.Disposable {
 				this.load();
 				this._onDidChange.fire(this);
 			}
-		})
+		});
 	}
 
 	public load() {

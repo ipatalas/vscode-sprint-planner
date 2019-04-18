@@ -15,7 +15,7 @@ export class SessionStore implements ISessionStore {
 	constructor(private azureClient: AzureClient, private config: Configuration, private logger: Logger) {
 	}
 
-	async setIteration(): Promise<void> {
+	private async setIteration(): Promise<void> {
 		const editor = vsc.window.activeTextEditor;
 
 		if (editor) {

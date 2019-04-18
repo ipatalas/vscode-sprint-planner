@@ -11,7 +11,7 @@ export class PublishCommand {
 
 	async publish(line?: number) {
 		const editor = vsc.window.activeTextEditor;
-		if (!editor) return;
+		if (!editor) { return; }
 
 		try {
 			let currentLine = line !== undefined ? line : editor.selection.active.line;
@@ -24,7 +24,7 @@ export class PublishCommand {
 
 			await this.sessionStore.ensureHasUserStories();
 
-			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id == us.id);
+			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id === us.id);
 			if (!userStoryInfo) {
 				return console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
 			}

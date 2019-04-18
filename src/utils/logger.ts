@@ -27,7 +27,7 @@ export class Logger implements vsc.Disposable {
 			return (text: string) => {
 				this.logger.appendLine(text);
 				this.isLineStillOpen = false;
-			}
+			};
 		}
 	}
 
