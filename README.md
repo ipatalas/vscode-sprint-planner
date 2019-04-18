@@ -42,4 +42,5 @@ This extension contributes the following settings:
 
 - ability to define arbitrary activity type (hardoded to 'Development' now)
 - option for partial update (take already published tasks into account)
+- snippets for "taxes" tasks (common tasks among many user stories, eg. unit tests)
 - want more? open an issue or PR
