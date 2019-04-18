@@ -21,7 +21,8 @@ export class IterationCompletionProvider implements vsc.CompletionItemProvider {
 
 				if (this.sessionStore.iterations) {
 					return this.sessionStore.iterations.map(it => {
-						const item = new vsc.CompletionItem(`${it.id} - ${it.name} - (${it.path})`, vsc.CompletionItemKind.Class);
+						const item = new vsc.CompletionItem(`${it.name} - (${it.path})`, vsc.CompletionItemKind.Class);
+						item.insertText = `${it.id} - ${it.name} - (${it.path})`;
 						item.sortText = it.path;
 
 						return item;
