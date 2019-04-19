@@ -10,6 +10,7 @@ import { Commands } from './constants';
 import { PublishCodeLensProvider } from './providers/publishCodeLensProvider';
 import { Logger } from './utils/logger';
 import { Configuration } from './utils/config';
+import { ActivityCompletionProvider } from './providers/activityCompletionProvider';
 
 const documentSelector = [
 	{ language: 'planner', scheme: 'file' },
@@ -26,11 +27,17 @@ export function activate(context: vsc.ExtensionContext) {
 
 	const publishCommand = new PublishCommand(sessionStore, azureClient, logger);
 
-	context.subscriptions.push(logger, config);
-	context.subscriptions.push(vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand));
-	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'));
-	context.subscriptions.push(vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'));
-	context.subscriptions.push(vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()));
+	const alphabet = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+
+	context.subscriptions.push(...[
+		logger,
+		config,
+		vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand),
+		vsc.languages.registerCompletionItemProvider(documentSelector, new ActivityCompletionProvider(sessionStore, logger), ...alphabet),
+		vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'),
+		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
+		vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider())
+	]);
 }
 
 // this method is called when your extension is deactivated
