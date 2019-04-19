@@ -10,6 +10,7 @@ export class ActivityCompletionProvider implements vsc.CompletionItemProvider {
 
 	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, _token: vsc.CancellationToken, _context: vsc.CompletionContext) {
 		const text = Document.getTextBeforeCursor(document, position);
+		const word = document.getText(document.getWordRangeAtPosition(position, /\w*:/));
 
 		if (ActivityTypeTriggerRegex.test(text)) {
 			try {
@@ -19,6 +20,14 @@ export class ActivityCompletionProvider implements vsc.CompletionItemProvider {
 					return this.sessionStore.activityTypes.map(activity => {
 						const item = new vsc.CompletionItem(activity, vsc.CompletionItemKind.TypeParameter);
 						item.insertText = `${activity}:`;
+
+						if (word.endsWith(':')) {
+							const currentLine = document.lineAt(position.line);
+
+							item.additionalTextEdits = [
+								vsc.TextEdit.delete(new vsc.Range(position, position.with(undefined, currentLine.text.length)))
+							];
+						}
 
 						return item;
 					});
