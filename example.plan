@@ -1,7 +1,11 @@
 US#13 - User Story Title (just informational)
+Development:
 - Discussion of the idea, 1h
 - Create metrics for User Story, 4h
 - New sample task
+Testing:
+- Integration tests, 2h
+- UI tests, 4h
 ---
 
 US#14 - Another User Story
