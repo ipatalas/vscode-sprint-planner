@@ -4,12 +4,17 @@
 	"repository": {
 		"expression": {
 			"patterns": [
+				{ "include": "#activity" },
 				{ "include": "#iteration-id" },
 				{ "include": "#user-story-id" },
 				{ "include": "#estimation" },
 				{ "include": "#task-description" },
 				{ "include": "#task" }
 			]
+		},
+		"activity": {
+			"match": "^\\w+:$",
+			"name": "storage.type"
 		},
 		"iteration-id": {
 			"match": "^IT#\\h{8}(\\-\\h{4}){3}\\-\\h{12}",
