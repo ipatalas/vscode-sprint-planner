@@ -2,18 +2,14 @@ import * as vsc from 'vscode';
 import { ISessionStore } from '../store';
 import { IterationPrefix } from '../constants';
 import { Logger } from '../utils/logger';
+import { Document } from '../utils/document';
 
 export class IterationCompletionProvider implements vsc.CompletionItemProvider {
 	constructor(private sessionStore: ISessionStore, private logger: Logger) {
 	}
 
 	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, token: vsc.CancellationToken, context: vsc.CompletionContext) {
-		const range = new vsc.Range(
-			new vsc.Position(position.line, position.character - IterationPrefix.length),
-			position
-		);
-
-		const text = document.getText(range);
+		const text = Document.getTextBeforeCursor(document, position);
 
 		if (text === IterationPrefix) {
 			try {
@@ -29,10 +25,9 @@ export class IterationCompletionProvider implements vsc.CompletionItemProvider {
 					});
 				}
 			} catch (err) {
-				if (typeof err === 'string') {
-					vsc.window.showErrorMessage(err);
-				} else if (err) {
-					this.logger.log(JSON.stringify(err));
+				if (err) {
+					vsc.window.showErrorMessage(err.message);
+					this.logger.log(err);
 				}
 			}
 		}

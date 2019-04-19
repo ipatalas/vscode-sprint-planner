@@ -2,18 +2,14 @@ import * as vsc from 'vscode';
 import { ISessionStore } from '../store';
 import { UserStoryPrefix } from '../constants';
 import { Logger } from '../utils/logger';
+import { Document } from '../utils/document';
 
 export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 	constructor(private sessionStore: ISessionStore, private logger: Logger) {
 	}
 
 	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, _token: vsc.CancellationToken, _context: vsc.CompletionContext) {
-		const range = new vsc.Range(
-			new vsc.Position(position.line, position.character - UserStoryPrefix.length),
-			position
-		);
-
-		const text = document.getText(range);
+		const text = Document.getTextBeforeCursor(document, position);
 
 		if (text === UserStoryPrefix) {
 			try {
