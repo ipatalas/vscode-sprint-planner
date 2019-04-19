@@ -6,6 +6,7 @@
 			"patterns": [
 				{ "include": "#activity" },
 				{ "include": "#iteration-id" },
+				{ "include": "#user-story-tag" },
 				{ "include": "#user-story-id" },
 				{ "include": "#estimation" },
 				{ "include": "#task-description" },
@@ -20,9 +21,13 @@
 			"match": "^IT#\\h{8}(\\-\\h{4}){3}\\-\\h{12}",
 			"name": "entity.name.function"
 		},
-		"user-story-id": {
-			"match": "^US#\\d+",
+		"user-story-tag": {
+			"match": "^US#(?=\\d+)",
 			"name": "entity.name.function"
+		},
+		"user-story-id": {
+			"match": "(?<=^US#)\\d+",
+			"name": "entity.name.tag"
 		},
 		"estimation": {
 			"match": "\\d+h?$",
