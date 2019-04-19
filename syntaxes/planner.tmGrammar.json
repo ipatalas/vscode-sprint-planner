@@ -28,7 +28,7 @@
 			"name": "comment.line"
 		},
 		"task": {
-			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,\\s*\\d+h?$|$)",
+			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=[,-]\\s*\\d+h?$|$)",
 			"name": "string.unquoted"
 		}
 	}
