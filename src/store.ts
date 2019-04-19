@@ -6,9 +6,13 @@ import { Stopwatch } from './utils/stopwatch';
 import { Configuration } from './utils/config';
 import { TextProcessor } from './utils/textProcessor';
 
+const MissingUrlOrToken = "Missing URL or token in configuration";
+
 export class SessionStore implements ISessionStore {
-	public currentIteration!: IterationInfo | undefined;
-	public customIteration!: IterationInfo | undefined;
+	private currentIteration!: IterationInfo | undefined;
+	private customIteration!: IterationInfo | undefined;
+
+	public activityTypes?: string[];
 	public iterations?: IterationInfo[];
 	public userStories?: UserStoryInfo[] = undefined;
 
@@ -36,13 +40,38 @@ export class SessionStore implements ISessionStore {
 		return Promise.resolve();
 	}
 
+	async ensureHasActivityTypes (): Promise<void> {
+		if (this.activityTypes !== undefined) {
+			return Promise.resolve();
+		}
+
+		if (!this.config.isValid) {
+			return Promise.reject(MissingUrlOrToken);
+		}
+
+		try {
+			let total = Stopwatch.startNew();
+			this.activityTypes = await this.azureClient.getActivityTypes();
+			total.stop();
+
+			this.logger.log(`Activity types fetched in ${total.toString()} (1 request)`);
+		} catch (err) {
+			if (err.response) {
+				console.error(`${err.response.data}`);
+			}
+			return Promise.reject(err);
+		}
+
+		return Promise.resolve();
+	}
+
 	async ensureHasIterations (): Promise<void> {
 		if (this.iterations !== undefined) {
 			return Promise.resolve();
 		}
 
 		if (!this.config.isValid) {
-			return Promise.reject("Missing URL or token in configuration");
+			return Promise.reject(MissingUrlOrToken);
 		}
 
 		try {
@@ -62,10 +91,9 @@ export class SessionStore implements ISessionStore {
 		return Promise.resolve();
 	}
 
-
 	async ensureHasUserStories (): Promise<void> {
 		if (!this.config.isValid) {
-			return Promise.reject("Missing URL or token in configuration");
+			return Promise.reject(MissingUrlOrToken);
 		}
 
 		try {
@@ -107,9 +135,11 @@ export class SessionStore implements ISessionStore {
 }
 
 export interface ISessionStore {
+	readonly activityTypes?: string[];
 	readonly iterations?: IterationInfo[];
 	readonly userStories?: UserStoryInfo[];
 
+	ensureHasActivityTypes (): Promise<void>;
 	ensureHasIterations (): Promise<void>;
 	ensureHasUserStories (): Promise<void>;
 }

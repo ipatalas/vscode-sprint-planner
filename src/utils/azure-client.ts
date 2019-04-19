@@ -4,6 +4,7 @@ import * as vsc from 'vscode';
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
 import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
+import { FieldDefinition } from '../models/azure-client/fields';
 import { Logger } from './logger';
 import { Stopwatch } from './stopwatch';
 import { Configuration } from './config';
@@ -132,6 +133,15 @@ export class AzureClient implements vsc.Disposable {
 		));
 	}
 
+	public async getActivityTypes(): Promise<string[]> {
+		const finish = this.logger.perf('Getting activity types...');
+		const result = await this.client.get<FieldDefinition>(`/wit/workitemtypes/Task/fields/Microsoft.VSTS.Common.Activity?$expand=All`);
+
+		finish();
+
+		return result.data.allowedValues;
+	}
+
 	public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
 		const finish = this.logger.perf('Getting user story info...');
 
@@ -162,7 +172,7 @@ export class AzureClient implements vsc.Disposable {
 			return 0;
 		}
 
-    const finish = this.logger.perf('Getting max stack rank for tasks...');
+    	const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
 			ids: taskIds.join(','),
