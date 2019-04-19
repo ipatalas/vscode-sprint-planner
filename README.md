@@ -1,3 +1,5 @@
+[![MarketPlace Tag](http://vsmarketplacebadge.apphb.com/version-short/ipatalas.vscode-sprint-planner.svg)](https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-sprint-planner)
+
 # Azure DevOps planner
 
 This extension features ability to export a planning session into Azure DevOps system. Planning in Azure DevOps itself is hard, way too much clicking. It's so much easier to just type all the tasks in a simple text form and then just export them.
@@ -40,7 +42,7 @@ This extension contributes the following settings:
 
 ## Roadmap
 
-- ability to define arbitrary activity type (hardoded to 'Development' now)
+- ability to define arbitrary activity type (hardcoded to 'Development' now)
 - option for partial update (take already published tasks into account)
 - snippets for "taxes" tasks (common tasks among many user stories, eg. unit tests)
 - want more? open an issue or PR
