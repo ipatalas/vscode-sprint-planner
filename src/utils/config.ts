@@ -18,7 +18,7 @@ export class Configuration implements vsc.Disposable {
 	}
 
 	get isValid() {
-		return this.organization && this.project && this.team && this.token;
+		return !!this.organization && !!this.project && !!this.team && !!this.token;
 	}
 
 	constructor(logger: Logger) {
