@@ -11,6 +11,7 @@ const MissingUrlOrToken = "Missing URL or token in configuration";
 export class SessionStore implements ISessionStore {
 	private currentIteration!: IterationInfo | undefined;
 	private customIteration!: IterationInfo | undefined;
+	private fetchingActivityTypes: boolean = false;
 
 	public activityTypes?: string[];
 	public iterations?: IterationInfo[];
@@ -49,6 +50,12 @@ export class SessionStore implements ISessionStore {
 			return Promise.reject(MissingUrlOrToken);
 		}
 
+		if (this.fetchingActivityTypes) {
+			return Promise.reject();
+		}
+
+		this.fetchingActivityTypes = true;
+
 		try {
 			let total = Stopwatch.startNew();
 			this.activityTypes = await this.azureClient.getActivityTypes();
@@ -59,9 +66,11 @@ export class SessionStore implements ISessionStore {
 			if (err.response) {
 				console.error(`${err.response.data}`);
 			}
+			this.fetchingActivityTypes = false;
 			return Promise.reject(err);
 		}
 
+		this.fetchingActivityTypes = false;
 		return Promise.resolve();
 	}
 
