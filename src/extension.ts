@@ -6,15 +6,15 @@ import { IterationCompletionProvider } from './providers/iterationCompletionProv
 import { UserStoryCompletionProvider } from './providers/userStoryCompletionProvider';
 import { SessionStore } from './store';
 import { AzureClient } from './utils/azure-client';
-import { Commands } from './constants';
+import { Commands, LanguageId } from './constants';
 import { PublishCodeLensProvider } from './providers/publishCodeLensProvider';
 import { Logger } from './utils/logger';
 import { Configuration } from './utils/config';
 import { ActivityCompletionProvider } from './providers/activityCompletionProvider';
 
 const documentSelector = [
-	{ language: 'planner', scheme: 'file' },
-	{ language: 'planner', scheme: 'untitled' },
+	{ language: LanguageId, scheme: 'file' },
+	{ language: LanguageId, scheme: 'untitled' },
 ];
 
 // this method is called when your extension is activated

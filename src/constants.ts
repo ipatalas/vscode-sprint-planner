@@ -1,3 +1,5 @@
+export const LanguageId = 'planner';
+
 export const NewLineRegex = /\r?\n/g;
 export const ActivityTypeTriggerRegex = /^[a-z]*$/i;
 
