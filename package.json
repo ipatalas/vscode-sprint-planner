@@ -105,6 +105,7 @@
 	},
 	"dependencies": {
 		"axios": "^0.18.0",
+		"didyoumean2": "^3.0.0",
 		"pretty-hrtime": "^1.0.3"
 	}
 }

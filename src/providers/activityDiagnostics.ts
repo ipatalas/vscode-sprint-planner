@@ -56,7 +56,9 @@ export class ActivityDiagnostics implements vsc.Disposable {
 
 				if (!activities.includes(activity)) {
 					const range = new vsc.Range(i, 0, i, activity.length);
-					diagnostics.push(new vsc.Diagnostic(range, `${activity} is not a valid Activity`));
+					const diagnostic = new vsc.Diagnostic(range, `${activity} is not a valid Activity`);
+					diagnostic.code = activity;
+					diagnostics.push(diagnostic);
 				}
 			}
 		}

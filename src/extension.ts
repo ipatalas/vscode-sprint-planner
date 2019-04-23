@@ -12,6 +12,7 @@ import { Logger } from './utils/logger';
 import { Configuration } from './utils/config';
 import { ActivityCompletionProvider } from './providers/activityCompletionProvider';
 import { ActivityDiagnostics } from './providers/activityDiagnostics';
+import { ActivityCodeActionProvider } from './providers/activityCodeActionProvider';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -41,6 +42,7 @@ export function activate(context: vsc.ExtensionContext) {
 		vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()),
+		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore, logger)),
 		activityDiagnostics
 	]);
 }
