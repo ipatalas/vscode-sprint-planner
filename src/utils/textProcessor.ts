@@ -86,13 +86,24 @@ export class TextProcessor {
 				.join(EOL)
 				.split(Constants.TaskLinesSplitter);
 
-			return taskLines.map(this.getTask);
+			const tasks = [];
+			let activity = undefined;
+
+			for (const line of taskLines) {
+				if (this.isActivityLine(line)) {
+					activity = line.substr(0, line.length - 1);
+				} else {
+					tasks.push(this.getTask(line, activity));
+				}
+			}
+
+			return tasks;
 		}
 
 		return [];
 	}
 
-	private static getTask(taskLine: string): Task {
+	private static getTask(taskLine: string, activity?: string): Task {
 		let [title, ...description] = taskLine.split(EOL);
 
 		const task = <Task>{};
@@ -107,6 +118,7 @@ export class TextProcessor {
 
 		task.title = title;
 		task.description = description.map(d => d.trimLeft());
+		task.activity = activity;
 
 		return task;
 	}
@@ -119,6 +131,10 @@ export class TextProcessor {
 	private static isEndOfUserStory(line: string) {
 		let isEndOfUserStory = Constants.EndOfUserStoryRegex.test(line) || Constants.UserStoryRegex.test(line);
 		return isEndOfUserStory;
+	}
+
+	private static isActivityLine(line: string) {
+		return Constants.ActivityTypeLine.test(line);
 	}
 }
 

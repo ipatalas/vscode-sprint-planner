@@ -57,7 +57,7 @@ export class PublishCommand {
 			areaPath: userStory.areaPath,
 			teamProject: userStory.teamProject,
 			iterationPath: userStory.iterationPath,
-			activity: 'Development',
+			activity: task.activity || 'Development',
 			estimation: task.estimation,
 			userStoryUrl: userStory.url,
 			stackRank: stackRank
