@@ -79,6 +79,12 @@
 					"type": "string",
 					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"
 				},
+				"planner.azure-devops.default.activity": {
+					"title": "Default Activity",
+					"type": "string",
+					"default": "Development",
+					"description": "Default activity used when none is provided for the task"
+				},
 				"planner.azure-devops.debug": {
 					"title": "Debug logging",
 					"type": "boolean",

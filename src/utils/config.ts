@@ -9,6 +9,7 @@ export class Configuration implements vsc.Disposable {
 	public team: string | undefined;
 	public token: string | undefined;
 	public debug!: boolean;
+	public defaultActivity: string | undefined;
 
 	private _onDidChange: vsc.EventEmitter<Configuration>;
 	private _eventHandler: vsc.Disposable;
@@ -43,6 +44,7 @@ export class Configuration implements vsc.Disposable {
 		this.team = config.get('team');
 		this.token = config.get('token');
 		this.debug = config.get<boolean>('debug', false);
+		this.defaultActivity = config.get('default.activity');
 	}
 
 	dispose() {

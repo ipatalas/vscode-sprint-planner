@@ -27,7 +27,7 @@ export function activate(context: vsc.ExtensionContext) {
 	const azureClient = new AzureClient(config, logger);
 	const sessionStore = new SessionStore(azureClient, config, logger);
 
-	const publishCommand = new PublishCommand(sessionStore, azureClient, logger);
+	const publishCommand = new PublishCommand(sessionStore, azureClient, logger, config);
 
 	const alphabet = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 

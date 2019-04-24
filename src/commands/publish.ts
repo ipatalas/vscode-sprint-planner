@@ -5,9 +5,14 @@ import { SessionStore } from '../store';
 import { AzureClient, TaskInfo, UserStoryInfo } from '../utils/azure-client';
 import { Task } from '../models/task';
 import { Logger } from '../utils/logger';
+import { Configuration } from '../utils/config';
 
 export class PublishCommand {
-	constructor(private sessionStore: SessionStore, private client: AzureClient, private logger: Logger) { }
+	constructor(
+		private sessionStore: SessionStore,
+		private client: AzureClient,
+		private logger: Logger,
+		private config: Configuration) { }
 
 	async publish(line?: number) {
 		const editor = vsc.window.activeTextEditor;
@@ -57,7 +62,7 @@ export class PublishCommand {
 			areaPath: userStory.areaPath,
 			teamProject: userStory.teamProject,
 			iterationPath: userStory.iterationPath,
-			activity: task.activity || 'Development',
+			activity: task.activity || this.config.defaultActivity!,
 			estimation: task.estimation,
 			userStoryUrl: userStory.url,
 			stackRank: stackRank
