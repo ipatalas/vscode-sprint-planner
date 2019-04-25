@@ -20,6 +20,10 @@ Now it's time to start planning your first story. You can start by typing `US#` 
 
 ![user story autocomplete](images/planner-1.gif)
 
+If you wish to add tasks for iteration other than current you can do so by choosing it at the beginning of the file:
+
+![iteration autocomplete](images/planner-2.gif)
+
 Then it's time to enter some tasks in the following manner:
 
 ![user story autocomplete](images/planner-tasks.png)

@@ -5,7 +5,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.1.0]
 ### Added
-- ability to select arbitrary iteration (still defaulted to Development)
+- ability to select arbitrary activity (defaulted to Development)
+- ability to select arbitrary iteration (still defaulted to current)
 ### Changed
 - make `h` in estimation optional
 ### Fixed
