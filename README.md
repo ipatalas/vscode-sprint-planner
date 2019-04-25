@@ -39,10 +39,11 @@ This extension contributes the following settings:
 * `planner.azure-devops.team`: Team name
 * `planner.azure-devops.token`: Authentication token (https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops)
 * `planner.azure-devops.debug`: whether to turn debug logging on or off
+* `planner.azure-devops.default.activity`: default Activity used when none is provided for the task (default: Development)
 
 ## Roadmap
 
-- ability to define arbitrary activity type (hardcoded to 'Development' now)
+- ~~ability to define arbitrary activity type (hardcoded to 'Development' now)~~
 - option for partial update (take already published tasks into account)
 - snippets for "taxes" tasks (common tasks among many user stories, eg. unit tests)
 - want more? open an issue or PR

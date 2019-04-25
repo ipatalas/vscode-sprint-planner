@@ -3,9 +3,9 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [0.0.4]
+## [0.1.0]
 ### Added
-- ability to select arbitrary iteration (still defaulted to current)
+- ability to select arbitrary iteration (still defaulted to Development)
 ### Changed
 - make `h` in estimation optional
 ### Fixed
