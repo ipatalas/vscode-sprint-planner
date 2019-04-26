@@ -1,4 +1,4 @@
-[![MarketPlace Tag](http://vsmarketplacebadge.apphb.com/version-short/ipatalas.vscode-sprint-planner.svg)](https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-sprint-planner)
+[![MarketPlace Tag](https://vsmarketplacebadge.apphb.com/version-short/ipatalas.vscode-sprint-planner.svg)](https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-sprint-planner)
 
 # Azure DevOps planner
 
