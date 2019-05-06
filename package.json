@@ -1,117 +1,121 @@
 {
-	"name": "vscode-sprint-planner",
-	"displayName": "Azure DevOps planner",
-	"description": "Azure DevOps planner",
-	"publisher": "ipatalas",
-	"version": "0.1.0",
-	"engines": {
-		"vscode": "^1.31.0"
-	},
-	"categories": [
-		"Other",
-		"Snippets"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ipatalas/vscode-sprint-planner"
-	},
-	"activationEvents": [
-		"onCommand:sprintplanner.publish",
-		"onLanguage:planner"
-	],
-	"icon": "images/logo128.png",
-	"main": "./out/extension.js",
-	"contributes": {
-		"languages": [
-			{
-				"id": "planner",
-				"extensions": [
-					".plan"
-				],
-				"aliases": [
-					"planner"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "planner",
-				"scopeName": "source.planner",
-				"path": "./syntaxes/planner.tmGrammar.json"
-			}
-		],
-		"commands": [
-			{
-				"command": "sprintplanner.publish",
-				"title": "Publish planning"
-			}
-		],
-		"snippets": [
-			{
-				"language": "planner",
-				"path": "./snippets/planner.json"
-			}
-		],
-		"configurationDefaults": {
-			"[planner]": {
-				"editor.detectIndentation": false,
-				"editor.insertSpaces": false
-			}
-		},
-		"configuration": {
-			"title": "Azure DevOps planner",
-			"properties": {
-				"planner.azure-devops.organization": {
-					"title": "Organization",
-					"type": "string"
-				},
-				"planner.azure-devops.project": {
-					"title": "Project",
-					"type": "string"
-				},
-				"planner.azure-devops.team": {
-					"title": "Team",
-					"type": "string"
-				},
-				"planner.azure-devops.token": {
-					"title": "Token",
-					"type": "string",
-					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"
-				},
-				"planner.azure-devops.default.activity": {
-					"title": "Default Activity",
-					"type": "string",
-					"default": "Development",
-					"description": "Default activity used when none is provided for the task"
-				},
-				"planner.azure-devops.debug": {
-					"title": "Debug logging",
-					"type": "boolean",
-					"default": false,
-					"description": "Whether to turn debug logging on or off"
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^10.12.21",
-		"@types/pretty-hrtime": "^1.0.0",
-		"tslint": "^5.12.1",
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28"
-	},
-	"dependencies": {
-		"axios": "^0.18.0",
-		"didyoumean2": "^3.0.0",
-		"pretty-hrtime": "^1.0.3"
-	}
+  "name": "vscode-sprint-planner",
+  "displayName": "Azure DevOps planner",
+  "description": "Azure DevOps planner",
+  "publisher": "ipatalas",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.31.0"
+  },
+  "categories": [
+    "Other",
+    "Snippets"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipatalas/vscode-sprint-planner"
+  },
+  "activationEvents": [
+    "onCommand:sprintplanner.publish",
+    "onLanguage:planner"
+  ],
+  "icon": "images/logo128.png",
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "planner",
+        "extensions": [
+          ".plan"
+        ],
+        "aliases": [
+          "planner"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "planner",
+        "scopeName": "source.planner",
+        "path": "./syntaxes/planner.tmGrammar.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "sprintplanner.publish",
+        "title": "Publish planning"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "planner",
+        "path": "./snippets/planner.json"
+      }
+    ],
+    "configurationDefaults": {
+      "[planner]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": false
+      }
+    },
+    "configuration": {
+      "title": "Azure DevOps planner",
+      "properties": {
+        "planner.azure-devops.organization": {
+          "title": "Organization",
+          "type": "string"
+        },
+        "planner.azure-devops.project": {
+          "title": "Project",
+          "type": "string"
+        },
+        "planner.azure-devops.team": {
+          "title": "Team",
+          "type": "string"
+        },
+        "planner.azure-devops.token": {
+          "title": "Token",
+          "type": "string",
+          "markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"
+        },
+        "planner.azure-devops.default.activity": {
+          "title": "Default Activity",
+          "type": "string",
+          "default": "Development",
+          "description": "Default activity used when none is provided for the task"
+        },
+        "planner.azure-devops.debug": {
+          "title": "Debug logging",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to turn debug logging on or off"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^10.12.21",
+    "@types/pretty-hrtime": "^1.0.0",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1",
+    "vscode": "^1.1.28"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "didyoumean2": "^3.0.0",
+    "pretty-hrtime": "^1.0.3",
+    "snyk": "^1.161.1"
+  },
+  "snyk": true
 }
