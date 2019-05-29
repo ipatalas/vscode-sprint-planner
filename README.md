@@ -7,7 +7,7 @@ This extension features ability to export a planning session into Azure DevOps s
 ## Disclaimer
 
 This is a very early stage of development so please don't expect everything to work.
-Some stuff is hardcoded for now like the Activity under which the tasks are created. It's always `Development` now.
+~~Some stuff is hardcoded for now like the Activity under which the tasks are created. It's always `Development` now.~~ (no longer true, see below)
 Additionally you should not publish your tasks partially just to update them later. They will get duplicated since it's always _Push All_ now.
 
 ## Usage
