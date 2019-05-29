@@ -48,6 +48,15 @@ This extension contributes the following settings:
 To change the settings please use `Preferences: Open User Settings` command (or `Workspace Settings` if you like to use different Azure DevOps accounts per workspace). This is by default bound to `Ctrl+,`.
 In the settings expand `Extensions` section and look for this extension's settings.
 
+## Complementary extensions
+
+I am using another extension to make it easier to change the estimations:
+
+![incrementor](images/incrementor.gif)
+
+There are few similar extensions available on the market. I picked [Incrementor](https://marketplace.visualstudio.com/items?itemName=nmsmith89.incrementor).
+VSCode allows you to bind any commands to a key so I bound increment/decrement to `Ctrl+Shift+Up` and `Ctrl+Shift+Down` but that's up to you.
+
 ## Roadmap
 
 - ~~ability to define arbitrary activity type (hardcoded to 'Development' now)~~
