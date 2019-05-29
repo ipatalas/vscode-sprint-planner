@@ -45,6 +45,9 @@ This extension contributes the following settings:
 * `planner.azure-devops.debug`: whether to turn debug logging on or off
 * `planner.azure-devops.default.activity`: default Activity used when none is provided for the task (default: Development)
 
+To change the settings please use `Preferences: Open User Settings` command (or `Workspace Settings` if you like to use different Azure DevOps accounts per workspace). This is by default bound to `Ctrl+,`.
+In the settings expand `Extensions` section and look for this extension's settings.
+
 ## Roadmap
 
 - ~~ability to define arbitrary activity type (hardcoded to 'Development' now)~~
