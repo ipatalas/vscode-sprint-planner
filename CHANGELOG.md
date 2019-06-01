@@ -3,15 +3,19 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.2.0]
+### Added
+- Activity type decoration (number of tasks and hours per activity)
+
 ## [0.1.0]
 ### Added
-- ability to select arbitrary activity (defaulted to Development)
-- ability to select arbitrary iteration (still defaulted to current)
+- Ability to select arbitrary activity (defaulted to Development)
+- Ability to select arbitrary iteration (still defaulted to current)
 ### Changed
-- make `h` in estimation optional
+- Make `h` in estimation optional
 ### Fixed
-- proper syntax highlighting when task title has commas
-- minor error handling improvements
+- Proper syntax highlighting when task title has commas
+- Minor error handling improvements
 
 ## [0.0.3]
 ### Fixed
