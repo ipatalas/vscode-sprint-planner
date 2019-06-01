@@ -1,5 +1,5 @@
 import * as Constants from '../constants';
-import { Task } from '../models/task';
+import { Task, UserStory } from '../models/task';
 import { EOL } from "os";
 
 export class TextProcessor {
@@ -49,12 +49,12 @@ export class TextProcessor {
 			return;
 		}
 
-		const [usLine] = userStoryInfo;
+		const [usLine, usId] = userStoryInfo;
 		const tasks = TextProcessor.getTasksInfo(allLines, usLine + 1);
 
-		return {
-			line: userStoryInfo[0],
-			id: userStoryInfo[1],
+		return <UserStory>{
+			line: usLine,
+			id: usId,
 			tasks
 		};
 	}
