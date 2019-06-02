@@ -13,6 +13,7 @@ import { Configuration } from './utils/config';
 import { ActivityCompletionProvider } from './providers/activityCompletionProvider';
 import { ActivityDiagnostics } from './providers/activityDiagnostics';
 import { ActivityCodeActionProvider } from './providers/activityCodeActionProvider';
+import { SnippetCompletionProvider } from './providers/snippetCompletionProvider';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -39,6 +40,7 @@ export function activate(context: vsc.ExtensionContext) {
 		config,
 		vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new ActivityCompletionProvider(sessionStore, logger), ...alphabet),
+		vsc.languages.registerCompletionItemProvider(documentSelector, new SnippetCompletionProvider(config), ...alphabet),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()),

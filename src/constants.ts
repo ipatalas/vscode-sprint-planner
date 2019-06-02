@@ -2,6 +2,7 @@ export const LanguageId = 'planner';
 
 export const NewLineRegex = /\r?\n/g;
 export const ActivityTypeTriggerRegex = /^[a-z]*$/i;
+export const SnippetTriggerRegex = /^[a-z]*$/i;
 export const ActivityTypeLine = /^[a-z]+:$/i;
 
 export const IterationPrefix = 'IT#';

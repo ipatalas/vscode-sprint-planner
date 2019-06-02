@@ -53,7 +53,7 @@ export class ActivityDiagnostics implements vsc.Disposable {
 
 		const lines = document.getText().split(NewLineRegex);
 		const diagnostics: vsc.Diagnostic[] = [];
-		const textEditor = vsc.window.activeTextEditor!;
+		const textEditor = vsc.window.activeTextEditor;
 
 		const userStoryLines = TextProcessor.getUserStoryLineIndices(lines);
 		const userStories = userStoryLines.map(usLine => TextProcessor.getUserStory(lines, usLine)!);
@@ -69,7 +69,7 @@ export class ActivityDiagnostics implements vsc.Disposable {
 					const diagnostic = new vsc.Diagnostic(range, `${activity} is not a valid Activity`);
 					diagnostic.code = activity;
 					diagnostics.push(diagnostic);
-				} else {
+				} else if (textEditor) {
 					let userStory = this.findUserStory(userStories, line);
 					if (userStory) {
 						const decoration = this.createActivityDecoration(userStory, activity);
