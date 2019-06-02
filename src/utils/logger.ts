@@ -31,6 +31,10 @@ export class Logger implements vsc.Disposable {
 		}
 	}
 
+	public show() {
+		this.logger.show(true);
+	}
+
 	public perf(text: string) {
 		const finishLogLine = this.log(text, false)!;
 		const stopwatch = Stopwatch.startNew();

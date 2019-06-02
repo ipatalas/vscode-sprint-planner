@@ -90,6 +90,15 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Whether to turn debug logging on or off"
+				},
+				"planner.azure-devops.snippets": {
+					"title": "Task snippets",
+					"type": "object",
+					"description": "Custom task snippets",
+					"properties": {
+						"name": {"title": "Name of the snippet", "type": "string"},
+						"url": {"title": "URL of the snippet", "type": "string", "description": "Either a local path or a HTTP link"}
+					}
 				}
 			}
 		}
