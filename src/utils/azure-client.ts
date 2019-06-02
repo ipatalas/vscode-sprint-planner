@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as vsc from 'vscode';
 
 import { IterationsResult } from '../models/azure-client/iterations';
@@ -58,7 +58,7 @@ export class AzureClient implements vsc.Disposable {
 			if (config.debug) {
 				const id = client.interceptors.response.use(
 					res => this.logRequest(res.request, res),
-					err => this.logRequest(err.request, Promise.reject(err))
+					err => this.logRequest(err.request, Promise.reject(err), err.response)
 				);
 				this._interceptors.push(id);
 			}
@@ -70,8 +70,11 @@ export class AzureClient implements vsc.Disposable {
 		this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
 	}
 
-	private logRequest(request: any, returnValue: any) {
+	private logRequest(request: any, returnValue: any, response?: AxiosResponse) {
 		console.log(`[DEBUG] ${request.method!.toUpperCase()} ${request.path}`);
+		if (response) {
+			console.log(`[DEBUG] Response: ${JSON.stringify(response.data)}`);
+		}
 		return returnValue;
 	}
 
@@ -96,7 +99,7 @@ export class AzureClient implements vsc.Disposable {
 		}
 
 		throw new Error("Iterations not found");
-  }
+	}
 
 	public async getCurrentIterationInfo(): Promise<IterationInfo> {
 		const finish = this.logger.perf('Getting current iteration info...');
@@ -172,7 +175,7 @@ export class AzureClient implements vsc.Disposable {
 			return 0;
 		}
 
-    	const finish = this.logger.perf('Getting max stack rank for tasks...');
+		const finish = this.logger.perf('Getting max stack rank for tasks...');
 
 		const params = <any>{
 			ids: taskIds.join(','),
@@ -230,7 +233,7 @@ export class AzureClient implements vsc.Disposable {
 			})
 			.catch(err => {
 				console.error(err);
-				return -1;
+				return Promise.reject(err);
 			});
 	}
 

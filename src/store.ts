@@ -41,7 +41,7 @@ export class SessionStore implements ISessionStore {
 		return Promise.resolve();
 	}
 
-	async ensureHasActivityTypes (): Promise<void> {
+	async ensureHasActivityTypes(): Promise<void> {
 		if (this.activityTypes !== undefined) {
 			return Promise.resolve();
 		}
@@ -63,9 +63,6 @@ export class SessionStore implements ISessionStore {
 
 			this.logger.log(`Activity types fetched in ${total.toString()} (1 request)`);
 		} catch (err) {
-			if (err.response) {
-				console.error(`${err.response.data}`);
-			}
 			this.fetchingActivityTypes = false;
 			return Promise.reject(err);
 		}
@@ -74,7 +71,7 @@ export class SessionStore implements ISessionStore {
 		return Promise.resolve();
 	}
 
-	async ensureHasIterations (): Promise<void> {
+	async ensureHasIterations(): Promise<void> {
 		if (this.iterations !== undefined) {
 			return Promise.resolve();
 		}
@@ -83,61 +80,47 @@ export class SessionStore implements ISessionStore {
 			return Promise.reject(MissingUrlOrToken);
 		}
 
-		try {
-			let total = Stopwatch.startNew();
-			this.iterations = await this.azureClient.getIterationsInfo();
-			total.stop();
+		let total = Stopwatch.startNew();
+		this.iterations = await this.azureClient.getIterationsInfo();
+		total.stop();
 
-			this.logger.log(`Iterations fetched in ${total.toString()} (1 request)`);
-			vsc.window.setStatusBarMessage(`Iterations fetched in ${total.toString()} (1 request)`, 2000);
-		} catch (err) {
-			if (err.response) {
-				console.error(`${err.response.data}`);
-			}
-			return Promise.reject(err);
-		}
+		this.logger.log(`Iterations fetched in ${total.toString()} (1 request)`);
+		vsc.window.setStatusBarMessage(`Iterations fetched in ${total.toString()} (1 request)`, 2000);
 
 		return Promise.resolve();
 	}
 
-	async ensureHasUserStories (): Promise<void> {
+	async ensureHasUserStories(): Promise<void> {
 		if (!this.config.isValid) {
 			return Promise.reject(MissingUrlOrToken);
 		}
 
-		try {
-			let total = Stopwatch.startNew();
-			let iteration;
+		let total = Stopwatch.startNew();
+		let iteration;
 
-			this.setIteration();
+		this.setIteration();
 
-			if (!this.customIteration) {
-				this.currentIteration = this.currentIteration || await this.azureClient.getCurrentIterationInfo();
-				iteration = this.currentIteration;
-				this.logger.log(`Iteration defaulted to ${this.currentIteration.path.toString()}`);
-			} else {
-				this.currentIteration = undefined;
-				iteration = this.customIteration;
-			}
-
-			const workItemsIds = await this.azureClient.getIterationWorkItems(iteration.id);
-
-			if (workItemsIds.length === 0) {
-				this.logger.log(`No user stories found in iteration`);
-				return Promise.reject();
-			}
-
-			this.userStories = await this.azureClient.getUserStoryInfo(workItemsIds.map(x => x.id));
-			total.stop();
-
-			this.logger.log(`User stories fetched in ${total.toString()} (3 requests)`);
-			vsc.window.setStatusBarMessage(`User stories fetched in ${total.toString()} (3 requests)`, 2000);
-		} catch (err) {
-			if (err.response) {
-				console.error(`${err.response.data}`);
-			}
-			return Promise.reject(err);
+		if (!this.customIteration) {
+			this.currentIteration = this.currentIteration || await this.azureClient.getCurrentIterationInfo();
+			iteration = this.currentIteration;
+			this.logger.log(`Iteration defaulted to ${this.currentIteration.path.toString()}`);
+		} else {
+			this.currentIteration = undefined;
+			iteration = this.customIteration;
 		}
+
+		const workItemsIds = await this.azureClient.getIterationWorkItems(iteration.id);
+
+		if (workItemsIds.length === 0) {
+			this.logger.log(`No user stories found in iteration`);
+			return Promise.reject();
+		}
+
+		this.userStories = await this.azureClient.getUserStoryInfo(workItemsIds.map(x => x.id));
+		total.stop();
+
+		this.logger.log(`User stories fetched in ${total.toString()} (3 requests)`);
+		vsc.window.setStatusBarMessage(`User stories fetched in ${total.toString()} (3 requests)`, 2000);
 
 		return Promise.resolve();
 	}
@@ -148,7 +131,7 @@ export interface ISessionStore {
 	readonly iterations?: IterationInfo[];
 	readonly userStories?: UserStoryInfo[];
 
-	ensureHasActivityTypes (): Promise<void>;
-	ensureHasIterations (): Promise<void>;
-	ensureHasUserStories (): Promise<void>;
+	ensureHasActivityTypes(): Promise<void>;
+	ensureHasIterations(): Promise<void>;
+	ensureHasUserStories(): Promise<void>;
 }
