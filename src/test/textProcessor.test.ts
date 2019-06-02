@@ -30,8 +30,8 @@ Development:
 Testing:
 - Integration tests, 2h
 - UI tests, 4h
-- small task
-- even smaller one`.split("\n");
+- small task, 0.5h
+- even smaller one, 3m`.split("\n");
 
 		const results = TextProcessor.getUserStory(lines, 0);
 
@@ -72,13 +72,13 @@ Testing:
 			activity: 'Testing'
 		});
 		expect(results!.tasks[5]).to.be.eql({
-			estimation: 0,
+			estimation: 0.5,
 			title: 'small task',
 			description: [],
 			activity: 'Testing'
 		});
 		expect(results!.tasks[6]).to.be.eql({
-			//estimation: 0,
+			estimation: 0.05,
 			title: 'even smaller one',
 			description: [],
 			activity: 'Testing'
