@@ -112,7 +112,13 @@ export class TextProcessor {
 
 		const match = title.match(Constants.TaskEstimationRegex);
 		if (match !== null) {
-			task.estimation = parseInt(match.groups!.estimation);
+			const est = match.groups!.estimation;
+			if (est) {
+				task.estimation = parseFloat(est);
+			} else {
+				const minutes = parseInt(match.groups!.estimation_m);
+				task.estimation = Math.floor(minutes / 60 * 100) / 100;
+			}
 			title = title.replace(match[0], '');
 		}
 
