@@ -108,7 +108,7 @@ export class ActivityDiagnostics implements vsc.Disposable {
 			return acc;
 		}, 0);
 
-		const percentage = Math.floor(stats.hours * 100 / totalHours);
+		const percentage = totalHours > 0 ? Math.floor(stats.hours * 100 / totalHours) : 0;
 
 		return vsc.window.createTextEditorDecorationType({
 			isWholeLine: true,
