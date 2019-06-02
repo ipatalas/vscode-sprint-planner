@@ -111,12 +111,15 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.42",
+		"@types/mocha": "5.2.7",
 		"@types/node": "^10.12.21",
 		"@types/pretty-hrtime": "^1.0.0",
+		"@types/expect.js": "^0.3.29",
 		"tslint": "^5.17.0",
 		"typescript": "^3.5.1",
-		"vscode": "^1.1.34"
+		"vscode": "^1.1.34",
+		"mocha": "6.1.4",
+		"expect.js": "0.3.1"
 	},
 	"dependencies": {
 		"axios": "^0.19.0",
