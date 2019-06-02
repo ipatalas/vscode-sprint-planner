@@ -6,6 +6,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.2.0]
 ### Added
 - Activity type decoration (number of tasks and hours per activity)
+- Support for task snippets loaded from disk or HTTP
+### Changed
+- Support decimal numbers in estimation or estimation in minutes
 
 ## [0.1.0]
 ### Added
