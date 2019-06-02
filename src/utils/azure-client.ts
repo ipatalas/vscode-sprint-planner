@@ -49,8 +49,8 @@ export class AzureClient implements vsc.Disposable {
 					username: "PAT",
 					password: config.token || ""
 				},
-				params: {
-					'api-version': "5.0"
+				headers: {
+					'Accept': 'application/json; api-version=5.0'
 				},
 				validateStatus: status => status === 200
 			});
