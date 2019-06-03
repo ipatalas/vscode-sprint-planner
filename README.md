@@ -60,6 +60,8 @@ Let's handle this like a pro! Go to settings file (UI doesn't provide option to 
 
 > Note: it can be either a local file or HTTP(S) direct link to a file
 
+The format of the file is as in the example: https://gist.github.com/ipatalas/8bb7b2fdb2e1c26dc8249659791cf56e#file-taxes
+
 It will be read only once when activating the extension (usually first time you open a `planner` file) and then cached. From now on you can simply use names of those snippets as snippets in the editor like this:
 
 ![snippets](images/snippets.gif)
