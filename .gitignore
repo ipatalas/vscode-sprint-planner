@@ -2,6 +2,7 @@
 /.vscode-test
 /node_modules
 /out
+/dist
 /responses
 yarn.lock
 team-extension.log

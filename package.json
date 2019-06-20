@@ -20,7 +20,7 @@
 		"onLanguage:planner"
 	],
 	"icon": "images/logo128.png",
-	"main": "./out/extension.js",
+	"main": "./dist/extension",
 	"contributes": {
 		"languages": [
 			{
@@ -111,22 +111,27 @@
 		}
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
+		"vscode:prepublish": "webpack --mode production",
+		"webpack": "webpack --mode development",
+		"webpack-dev": "webpack --mode development --watch",
+		"compile": "webpack --mode none",
+		"watch": "webpack --mode none --watch",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
+		"@types/expect.js": "^0.3.29",
 		"@types/mocha": "5.2.7",
 		"@types/node": "^10.12.21",
 		"@types/pretty-hrtime": "^1.0.0",
-		"@types/expect.js": "^0.3.29",
+		"expect.js": "0.3.1",
+		"mocha": "6.1.4",
+		"ts-loader": "^6.0.2",
 		"tslint": "^5.17.0",
 		"typescript": "^3.5.1",
 		"vscode": "^1.1.34",
-		"mocha": "6.1.4",
-		"expect.js": "0.3.1"
+		"webpack": "^4.32.2",
+		"webpack-cli": "^3.3.2"
 	},
 	"dependencies": {
 		"axios": "^0.19.0",
