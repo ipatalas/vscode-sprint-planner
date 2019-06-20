@@ -79,5 +79,5 @@ VSCode allows you to bind any commands to a key so I bound increment/decrement t
 
 - ~~ability to define arbitrary activity type (hardcoded to 'Development' now)~~
 - option for partial update (take already published tasks into account)
-- ~~snippets for "taxes" tasks (common tasks among many user stories, eg. unit tests)~~
+- ~~snippets for "taxes" tasks (common tasks among many user stories, eg. unit tests)~~ 👉 [Task snippets](#task-snippets)
 - want more? open an issue or PR
