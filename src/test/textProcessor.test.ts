@@ -43,7 +43,8 @@ Testing:
 			activity: 'Development',
 			description: [],
 			estimation: 1,
-			title: 'Discussion of the idea'
+			title: 'Discussion of the idea',
+			line: 2
 		});
 
 		expect(results!.tasks[1]).to.be.eql({
@@ -52,36 +53,42 @@ Testing:
 			description:
 				['Description of the task, leading whitespaces will be trimmed',
 					'It can be multiline as well, emojis more than welcome 👌😎'],
-			activity: 'Development'
+			activity: 'Development',
+			line: 3
 		});
 		expect(results!.tasks[2]).to.be.eql({
 			title: 'New sample task',
 			description: [],
-			activity: 'Development'
+			activity: 'Development',
+			line: 6
 		});
 		expect(results!.tasks[3]).to.be.eql({
 			estimation: 2,
 			title: 'Integration tests',
 			description: [],
-			activity: 'Testing'
+			activity: 'Testing',
+			line: 8
 		});
 		expect(results!.tasks[4]).to.be.eql({
 			estimation: 4,
 			title: 'UI tests',
 			description: [],
-			activity: 'Testing'
+			activity: 'Testing',
+			line: 9
 		});
 		expect(results!.tasks[5]).to.be.eql({
 			estimation: 0.5,
 			title: 'small task',
 			description: [],
-			activity: 'Testing'
+			activity: 'Testing',
+			line: 10
 		});
 		expect(results!.tasks[6]).to.be.eql({
 			estimation: 0.05,
 			title: 'even smaller one',
 			description: [],
-			activity: 'Testing'
+			activity: 'Testing',
+			line: 11
 		});
 	});
 });

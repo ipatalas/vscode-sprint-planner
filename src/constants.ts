@@ -14,7 +14,7 @@ export const EndOfUserStoryRegex = /^(---|\s*)$/;
 
 export const TaskPrefixRegex = /^\s*[-*]\s*/;
 export const TaskEstimationRegex = /\s*[,-]\s*((?<estimation>\d+(?:\.\d+)?)h?|(?<estimation_m>\d+)m)$/;
-export const TaskLinesSplitter = /\r?\n(?!\t)/; // tab in negative look-ahead assertion is for task descriptions which should be indented by a tab
+export const TaskDescriptionRegex = /^\t/;
 export const WorkItemIdFromUrl = /\/workItems\/(\d+)/;
 
 export const Commands = {

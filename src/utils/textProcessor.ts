@@ -81,21 +81,34 @@ export class TextProcessor {
 		}
 
 		if (firstTaskLine <= lastTaskLine) {
-			const taskLines = lines
-				.slice(firstTaskLine, lastTaskLine + 1)
-				.join(EOL)
-				.split(Constants.TaskLinesSplitter);
+			const taskLines = lines.slice(firstTaskLine, lastTaskLine + 1);
 
-			const tasks = [];
+			const tasks: Task[] = [];
+			let description: string[] = [];
 			let activity = undefined;
+
+			let lineNo = firstTaskLine;
+
+			const updateDescription = (description: string[]) => {
+				if (tasks.length > 0) {
+					tasks[tasks.length - 1].description = description;
+				}
+			};
 
 			for (const line of taskLines) {
 				if (this.isActivityLine(line)) {
 					activity = line.substr(0, line.length - 1);
+				} else if (this.isTaskDescriptionLine(line)) {
+					description.push(line.trimLeft());
 				} else {
-					tasks.push(this.getTask(line, activity));
+					updateDescription(description);
+					description = [];
+					tasks.push(this.getTask(line, lineNo, activity));
 				}
+				lineNo++;
 			}
+
+			updateDescription(description);
 
 			return tasks;
 		}
@@ -103,14 +116,12 @@ export class TextProcessor {
 		return [];
 	}
 
-	private static getTask(taskLine: string, activity?: string): Task {
-		let [title, ...description] = taskLine.split(EOL);
-
+	private static getTask(taskTitle: string, lineNo: number, activity?: string): Task {
 		const task = <Task>{};
 
-		title = title.replace(Constants.TaskPrefixRegex, '');
+		taskTitle = taskTitle.replace(Constants.TaskPrefixRegex, '');
 
-		const match = title.match(Constants.TaskEstimationRegex);
+		const match = taskTitle.match(Constants.TaskEstimationRegex);
 		if (match !== null) {
 			const est = match.groups!.estimation;
 			if (est) {
@@ -119,12 +130,12 @@ export class TextProcessor {
 				const minutes = parseInt(match.groups!.estimation_m);
 				task.estimation = Math.floor(minutes / 60 * 100) / 100;
 			}
-			title = title.replace(match[0], '');
+			taskTitle = taskTitle.replace(match[0], '');
 		}
 
-		task.title = title;
-		task.description = description.map(d => d.trimLeft());
+		task.title = taskTitle;
 		task.activity = activity;
+		task.line = lineNo;
 
 		return task;
 	}
@@ -139,8 +150,7 @@ export class TextProcessor {
 		return isEndOfUserStory;
 	}
 
-	private static isActivityLine(line: string) {
-		return Constants.ActivityTypeLine.test(line);
-	}
+	private static isActivityLine = (line: string) => Constants.ActivityTypeLine.test(line);
+	private static isTaskDescriptionLine = (line: string) => Constants.TaskDescriptionRegex.test(line);
 }
 

@@ -3,6 +3,7 @@ export interface Task {
 	estimation?: number;
 	description?: string[];
 	activity?: string;
+	line: number;
 }
 
 export interface UserStory {
