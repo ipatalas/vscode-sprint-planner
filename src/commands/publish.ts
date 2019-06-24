@@ -6,6 +6,7 @@ import { AzureClient, TaskInfo, UserStoryInfo } from '../utils/azure-client';
 import { Task } from '../models/task';
 import { Logger } from '../utils/logger';
 import { Configuration } from '../utils/config';
+import { isNumber } from 'util';
 
 export class PublishCommand {
 	constructor(
@@ -34,12 +35,22 @@ export class PublishCommand {
 				return console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
 			}
 
-			const taskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
-			const maxStackRank = await this.client.getMaxTaskStackRank(taskIds);
+			const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
+			const maxStackRank = await this.client.getMaxTaskStackRank(vsoTaskIds);
 
 			const requests = us.tasks.map((t, i) => this.buildTaskInfo(t, userStoryInfo, maxStackRank + i + 1));
 
-			await Promise.all(requests.map(r => this.client.createTask(r)));
+			let taskIds = await Promise.all(requests.map(r => this.client.createTask(r)));
+
+			await editor.edit((edit: vsc.TextEditorEdit) => {
+				for (let i = 0; i < us.tasks.length; i++) {
+					if (isNumber(taskIds[i])) {
+						const task = us.tasks[i];
+						const lineLength = editor.document.lineAt(task.line).text.length;
+						edit.insert(new vsc.Position(task.line, lineLength), ` [#${taskIds[i]}]`);
+					}
+				}
+			});
 
 			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id}`);
 		} catch (err) {
