@@ -1,6 +1,5 @@
 import * as Constants from '../constants';
 import { Task, UserStory } from '../models/task';
-import { EOL } from "os";
 
 export class TextProcessor {
 
@@ -120,6 +119,14 @@ export class TextProcessor {
 		const task = <Task>{};
 
 		taskTitle = taskTitle.replace(Constants.TaskPrefixRegex, '');
+
+		const match_id = taskTitle.match(Constants.TaskIdRegex);
+		if (match_id !== null) {
+			const id = match_id.groups!.id;
+
+			task.id = parseInt(id);
+			taskTitle = taskTitle.replace(match_id[0], '');
+		}
 
 		const match = taskTitle.match(Constants.TaskEstimationRegex);
 		if (match !== null) {

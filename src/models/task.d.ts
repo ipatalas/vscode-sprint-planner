@@ -1,4 +1,5 @@
 export interface Task {
+	id?: number;
 	title: string;
 	estimation?: number;
 	description?: string[];

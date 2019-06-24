@@ -13,7 +13,8 @@ export const UserStoryRegex = /^US#(\d+)/;
 export const EndOfUserStoryRegex = /^(---|\s*)$/;
 
 export const TaskPrefixRegex = /^\s*[-*]\s*/;
-export const TaskEstimationRegex = /\s*[,-]\s*((?<estimation>\d+(?:\.\d+)?)h?|(?<estimation_m>\d+)m)$/;
+export const TaskEstimationRegex = /\s*[,-]\s*((?<estimation_m>\d+)m|(?<estimation>\d+(?:\.\d+)?)h?)/;
+export const TaskIdRegex = /\s*\[#(?<id>\d+)\]$/;
 export const TaskDescriptionRegex = /^\t/;
 export const WorkItemIdFromUrl = /\/workItems\/(\d+)/;
 

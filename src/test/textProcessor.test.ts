@@ -22,15 +22,15 @@ describe("Given TextProcessor", function () {
 	it('when calling getUserStory', () => {
 		const lines = `US#13 - User Story Title (just informational)
 Development:
-- Discussion of the idea, 1h
-- Create metrics for User Story, 4h
+- Discussion of the idea, 1h [#101]
+- Create metrics for User Story, 4h [#102]
 	Description of the task, leading whitespaces will be trimmed
 	It can be multiline as well, emojis more than welcome 👌😎
 - New sample task
 Testing:
-- Integration tests, 2h
-- UI tests, 4h
-- small task, 0.5h
+- Integration tests, 2h [#103]
+- UI tests, 4h [#104]
+- small task, 0.5h [#105]
 - even smaller one, 3m`.split("\n");
 
 		const results = TextProcessor.getUserStory(lines, 0);
@@ -44,7 +44,8 @@ Testing:
 			description: [],
 			estimation: 1,
 			title: 'Discussion of the idea',
-			line: 2
+			line: 2,
+			id: 101
 		});
 
 		expect(results!.tasks[1]).to.be.eql({
@@ -54,7 +55,8 @@ Testing:
 				['Description of the task, leading whitespaces will be trimmed',
 					'It can be multiline as well, emojis more than welcome 👌😎'],
 			activity: 'Development',
-			line: 3
+			line: 3,
+			id: 102
 		});
 		expect(results!.tasks[2]).to.be.eql({
 			title: 'New sample task',
@@ -67,21 +69,24 @@ Testing:
 			title: 'Integration tests',
 			description: [],
 			activity: 'Testing',
-			line: 8
+			line: 8,
+			id: 103
 		});
 		expect(results!.tasks[4]).to.be.eql({
 			estimation: 4,
 			title: 'UI tests',
 			description: [],
 			activity: 'Testing',
-			line: 9
+			line: 9,
+			id: 104
 		});
 		expect(results!.tasks[5]).to.be.eql({
 			estimation: 0.5,
 			title: 'small task',
 			description: [],
 			activity: 'Testing',
-			line: 10
+			line: 10,
+			id: 105
 		});
 		expect(results!.tasks[6]).to.be.eql({
 			estimation: 0.05,
