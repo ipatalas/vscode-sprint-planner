@@ -10,7 +10,8 @@
 				{ "include": "#user-story-id" },
 				{ "include": "#estimation" },
 				{ "include": "#task-description" },
-				{ "include": "#task" }
+				{ "include": "#task" },
+				{ "include": "#task-id" }
 			]
 		},
 		"activity": {
@@ -30,8 +31,12 @@
 			"name": "entity.name.tag"
 		},
 		"estimation": {
-			"match": "(\\d+(\\.\\d{1,2})?h?|\\d+m)$",
+			"match": "(\\d+(\\.\\d{1,2})?h?|\\d+m)(?=$| \\[#\\d+\\]$)",
 			"name": "constant.numeric"
+		},
+		"task-id": {
+			"match": "(?<=\\[)#\\d+(?=\\]$)",
+			"name": "entity.name.tag"
 		},
 		"task-description": {
 			"match": "^\t.*",
