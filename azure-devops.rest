@@ -23,7 +23,7 @@ Authorization: Basic PAT {{token}}
 
 
 ### Get titles of User stories
-GET {{baseUrl}}/wit/workitems?ids=1,13,14,17&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
+GET {{baseUrl}}/wit/workitems?ids=1,13,14&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
 Authorization: Basic PAT {{token}}
 
 ###
@@ -91,3 +91,32 @@ Content-Type: application/json-patch+json
 
 # Add work item: https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/create?view=azure-devops-rest-5.0
 # Add link https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0#add_a_link
+
+### Update task
+# https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0
+PATCH {{baseUrl}}/wit/workitems/10?{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+Content-Type: application/json-patch+json
+
+[
+	{
+		"op": "add",
+		"path": "/fields/System.Title",
+		"value": "small task - edited"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/Microsoft.VSTS.Common.Activity",
+		"value": "Development"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/Microsoft.VSTS.Scheduling.RemainingWork",
+		"value": 2
+  	},
+	{
+		"op": "add",
+		"path": "/fields/Microsoft.VSTS.Scheduling.OriginalEstimate",
+		"value": 2
+  	}
+]
