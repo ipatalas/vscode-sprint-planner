@@ -10,8 +10,8 @@
 				{ "include": "#user-story-id" },
 				{ "include": "#estimation" },
 				{ "include": "#task-description" },
-				{ "include": "#task" },
-				{ "include": "#task-id" }
+				{ "include": "#task-id" },
+				{ "include": "#task" }
 			]
 		},
 		"activity": {
@@ -43,7 +43,7 @@
 			"name": "comment.line"
 		},
 		"task": {
-			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,[^,]*$|$)",
+			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,[^,]*$| \\[#\\d+\\]$|$)",
 			"name": "string.unquoted"
 		}
 	}
