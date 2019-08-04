@@ -37,8 +37,9 @@ export class PublishCommand {
 
 			const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
 			const maxStackRank = await this.client.getMaxTaskStackRank(vsoTaskIds);
+			let firstFreeStackRank = maxStackRank + 1;
 
-			const requests = us.tasks.map((t, i) => this.buildTaskInfo(t, userStoryInfo, maxStackRank + i + 1));
+			const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo, t.id ? undefined : firstFreeStackRank++));
 
 			let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
 
@@ -76,7 +77,7 @@ export class PublishCommand {
 		return m && parseInt(m[1]);
 	}
 
-	private buildTaskInfo(task: Task, userStory: UserStoryInfo, stackRank: number): TaskInfo {
+	private buildTaskInfo(task: Task, userStory: UserStoryInfo, stackRank?: number): TaskInfo {
 		return {
 			id: task.id,
 			title: task.title,

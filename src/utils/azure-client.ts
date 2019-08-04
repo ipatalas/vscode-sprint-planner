@@ -238,9 +238,12 @@ export class AzureClient implements vsc.Disposable {
 				this.addOperation('/fields/System.AreaPath', task.areaPath),
 				this.addOperation('/fields/System.TeamProject', task.teamProject),
 				this.addOperation('/fields/System.IterationPath', task.iterationPath),
-				this.addOperation('/fields/Microsoft.VSTS.Common.StackRank', task.stackRank),
 				this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl))
 			]);
+		}
+
+		if (task.stackRank) {
+			request.push(this.addOperation('/fields/Microsoft.VSTS.Common.StackRank', task.stackRank));
 		}
 
 		if (task.description && task.description.length > 0) {
@@ -304,5 +307,5 @@ export interface TaskInfo {
 	activity: string;
 	estimation?: number;
 	userStoryUrl: string;
-	stackRank: number;
+	stackRank?: number;
 }
