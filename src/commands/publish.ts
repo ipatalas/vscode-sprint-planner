@@ -28,6 +28,10 @@ export class PublishCommand {
 				return console.log('Cannot find user story info');
 			}
 
+			if (!this.ValidateTasks(us.tasks)) {
+				return;
+			}
+
 			await this.sessionStore.ensureHasUserStories();
 
 			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id === us.id);
@@ -55,6 +59,23 @@ export class PublishCommand {
 				this.logger.log(err);
 			}
 		}
+	}
+
+	private ValidateTasks(tasks: Task[]) {
+		const taskIds = tasks.filter(t => t.id).map(t => t.id!.toString());
+		const occurences = taskIds.reduce((acc, id) => {
+			acc[id] = acc[id] || 0;
+			acc[id]++;
+			return acc;
+		}, {} as { [key: string]: number });
+
+		const duplicateIds = Object.entries(occurences).filter(x => (<number>x[1]) > 1).map(x => '#' + x[0]);
+		if (duplicateIds.length > 0) {
+			vsc.window.showWarningMessage(`Duplicate tasks found: ${duplicateIds.join(', ')}`);
+			return false;
+		}
+
+		return true;
 	}
 
 	private async AppendTaskIds(editor: vsc.TextEditor, us: import("d:/Dev/src/vscode/vscode-sprint-planner/src/models/task").UserStory, taskIds: number[]) {
