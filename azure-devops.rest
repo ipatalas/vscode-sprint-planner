@@ -23,7 +23,7 @@ Authorization: Basic PAT {{token}}
 
 
 ### Get titles of User stories
-GET {{baseUrl}}/wit/workitems?ids=1,13,14&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
+GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
 Authorization: Basic PAT {{token}}
 
 ###
@@ -118,5 +118,34 @@ Content-Type: application/json-patch+json
 		"op": "add",
 		"path": "/fields/Microsoft.VSTS.Scheduling.OriginalEstimate",
 		"value": 2
+  	}
+]
+
+### Create User story
+
+POST {{baseUrl}}/wit/workitems/$User%20Story?{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+Content-Type: application/json-patch+json
+
+[
+	{
+		"op": "add",
+		"path": "/fields/System.Title",
+		"value": "New user story"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.AreaPath",
+		"value": "MyFirstProject"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.TeamProject",
+		"value": "MyFirstProject"
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.IterationPath",
+		"value": "MyFirstProject\\Iteration 1"
   	}
 ]
