@@ -40,25 +40,35 @@ export class PublishCommand {
 
 			const requests = us.tasks.map((t, i) => this.buildTaskInfo(t, userStoryInfo, maxStackRank + i + 1));
 
-			let taskIds = await Promise.all(requests.map(r => this.client.createTask(r)));
+			let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
 
-			await editor.edit((edit: vsc.TextEditorEdit) => {
-				for (let i = 0; i < us.tasks.length; i++) {
-					if (isNumber(taskIds[i])) {
-						const task = us.tasks[i];
-						const lineLength = editor.document.lineAt(task.line).text.length;
-						edit.insert(new vsc.Position(task.line, lineLength), ` [#${taskIds[i]}]`);
-					}
-				}
-			});
+			await this.AppendTaskIds(editor, us, taskIds);
 
-			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id}`);
+			const updatedTasks = us.tasks.filter(x => !!x.id).length;
+			const createdTasks = us.tasks.length - updatedTasks;
+
+			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id} (${createdTasks} created, ${updatedTasks} updated)`);
 		} catch (err) {
 			if (err) {
 				vsc.window.showErrorMessage(err.message);
 				this.logger.log(err);
 			}
 		}
+	}
+
+	private async AppendTaskIds(editor: vsc.TextEditor, us: import("d:/Dev/src/vscode/vscode-sprint-planner/src/models/task").UserStory, taskIds: number[]) {
+		await editor.edit((edit: vsc.TextEditorEdit) => {
+			for (let i = 0; i < us.tasks.length; i++) {
+				if (isNumber(taskIds[i])) {
+					const task = us.tasks[i];
+					const taskIsUpdated = task.id === taskIds[i];
+					if (!taskIsUpdated) {
+						const lineLength = editor.document.lineAt(task.line).text.length;
+						edit.insert(new vsc.Position(task.line, lineLength), ` [#${taskIds[i]}]`);
+					}
+				}
+			}
+		});
 	}
 
 	private extractTaskId(url: string): number | null {
@@ -68,6 +78,7 @@ export class PublishCommand {
 
 	private buildTaskInfo(task: Task, userStory: UserStoryInfo, stackRank: number): TaskInfo {
 		return {
+			id: task.id,
 			title: task.title,
 			description: task.description,
 			areaPath: userStory.areaPath,
