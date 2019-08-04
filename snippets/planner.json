@@ -7,9 +7,16 @@
         "description": "Iteration marker"
     },
     "User story title": {
-        "prefix": "user story",
+        "prefix": "edit user story",
         "body": [
             "US#"
+        ],
+        "description": "User Story marker"
+    },
+    "Create User story": {
+        "prefix": "create user story",
+        "body": [
+            "US#new - ${1:title}"
         ],
         "description": "User Story marker"
     },
