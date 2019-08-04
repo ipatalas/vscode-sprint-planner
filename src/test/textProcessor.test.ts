@@ -19,7 +19,7 @@ describe("Given TextProcessor", function () {
 		expect(results).to.be.eql([0, 1, 2, 4, 6]);
 	});
 
-	it('when calling getUserStory', () => {
+	it('when calling getUserStory for existing US', () => {
 		const lines = `US#13 - User Story Title (just informational)
 Development:
 - Discussion of the idea, 1h [#101]
@@ -95,5 +95,21 @@ Testing:
 			activity: 'Testing',
 			line: 11
 		});
+	});
+
+	it('when calling getUserStory for new US', () => {
+		const lines = `US#new - New User Story
+Development:
+- Discussion of the idea, 1h
+- Create metrics for User Story, 4h
+	Description of the task, leading whitespaces will be trimmed
+	It can be multiline as well, emojis more than welcome 👌😎
+- New sample task`.split("\n");
+
+		const results = TextProcessor.getUserStory(lines, 0);
+
+		expect(results).to.be.ok();
+		expect(results!.id).to.be.equal(undefined);
+		expect(results!.tasks.length).to.be.equal(3);
 	});
 });
