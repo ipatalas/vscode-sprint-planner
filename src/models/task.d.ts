@@ -9,6 +9,6 @@ export interface Task {
 
 export interface UserStory {
 	line: number,
-	id: number,
+	id?: number,
 	tasks: Task[]
 }

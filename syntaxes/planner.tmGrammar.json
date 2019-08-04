@@ -23,11 +23,11 @@
 			"name": "entity.name.function"
 		},
 		"user-story-tag": {
-			"match": "^US#(?=\\d+)",
+			"match": "^US#(?=\\d+|new)",
 			"name": "entity.name.function"
 		},
 		"user-story-id": {
-			"match": "(?<=^US#)\\d+",
+			"match": "(?<=^US#)\\d+|new",
 			"name": "entity.name.tag"
 		},
 		"estimation": {

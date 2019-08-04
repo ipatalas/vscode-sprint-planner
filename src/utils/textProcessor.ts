@@ -49,7 +49,7 @@ export class TextProcessor {
 		}
 
 		const [usLine, usId] = userStoryInfo;
-		const tasks = TextProcessor.getTasksInfo(allLines, usLine + 1);
+		const tasks = TextProcessor.getTasksInfo(allLines, usLine! + 1);
 
 		return <UserStory>{
 			line: usLine,
@@ -62,7 +62,7 @@ export class TextProcessor {
 		for (; currentLine >= 0; currentLine--) {
 			const id = TextProcessor.getUserStoryID(lines[currentLine]);
 			if (id) {
-				return [currentLine, parseInt(id)];
+				return [currentLine, id === 'new' ? undefined : parseInt(id)];
 			}
 		}
 	}
