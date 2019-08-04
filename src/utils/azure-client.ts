@@ -197,16 +197,54 @@ export class AzureClient implements vsc.Disposable {
 		return max;
 	}
 
-	public createTask(task: TaskInfo): Promise<number> {
+	public createOrUpdateTask(task: TaskInfo): Promise<number> {
+		const createNewTask = !task.id;
+
+		const request = this.buildCreateUpdateRequest(task, createNewTask);
+
+		if (createNewTask) {
+			this.logger.log(`Creating task: ${task.title}...`);
+		} else {
+			this.logger.log(`Updating task #${task.id}: ${task.title}...`);
+		}
+		let stopwatch = Stopwatch.startNew();
+
+		const func = createNewTask ? this.client.post : this.client.patch;
+		const url = createNewTask ? '/wit/workitems/$Task' : `/wit/workitems/${task.id}`;
+
+		return func<WorkItemCreatedResponse>(
+			url, request, {
+				headers: {
+					'Content-Type': 'application/json-patch+json'
+				}
+			}).then(res => {
+				this.logger.log(`#${res.data.id} Task '${task.title}' ${createNewTask ? 'created' : 'updated'} (${stopwatch.toString()})`);
+				return res.data.id;
+			})
+			.catch(err => {
+				console.error(err);
+				return Promise.reject(err);
+			});
+	}
+
+	private buildCreateUpdateRequest(task: TaskInfo, createNewTask: boolean) {
 		const request = [
 			this.addOperation('/fields/System.Title', task.title),
-			this.addOperation('/fields/System.AreaPath', task.areaPath),
-			this.addOperation('/fields/System.TeamProject', task.teamProject),
-			this.addOperation('/fields/System.IterationPath', task.iterationPath),
-			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity),
-			this.addOperation('/fields/Microsoft.VSTS.Common.StackRank', task.stackRank),
-			this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl)),
+			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity)
 		];
+
+		if (createNewTask) {
+			request.push(...[
+				this.addOperation('/fields/System.AreaPath', task.areaPath),
+				this.addOperation('/fields/System.TeamProject', task.teamProject),
+				this.addOperation('/fields/System.IterationPath', task.iterationPath),
+				this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl))
+			]);
+		}
+
+		if (task.stackRank) {
+			request.push(this.addOperation('/fields/Microsoft.VSTS.Common.StackRank', task.stackRank));
+		}
 
 		if (task.description && task.description.length > 0) {
 			request.push(this.addOperation('/fields/System.Description', `<div>${task.description.join("</div><div>")}</div>`));
@@ -219,22 +257,7 @@ export class AzureClient implements vsc.Disposable {
 			]);
 		}
 
-		this.logger.log(`Creating task: ${task.title}...`);
-		let stopwatch = Stopwatch.startNew();
-
-		return this.client.post<WorkItemCreatedResponse>(
-			'/wit/workitems/$Task', request, {
-				headers: {
-					'Content-Type': 'application/json-patch+json'
-				}
-			}).then(res => {
-				this.logger.log(`#${res.data.id} Task '${task.title}' created (${stopwatch.toString()})`);
-				return res.data.id;
-			})
-			.catch(err => {
-				console.error(err);
-				return Promise.reject(err);
-			});
+		return request;
 	}
 
 	private addOperation(path: string, value: any) {
@@ -275,6 +298,7 @@ export interface UserStoryInfo {
 }
 
 export interface TaskInfo {
+	id?: number;
 	title: string;
 	description?: string[];
 	areaPath: string;
@@ -283,5 +307,5 @@ export interface TaskInfo {
 	activity: string;
 	estimation?: number;
 	userStoryUrl: string;
-	stackRank: number;
+	stackRank?: number;
 }

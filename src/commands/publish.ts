@@ -6,6 +6,7 @@ import { AzureClient, TaskInfo, UserStoryInfo } from '../utils/azure-client';
 import { Task } from '../models/task';
 import { Logger } from '../utils/logger';
 import { Configuration } from '../utils/config';
+import { isNumber } from 'util';
 
 export class PublishCommand {
 	constructor(
@@ -27,6 +28,10 @@ export class PublishCommand {
 				return console.log('Cannot find user story info');
 			}
 
+			if (!this.ValidateTasks(us.tasks)) {
+				return;
+			}
+
 			await this.sessionStore.ensureHasUserStories();
 
 			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id === us.id);
@@ -34,14 +39,20 @@ export class PublishCommand {
 				return console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
 			}
 
-			const taskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
-			const maxStackRank = await this.client.getMaxTaskStackRank(taskIds);
+			const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
+			const maxStackRank = await this.client.getMaxTaskStackRank(vsoTaskIds);
+			let firstFreeStackRank = maxStackRank + 1;
 
-			const requests = us.tasks.map((t, i) => this.buildTaskInfo(t, userStoryInfo, maxStackRank + i + 1));
+			const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo, t.id ? undefined : firstFreeStackRank++));
 
-			await Promise.all(requests.map(r => this.client.createTask(r)));
+			let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
 
-			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id}`);
+			await this.AppendTaskIds(editor, us, taskIds);
+
+			const updatedTasks = us.tasks.filter(x => !!x.id).length;
+			const createdTasks = us.tasks.length - updatedTasks;
+
+			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id} (${createdTasks} created, ${updatedTasks} updated)`);
 		} catch (err) {
 			if (err) {
 				vsc.window.showErrorMessage(err.message);
@@ -50,13 +61,46 @@ export class PublishCommand {
 		}
 	}
 
+	private ValidateTasks(tasks: Task[]) {
+		const taskIds = tasks.filter(t => t.id).map(t => t.id!.toString());
+		const occurences = taskIds.reduce((acc, id) => {
+			acc[id] = acc[id] || 0;
+			acc[id]++;
+			return acc;
+		}, {} as { [key: string]: number });
+
+		const duplicateIds = Object.entries(occurences).filter(x => (<number>x[1]) > 1).map(x => '#' + x[0]);
+		if (duplicateIds.length > 0) {
+			vsc.window.showWarningMessage(`Duplicate tasks found: ${duplicateIds.join(', ')}`);
+			return false;
+		}
+
+		return true;
+	}
+
+	private async AppendTaskIds(editor: vsc.TextEditor, us: import("d:/Dev/src/vscode/vscode-sprint-planner/src/models/task").UserStory, taskIds: number[]) {
+		await editor.edit((edit: vsc.TextEditorEdit) => {
+			for (let i = 0; i < us.tasks.length; i++) {
+				if (isNumber(taskIds[i])) {
+					const task = us.tasks[i];
+					const taskIsUpdated = task.id === taskIds[i];
+					if (!taskIsUpdated) {
+						const lineLength = editor.document.lineAt(task.line).text.length;
+						edit.insert(new vsc.Position(task.line, lineLength), ` [#${taskIds[i]}]`);
+					}
+				}
+			}
+		});
+	}
+
 	private extractTaskId(url: string): number | null {
 		const m = Constants.WorkItemIdFromUrl.exec(url);
 		return m && parseInt(m[1]);
 	}
 
-	private buildTaskInfo(task: Task, userStory: UserStoryInfo, stackRank: number): TaskInfo {
+	private buildTaskInfo(task: Task, userStory: UserStoryInfo, stackRank?: number): TaskInfo {
 		return {
+			id: task.id,
 			title: task.title,
 			description: task.description,
 			areaPath: userStory.areaPath,
