@@ -21,48 +21,61 @@ export class PublishCommand {
 		const editor = vsc.window.activeTextEditor;
 		if (!editor) { return; }
 
-		try {
-			let currentLine = line !== undefined ? line : editor.selection.active.line;
-			const lines = editor.document.getText().split(Constants.NewLineRegex);
+		vsc.window.withProgress({ location: vsc.ProgressLocation.Notification }, async progress => {
+			try {
+				let currentLine = line !== undefined ? line : editor.selection.active.line;
+				const lines = editor.document.getText().split(Constants.NewLineRegex);
 
-			const us = TextProcessor.getUserStory(lines, currentLine);
-			if (!us) {
-				return console.log('Cannot find user story info in that line');
+				const us = TextProcessor.getUserStory(lines, currentLine);
+				if (!us) {
+					return console.log('Cannot find user story info in that line');
+				}
+
+				this.validateUserStory(us);
+
+				progress.report({ increment: 10, message: "Publishing..." });
+
+				let createUserStory = !us.id;
+				let userStoryInfo: UserStoryInfo | undefined;
+
+				if (createUserStory) {
+					const iteration = await this.sessionStore.determineIteration();
+					const workItem = await this.client.createUserStory(us.title, iteration.path);
+					userStoryInfo = await this.getUserStoryInfo(workItem);
+				} else {
+					userStoryInfo = await this.getUserStoryInfo(us);
+				}
+
+				progress.report({ increment: 50 });
+
+				if (!userStoryInfo) {
+					return;
+				}
+
+				const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
+				const maxStackRank = await this.client.getMaxTaskStackRank(vsoTaskIds);
+				let firstFreeStackRank = maxStackRank + 1;
+
+				progress.report({ increment: 10 });
+
+				const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo!, t.id ? undefined : firstFreeStackRank++));
+
+				let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
+
+				progress.report({ increment: 30 });
+
+				await this.updateEditor(editor, us, taskIds, createUserStory ? userStoryInfo.id : undefined);
+				this.showSummary(userStoryInfo.id, us.tasks);
+
+				return Promise.resolve();
+			} catch (err) {
+				if (err) {
+					vsc.window.showErrorMessage(err.message);
+					this.logger.log(err);
+					return Promise.reject();
+				}
 			}
-
-			this.validateUserStory(us);
-
-			let createUserStory = !us.id;
-			let userStoryInfo: UserStoryInfo | undefined;
-
-			if (createUserStory) {
-				const iteration = await this.sessionStore.determineIteration();
-				const workItem = await this.client.createUserStory(us.title, iteration.path);
-				userStoryInfo = await this.getUserStoryInfo(workItem);
-			} else {
-				userStoryInfo = await this.getUserStoryInfo(us);
-			}
-
-			if (!userStoryInfo) {
-				return;
-			}
-
-			const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
-			const maxStackRank = await this.client.getMaxTaskStackRank(vsoTaskIds);
-			let firstFreeStackRank = maxStackRank + 1;
-
-			const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo!, t.id ? undefined : firstFreeStackRank++));
-
-			let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
-
-			await this.updateEditor(editor, us, taskIds, createUserStory ? userStoryInfo.id : undefined);
-			this.showSummary(userStoryInfo.id, us.tasks);
-		} catch (err) {
-			if (err) {
-				vsc.window.showErrorMessage(err.message);
-				this.logger.log(err);
-			}
-		}
+		});
 	}
 
 	private showSummary(usId: number, tasks: Task[]) {
