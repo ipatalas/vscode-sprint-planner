@@ -30,13 +30,12 @@ export class PublishCommand {
 				return console.log('Cannot find user story info in that line');
 			}
 
-			if (!this.validateTasks(us.tasks)) {
-				return;
-			}
+			this.validateUserStory(us);
 
+			let createUserStory = !us.id;
 			let userStoryInfo: UserStoryInfo | undefined;
 
-			if (!us.id) {
+			if (createUserStory) {
 				const iteration = await this.sessionStore.determineIteration();
 				const workItem = await this.client.createUserStory(us.title, iteration.path);
 				userStoryInfo = await this.getUserStoryInfo(workItem);
@@ -73,8 +72,14 @@ export class PublishCommand {
 		vsc.window.showInformationMessage(`Published ${tasks.length} tasks for US#${usId} (${createdTasks} created, ${updatedTasks} updated)`);
 	}
 
-	private validateTasks(tasks: Task[]) {
-		const taskIds = tasks.filter(t => t.id).map(t => t.id!.toString());
+	private validateUserStory(us: UserStory) {
+		let createUserStory = !us.id;
+
+		const taskIds = us.tasks.filter(t => t.id).map(t => t.id!.toString());
+		if (createUserStory && taskIds.length > 0) {
+			throw new Error(`Tasks cannot have IDs when creating User Story (#${taskIds.join(', #')})`)
+		}
+
 		const occurences = taskIds.reduce((acc, id) => {
 			acc[id] = acc[id] || 0;
 			acc[id]++;
@@ -83,11 +88,8 @@ export class PublishCommand {
 
 		const duplicateIds = Object.entries(occurences).filter(x => (<number>x[1]) > 1).map(x => '#' + x[0]);
 		if (duplicateIds.length > 0) {
-			vsc.window.showWarningMessage(`Duplicate tasks found: ${duplicateIds.join(', ')}`);
-			return false;
+			throw new Error(`Duplicate tasks found: ${duplicateIds.join(', ')}`)
 		}
-
-		return true;
 	}
 
 	private async getUserStoryInfo(us: UserStory | WorkItemInfo) {
