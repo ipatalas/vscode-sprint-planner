@@ -9,19 +9,23 @@ import { Configuration } from '../utils/config';
 import { isNumber } from 'util';
 import { WorkItemInfo } from '../models/azure-client/workItems';
 import { UserStoryInfoMapper } from '../utils/mappers';
+import { LockableCommand } from './lockableCommand';
 
-export class PublishCommand {
+export class PublishCommand extends LockableCommand {
 	constructor(
 		private sessionStore: ISessionStore,
 		private client: AzureClient,
 		private logger: Logger,
-		private config: Configuration) { }
+		private config: Configuration) {
+		super();
+	}
 
 	async publish(line?: number) {
 		const editor = vsc.window.activeTextEditor;
 		if (!editor) { return; }
+		if (!this.lock()) { return; }
 
-		vsc.window.withProgress({ location: vsc.ProgressLocation.Notification }, async progress => {
+		await vsc.window.withProgress({ location: vsc.ProgressLocation.Notification }, async progress => {
 			try {
 				let currentLine = line !== undefined ? line : editor.selection.active.line;
 				const lines = editor.document.getText().split(Constants.NewLineRegex);
@@ -76,6 +80,8 @@ export class PublishCommand {
 				}
 			}
 		});
+
+		this.unlock();
 	}
 
 	private showSummary(usId: number, tasks: Task[]) {
