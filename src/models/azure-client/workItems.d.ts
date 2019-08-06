@@ -17,6 +17,7 @@ export interface WorkItemFields {
 	"System.IterationPath":            string;
 	"System.Title":                    string;
 	"Microsoft.VSTS.Common.StackRank": number;
+	[key: string]: any;
 }
 
 export interface Relation {
@@ -27,10 +28,4 @@ export interface Relation {
 
 export interface Attributes {
 	isLocked: boolean;
-}
-
-export interface WorkItemCreatedResponse {
-	id:        number;
-	rev:       number;
-	url:       string;
 }

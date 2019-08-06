@@ -10,5 +10,6 @@ export interface Task {
 export interface UserStory {
 	line: number,
 	id?: number,
+	title: string;
 	tasks: Task[]
 }

@@ -9,8 +9,8 @@ import { TextProcessor } from './utils/textProcessor';
 const MissingUrlOrToken = "Missing URL or token in configuration";
 
 export class SessionStore implements ISessionStore {
-	private currentIteration!: IterationInfo | undefined;
-	private customIteration!: IterationInfo | undefined;
+	private currentIteration?: IterationInfo;
+	private customIteration?: IterationInfo;
 	private fetchingActivityTypes: boolean = false;
 
 	public activityTypes?: string[];
@@ -20,7 +20,7 @@ export class SessionStore implements ISessionStore {
 	constructor(private azureClient: AzureClient, private config: Configuration, private logger: Logger) {
 	}
 
-	private async setIteration(): Promise<void> {
+	private async setCustomIteration(): Promise<void> {
 		const editor = vsc.window.activeTextEditor;
 
 		if (editor) {
@@ -96,18 +96,7 @@ export class SessionStore implements ISessionStore {
 		}
 
 		let total = Stopwatch.startNew();
-		let iteration;
-
-		this.setIteration();
-
-		if (!this.customIteration) {
-			this.currentIteration = this.currentIteration || await this.azureClient.getCurrentIterationInfo();
-			iteration = this.currentIteration;
-			this.logger.log(`Iteration defaulted to ${this.currentIteration.path.toString()}`);
-		} else {
-			this.currentIteration = undefined;
-			iteration = this.customIteration;
-		}
+		let iteration = await this.determineIteration();
 
 		const workItemsIds = await this.azureClient.getIterationWorkItems(iteration.id);
 
@@ -124,6 +113,20 @@ export class SessionStore implements ISessionStore {
 
 		return Promise.resolve();
 	}
+
+	public async determineIteration() {
+		this.setCustomIteration();
+
+		if (!this.customIteration) {
+			this.currentIteration = this.currentIteration || await this.azureClient.getCurrentIterationInfo();
+			this.logger.log(`Iteration defaulted to ${this.currentIteration.path.toString()}`);
+			return this.currentIteration;
+		}
+		else {
+			this.currentIteration = undefined;
+			return this.customIteration;
+		}
+	}
 }
 
 export interface ISessionStore {
@@ -134,4 +137,6 @@ export interface ISessionStore {
 	ensureHasActivityTypes(): Promise<void>;
 	ensureHasIterations(): Promise<void>;
 	ensureHasUserStories(): Promise<void>;
+
+	determineIteration(): Promise<IterationInfo>;
 }

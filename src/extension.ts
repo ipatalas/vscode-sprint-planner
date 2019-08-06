@@ -14,18 +14,18 @@ import { ActivityCompletionProvider } from './providers/activityCompletionProvid
 import { ActivityDiagnostics } from './providers/activityDiagnostics';
 import { ActivityCodeActionProvider } from './providers/activityCodeActionProvider';
 import { SnippetCompletionProvider } from './providers/snippetCompletionProvider';
+import { WorkItemRequestBuilder } from './utils/workItemRequestBuilder';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
 	{ language: LanguageId, scheme: 'untitled' },
 ];
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vsc.ExtensionContext) {
+	const workItemRequestBuilder = new WorkItemRequestBuilder();
 	const logger = new Logger();
 	const config = new Configuration(logger);
-	const azureClient = new AzureClient(config, logger);
+	const azureClient = new AzureClient(config, logger, workItemRequestBuilder);
 	const sessionStore = new SessionStore(azureClient, config, logger);
 
 	const publishCommand = new PublishCommand(sessionStore, azureClient, logger, config);

@@ -3,11 +3,13 @@ import * as vsc from 'vscode';
 
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
-import { WorkItemInfoResult, WorkItemCreatedResponse } from '../models/azure-client/workItems';
+import { WorkItemInfoResult, WorkItemInfo } from '../models/azure-client/workItems';
 import { FieldDefinition } from '../models/azure-client/fields';
 import { Logger } from './logger';
 import { Stopwatch } from './stopwatch';
 import { Configuration } from './config';
+import { WorkItemRequestBuilder } from './workItemRequestBuilder';
+import { UserStoryInfoMapper } from './mappers';
 
 export class AzureClient implements vsc.Disposable {
 	private _apiVersionPreview = {
@@ -19,7 +21,7 @@ export class AzureClient implements vsc.Disposable {
 	_eventHandler: vsc.Disposable;
 	_interceptors: number[] = [];
 
-	constructor(config: Configuration, private logger: Logger) {
+	constructor(config: Configuration, private logger: Logger, private workItemRequestBuilder: WorkItemRequestBuilder) {
 		this.recreateClient(config);
 
 		this._eventHandler = config.onDidChange(cfg => this.recreateClient(cfg));
@@ -158,15 +160,7 @@ export class AzureClient implements vsc.Disposable {
 
 		return result.data.value
 			.filter(x => x.fields["System.WorkItemType"] === "User Story")
-			.map(x => (<UserStoryInfo>{
-				id: x.id,
-				url: x.url,
-				title: x.fields["System.Title"],
-				areaPath: x.fields["System.AreaPath"],
-				teamProject: x.fields["System.TeamProject"],
-				iterationPath: x.fields["System.IterationPath"],
-				taskUrls: (x.relations) && x.relations.filter(r => r.rel === 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
-			}));
+			.map(UserStoryInfoMapper.fromWorkItemInfo);
 	}
 
 	public async getMaxTaskStackRank(taskIds: number[]): Promise<number> {
@@ -200,7 +194,8 @@ export class AzureClient implements vsc.Disposable {
 	public createOrUpdateTask(task: TaskInfo): Promise<number> {
 		const createNewTask = !task.id;
 
-		const request = this.buildCreateUpdateRequest(task, createNewTask);
+		const buildRequest = createNewTask ? this.workItemRequestBuilder.createTaskRequest : this.workItemRequestBuilder.updateTaskRequest;
+		const request = buildRequest.call(this.workItemRequestBuilder, task);
 
 		if (createNewTask) {
 			this.logger.log(`Creating task: ${task.title}...`);
@@ -212,7 +207,7 @@ export class AzureClient implements vsc.Disposable {
 		const func = createNewTask ? this.client.post : this.client.patch;
 		const url = createNewTask ? '/wit/workitems/$Task' : `/wit/workitems/${task.id}`;
 
-		return func<WorkItemCreatedResponse>(
+		return func<WorkItemInfo>(
 			url, request, {
 				headers: {
 					'Content-Type': 'application/json-patch+json'
@@ -227,52 +222,25 @@ export class AzureClient implements vsc.Disposable {
 			});
 	}
 
-	private buildCreateUpdateRequest(task: TaskInfo, createNewTask: boolean) {
-		const request = [
-			this.addOperation('/fields/System.Title', task.title),
-			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity)
-		];
+	public createUserStory(title: string, iterationPath: string): Promise<WorkItemInfo> {
+		const request = this.workItemRequestBuilder.createUserStory(title, iterationPath);
 
-		if (createNewTask) {
-			request.push(...[
-				this.addOperation('/fields/System.AreaPath', task.areaPath),
-				this.addOperation('/fields/System.TeamProject', task.teamProject),
-				this.addOperation('/fields/System.IterationPath', task.iterationPath),
-				this.addOperation('/relations/-', this.userStoryLink(task.userStoryUrl))
-			]);
-		}
+		this.logger.log(`Creating User Story: ${title}...`);
+		let stopwatch = Stopwatch.startNew();
 
-		if (task.stackRank) {
-			request.push(this.addOperation('/fields/Microsoft.VSTS.Common.StackRank', task.stackRank));
-		}
-
-		if (task.description && task.description.length > 0) {
-			request.push(this.addOperation('/fields/System.Description', `<div>${task.description.join("</div><div>")}</div>`));
-		}
-
-		if (task.estimation) {
-			request.push(...[
-				this.addOperation('/fields/Microsoft.VSTS.Scheduling.RemainingWork', task.estimation),
-				this.addOperation('/fields/Microsoft.VSTS.Scheduling.OriginalEstimate', task.estimation)
-			]);
-		}
-
-		return request;
-	}
-
-	private addOperation(path: string, value: any) {
-		return {
-			op: 'add',
-			path,
-			value
-		};
-	}
-
-	private userStoryLink(url: string) {
-		return {
-			rel: "System.LinkTypes.Hierarchy-Reverse",
-			url
-		};
+		return this.client.post<WorkItemInfo>(
+			'/wit/workitems/$User%20Story', request, {
+				headers: {
+					'Content-Type': 'application/json-patch+json'
+				}
+			}).then(res => {
+				this.logger.log(`#${res.data.id} User story '${title}' created (${stopwatch.toString()})`);
+				return res.data;
+			})
+			.catch(err => {
+				console.error(err);
+				return Promise.reject(err);
+			});
 	}
 }
 

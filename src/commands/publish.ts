@@ -1,16 +1,18 @@
 import * as vsc from 'vscode';
 import * as Constants from '../constants';
 import { TextProcessor } from '../utils/textProcessor';
-import { SessionStore } from '../store';
+import { ISessionStore } from '../store';
 import { AzureClient, TaskInfo, UserStoryInfo } from '../utils/azure-client';
-import { Task } from '../models/task';
+import { Task, UserStory } from '../models/task';
 import { Logger } from '../utils/logger';
 import { Configuration } from '../utils/config';
 import { isNumber } from 'util';
+import { WorkItemInfo } from '../models/azure-client/workItems';
+import { UserStoryInfoMapper } from '../utils/mappers';
 
 export class PublishCommand {
 	constructor(
-		private sessionStore: SessionStore,
+		private sessionStore: ISessionStore,
 		private client: AzureClient,
 		private logger: Logger,
 		private config: Configuration) { }
@@ -25,34 +27,37 @@ export class PublishCommand {
 
 			const us = TextProcessor.getUserStory(lines, currentLine);
 			if (!us) {
-				return console.log('Cannot find user story info');
+				return console.log('Cannot find user story info in that line');
 			}
 
-			if (!this.ValidateTasks(us.tasks)) {
+			if (!this.validateTasks(us.tasks)) {
 				return;
 			}
 
-			await this.sessionStore.ensureHasUserStories();
+			let userStoryInfo: UserStoryInfo | undefined;
 
-			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id === us.id);
+			if (!us.id) {
+				const iteration = await this.sessionStore.determineIteration();
+				const workItem = await this.client.createUserStory(us.title, iteration.path);
+				userStoryInfo = await this.getUserStoryInfo(workItem);
+			} else {
+				userStoryInfo = await this.getUserStoryInfo(us);
+			}
+
 			if (!userStoryInfo) {
-				return console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
+				return;
 			}
 
 			const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
 			const maxStackRank = await this.client.getMaxTaskStackRank(vsoTaskIds);
 			let firstFreeStackRank = maxStackRank + 1;
 
-			const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo, t.id ? undefined : firstFreeStackRank++));
+			const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo!, t.id ? undefined : firstFreeStackRank++));
 
 			let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
 
-			await this.AppendTaskIds(editor, us, taskIds);
-
-			const updatedTasks = us.tasks.filter(x => !!x.id).length;
-			const createdTasks = us.tasks.length - updatedTasks;
-
-			vsc.window.showInformationMessage(`Published ${us.tasks.length} tasks for US#${us.id} (${createdTasks} created, ${updatedTasks} updated)`);
+			await this.appendTaskIds(editor, us, taskIds);
+			this.showSummary(userStoryInfo.id, us.tasks);
 		} catch (err) {
 			if (err) {
 				vsc.window.showErrorMessage(err.message);
@@ -61,7 +66,14 @@ export class PublishCommand {
 		}
 	}
 
-	private ValidateTasks(tasks: Task[]) {
+	private showSummary(usId: number, tasks: Task[]) {
+		const updatedTasks = tasks.filter(x => !!x.id).length;
+		const createdTasks = tasks.length - updatedTasks;
+
+		vsc.window.showInformationMessage(`Published ${tasks.length} tasks for US#${usId} (${createdTasks} created, ${updatedTasks} updated)`);
+	}
+
+	private validateTasks(tasks: Task[]) {
 		const taskIds = tasks.filter(t => t.id).map(t => t.id!.toString());
 		const occurences = taskIds.reduce((acc, id) => {
 			acc[id] = acc[id] || 0;
@@ -78,7 +90,27 @@ export class PublishCommand {
 		return true;
 	}
 
-	private async AppendTaskIds(editor: vsc.TextEditor, us: import("d:/Dev/src/vscode/vscode-sprint-planner/src/models/task").UserStory, taskIds: number[]) {
+	private async getUserStoryInfo(us: UserStory | WorkItemInfo) {
+		if (this.isUserStory(us)) {
+			await this.sessionStore.ensureHasUserStories();
+
+			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id === us.id);
+
+			if (!userStoryInfo) {
+				console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
+			}
+
+			return userStoryInfo;
+		} else {
+			return UserStoryInfoMapper.fromWorkItemInfo(us);
+		}
+	}
+
+	private isUserStory(us: UserStory | WorkItemInfo): us is UserStory {
+		return (us as UserStory).line !== undefined;
+	}
+
+	private async appendTaskIds(editor: vsc.TextEditor, us: UserStory, taskIds: number[]) {
 		await editor.edit((edit: vsc.TextEditorEdit) => {
 			for (let i = 0; i < us.tasks.length; i++) {
 				if (isNumber(taskIds[i])) {

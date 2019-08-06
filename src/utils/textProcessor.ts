@@ -48,21 +48,28 @@ export class TextProcessor {
 			return;
 		}
 
-		const [usLine, usId] = userStoryInfo;
-		const tasks = TextProcessor.getTasksInfo(allLines, usLine! + 1);
+		const tasks = TextProcessor.getTasksInfo(allLines, userStoryInfo.line + 1);
 
 		return <UserStory>{
-			line: usLine,
-			id: usId,
+			line: userStoryInfo.line,
+			id: userStoryInfo.id,
+			title: userStoryInfo.title,
 			tasks
 		};
 	}
 
 	private static getUserStoryInfo(lines: string[], currentLine: number) {
 		for (; currentLine >= 0; currentLine--) {
-			const id = TextProcessor.getUserStoryID(lines[currentLine]);
-			if (id) {
-				return [currentLine, id === 'new' ? undefined : parseInt(id)];
+			const match = Constants.UserStoryRegex.exec(lines[currentLine]);
+
+			if (match !== null) {
+				const { id, title } = match.groups!;
+
+				return {
+					line: currentLine,
+					id: id === 'new' ? undefined : parseInt(id),
+					title
+				};
 			}
 		}
 	}
@@ -145,11 +152,6 @@ export class TextProcessor {
 		task.line = lineNo;
 
 		return task;
-	}
-
-	private static getUserStoryID(line: string) {
-		const match = Constants.UserStoryRegex.exec(line);
-		return match !== null && match[1];
 	}
 
 	private static isEndOfUserStory(line: string) {
