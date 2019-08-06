@@ -55,7 +55,7 @@ export class PublishCommand {
 
 			let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
 
-			await this.appendTaskIds(editor, us, taskIds);
+			await this.updateEditor(editor, us, taskIds, createUserStory ? userStoryInfo.id : undefined);
 			this.showSummary(userStoryInfo.id, us.tasks);
 		} catch (err) {
 			if (err) {
@@ -112,8 +112,15 @@ export class PublishCommand {
 		return (us as UserStory).line !== undefined;
 	}
 
-	private async appendTaskIds(editor: vsc.TextEditor, us: UserStory, taskIds: number[]) {
+	private async updateEditor(editor: vsc.TextEditor, us: UserStory, taskIds: number[], createdUserStoryId?: number) {
 		await editor.edit((edit: vsc.TextEditorEdit) => {
+			if (createdUserStoryId) {
+				// Format of the line: US#new - <title>
+				const newIdx = 3;
+				const startPos = new vsc.Position(us.line, newIdx);
+				edit.replace(new vsc.Range(startPos, startPos.translate(undefined, "new".length)), createdUserStoryId.toString());
+			}
+
 			for (let i = 0; i < us.tasks.length; i++) {
 				if (isNumber(taskIds[i])) {
 					const task = us.tasks[i];
