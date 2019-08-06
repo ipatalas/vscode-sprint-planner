@@ -36,6 +36,7 @@ Testing:
 		const results = TextProcessor.getUserStory(lines, 0);
 
 		expect(results).to.be.ok();
+		expect(results!.title).to.be('User Story Title (just informational)');
 		expect(results!.id).to.be(13);
 		expect(results!.line).to.be(0);
 		expect(results!.tasks).to.have.length(7);
@@ -109,6 +110,7 @@ Development:
 		const results = TextProcessor.getUserStory(lines, 0);
 
 		expect(results).to.be.ok();
+		expect(results!.title).to.be('New User Story');
 		expect(results!.id).to.be.equal(undefined);
 		expect(results!.tasks.length).to.be.equal(3);
 	});
