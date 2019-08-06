@@ -131,17 +131,7 @@ Content-Type: application/json-patch+json
 	{
 		"op": "add",
 		"path": "/fields/System.Title",
-		"value": "New user story"
-  	},
-	{
-		"op": "add",
-		"path": "/fields/System.AreaPath",
-		"value": "MyFirstProject"
-  	},
-	{
-		"op": "add",
-		"path": "/fields/System.TeamProject",
-		"value": "MyFirstProject"
+		"value": "test 2"
   	},
 	{
 		"op": "add",
