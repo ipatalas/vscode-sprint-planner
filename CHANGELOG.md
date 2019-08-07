@@ -3,6 +3,14 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.3.0]
+### Added
+- Ability to update existing tasks
+- Ability to add new User Story
+- Progress bar to show publish operation progress
+### Changed
+- Updated grammar to be more reliable. For instance it should no longer highlight estimation-like text in User Story line.
+
 ## [0.2.0]
 ### Added
 - Activity type decoration (number of tasks and hours per activity)

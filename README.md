@@ -8,7 +8,8 @@ This extension features ability to export a planning session into Azure DevOps s
 
 This is a very early stage of development so please don't expect everything to work.
 ~~Some stuff is hardcoded for now like the Activity under which the tasks are created. It's always `Development` now.~~ (no longer true, see below)
-Additionally you should not publish your tasks partially just to update them later. They will get duplicated since it's always _Push All_ now.
+
+~~Additionally you should not publish your tasks partially just to update them later. They will get duplicated since it's always _Push All_ now.~~ (fixed in 0.3.0)
 
 ## Usage
 
@@ -28,11 +29,23 @@ Then it's time to enter some tasks in the following manner:
 
 ![user story autocomplete](images/planner-tasks.png)
 
-> Tip: tasks don't necesarilly have to be prepended with a hyphen but it makes it look better
-
-The image should be pretty self-explanatory I hope. The numbers following the tasks are estimations. They will be filled in both **Original** and **Remaining Estimation** field in Azure DevOps. As you can see it can be specified in both hours (up to 2 decimal places) and minutes (integer).
+he image should be pretty self-explanatory I hope. The numbers following the tasks are estimations. They will be filled in both **Original** and **Remaining Estimation** field in Azure DevOps. As you can see it can be specified in both hours (up to 2 decimal places) and minutes (integer).
 
 At this point there is a Code Lens action above the user story that lets you publish the changes. Check it out. In case of something is not working just open Output panel and pick `Azure DevOps planner` channel to see what might be wrong. If it's not obvious just raise an issue.
+
+### Updating tasks
+
+Since **0.3.0** tasks can be updated. After a publish all published tasks should get their ID instered at the end of task line. Don't play with those IDs if you don't want to make a mess. Later on you can change the title or estimation and such task will get updated next time this User Story is published.
+
+### Creating User Stories
+
+Apart from creating tasks you can now also create a new user stories. Just use the snippet `create user story` or type it manually like this:
+
+![create user story](images/create-user-story.png)
+
+After publishing you will get User Story ID filled and you can add more tasks then or update existing ones:
+
+![user story created](images/user-story-created.png)
 
 ## Configuration
 
@@ -77,9 +90,11 @@ I am using another extension to make it easier to change the estimations:
 There are few similar extensions available on the market. I picked [Incrementor](https://marketplace.visualstudio.com/items?itemName=nmsmith89.incrementor).
 VSCode allows you to bind any commands to a key so I bound increment/decrement to `Ctrl+Shift+Up` and `Ctrl+Shift+Down` but that's up to you.
 
+> **Update**: apparently there is such an option built-in. Check `Emmet: Increment by 1` and similar commands. Still using *Incrementor* though to easily toggle between **let/const/var** or **private/public**. Pick whatever suites you more.
+
 ## Roadmap
 
 - ~~ability to define arbitrary activity type (hardcoded to 'Development' now)~~
-- option for partial update (take already published tasks into account)
+- ~~option for partial update (take already published tasks into account)~~ 👉 [Updating tasks](#updating-tasks)
 - ~~snippets for "taxes" tasks (common tasks among many user stories, eg. unit tests)~~ 👉 [Task snippets](#task-snippets)
 - want more? open an issue or PR
