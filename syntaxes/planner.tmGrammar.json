@@ -6,11 +6,8 @@
 			"patterns": [
 				{ "include": "#activity" },
 				{ "include": "#iteration-id" },
-				{ "include": "#user-story-tag" },
-				{ "include": "#user-story-id" },
-				{ "include": "#estimation" },
+				{ "include": "#user-story" },
 				{ "include": "#task-description" },
-				{ "include": "#task-id" },
 				{ "include": "#task" }
 			]
 		},
@@ -22,29 +19,24 @@
 			"match": "^IT#\\h{8}(\\-\\h{4}){3}\\-\\h{12}",
 			"name": "entity.name.function"
 		},
-		"user-story-tag": {
-			"match": "^US#(?=\\d+|new)",
-			"name": "entity.name.function"
-		},
-		"user-story-id": {
-			"match": "(?<=^US#)\\d+|new",
-			"name": "entity.name.tag"
-		},
-		"estimation": {
-			"match": "(\\d+(\\.\\d{1,2})?h?|\\d+m)(?=$| \\[#\\d+\\]$)",
-			"name": "constant.numeric"
-		},
-		"task-id": {
-			"match": "(?<=\\[)#\\d+(?=\\]$)",
-			"name": "entity.name.tag"
+		"user-story": {
+			"match": "^US#(\\d+|new)",
+			"name": "entity.name.function",
+			"captures": {
+				"1": { "name": "entity.name.tag" }
+			}
 		},
 		"task-description": {
 			"match": "^\t.*",
 			"name": "comment.line"
 		},
 		"task": {
-			"match": "^(?:(?:[-*] |(?!US#)\\w+)).*?(?=,[^,]*$| \\[#\\d+\\]$|$)",
-			"name": "string.unquoted"
+			"match": "^(?<task>[-*] .*?)(?:, ?(?<estimation>\\d+(?:\\.\\d{1,2})?h?|\\d+m))?(?:\\s*\\[(?<task_id>#\\d+)\\])?$",
+			"captures": {
+				"1": { "name": "string.unquoted" },
+				"2": { "name": "constant.numeric" },
+				"3": { "name": "entity.name.tag" }
+			}
 		}
 	}
 }
