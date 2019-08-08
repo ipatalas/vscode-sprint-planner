@@ -39,7 +39,7 @@ Since **0.3.0** tasks can be updated. After a publish all published tasks should
 
 ### Creating User Stories
 
-Apart from creating tasks you can now also create a new user stories. Just use the snippet `create user story` or type it manually like this:
+Apart from creating tasks you can now also create new user stories. Just use the snippet `create user story` or type it manually like this:
 
 ![create user story](images/create-user-story.png)
 
