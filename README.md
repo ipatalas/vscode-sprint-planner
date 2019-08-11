@@ -4,13 +4,6 @@
 
 This extension features ability to export a planning session into Azure DevOps system. Planning in Azure DevOps itself is hard, way too much clicking. It's so much easier to just type all the tasks in a simple text form and then just export them.
 
-## Disclaimer
-
-This is a very early stage of development so please don't expect everything to work.
-~~Some stuff is hardcoded for now like the Activity under which the tasks are created. It's always `Development` now.~~ (no longer true, see below)
-
-~~Additionally you should not publish your tasks partially just to update them later. They will get duplicated since it's always _Push All_ now.~~ (fixed in 0.3.0)
-
 ## Usage
 
 To start a planning session open a new file in vscode and change the language to `planner` (_Change Language mode_ command). This should enable the extension and all its features.
