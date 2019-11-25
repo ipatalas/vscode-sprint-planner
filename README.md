@@ -55,6 +55,11 @@ This extension contributes the following settings:
 To change the settings please use `Preferences: Open User Settings` command (or `Workspace Settings` if you like to use different Azure DevOps accounts per workspace). This is by default bound to `Ctrl+,`.
 In the settings expand `Extensions` section and look for this extension's settings.
 
+### Token permissions
+
+For the token to work correctly it only needs one single scope: **Work Items (read & write)**
+![scopes](images/scopes.png)
+
 ### Task snippets
 
 It's often the case that some tasks repeat among all or almost all user stories. There is no need to type them all manually every time. It's a tedious task and should be automated. For instance we have automated tests. Additionally we do so called triangle meetings (BA/DEV/TEST) before starting the story to make sure we understand it correctly and also a short test pyramid meeting to preselect which tests go where (unit, integration, ui).
