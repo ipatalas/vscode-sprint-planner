@@ -3,6 +3,12 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.4.0]
+### Added
+- Support for Scrum process type (with Product Backlog Items)
+### Fixed
+- Don't reload snippets when they have not been changed in the configuration
+
 ## [0.3.0]
 ### Added
 - Ability to update existing tasks

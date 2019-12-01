@@ -48,6 +48,7 @@ This extension contributes the following settings:
 * `planner.azure-devops.project`: Project name
 * `planner.azure-devops.team`: Team name
 * `planner.azure-devops.token`: Authentication token (https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops)
+* `planner.azure-devops.process`: Project process (currently only Agile and Scrum are supported)
 * `planner.azure-devops.debug`: whether to turn debug logging on or off
 * `planner.azure-devops.default.activity`: default Activity used when none is provided for the task (default: Development)
 * `planner.azure-devops.snippets`: custom tasks snippets that can be used (see [Task snippets](#task-snippets))
