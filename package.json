@@ -78,7 +78,14 @@
 					"title": "Token",
 					"type": "string",
 					"markdownDescription": "How to obtain a token: https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops"
-				},
+                },
+                "planner.azure-devops.process": {
+                    "title": "Process",
+                    "type": "string",
+                    "default": "Agile",
+                    "enum": ["Agile", "Scrum"],
+                    "description": "Process used in the project (see your Project settings)"
+                },
 				"planner.azure-devops.default.activity": {
 					"title": "Default Activity",
 					"type": "string",

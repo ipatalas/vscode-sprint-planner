@@ -7,6 +7,7 @@ const ConfigurationKey = 'planner.azure-devops';
 const SnippetsConfigurationKey = 'planner.azure-devops.snippets';
 
 export class Configuration implements vsc.Disposable {
+    public process: string | undefined;
     public organization: string | undefined;
     public project: string | undefined;
     public team: string | undefined;
@@ -51,6 +52,7 @@ export class Configuration implements vsc.Disposable {
         this.project = config.get('project');
         this.team = config.get('team');
         this.token = config.get('token');
+        this.process = config.get('process');
         this.debug = config.get<boolean>('debug', false);
         this.defaultActivity = config.get('default.activity');
 
