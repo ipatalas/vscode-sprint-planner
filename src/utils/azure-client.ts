@@ -21,17 +21,20 @@ export class AzureClient implements vsc.Disposable {
 	_eventHandler: vsc.Disposable;
 	_interceptors: number[] = [];
 
-	constructor(config: Configuration, private logger: Logger, private workItemRequestBuilder: WorkItemRequestBuilder) {
-		this.recreateClient(config);
+	constructor(private config: Configuration, private logger: Logger, private workItemRequestBuilder: WorkItemRequestBuilder) {
+		this.recreateClient();
 
-		this._eventHandler = config.onDidChange(cfg => this.recreateClient(cfg));
+		this._eventHandler = config.onDidChange(newConfig => {
+			this.config = newConfig;
+			this.recreateClient();
+		});
 	}
 
 	dispose() {
 		this._eventHandler.dispose();
 	}
 
-	private recreateClient(config: Configuration) {
+	private recreateClient() {
 		if (this._interceptors.length > 0) {
 			this._interceptors.forEach(id => {
 				this.client.interceptors.response.eject(id);
@@ -40,16 +43,16 @@ export class AzureClient implements vsc.Disposable {
 			this._interceptors = [];
 		}
 
-		let organization = encodeURIComponent(config.organization!);
-		let project = encodeURIComponent(config.project!);
-		let team = encodeURIComponent(config.team!);
+		let organization = encodeURIComponent(this.config.organization!);
+		let project = encodeURIComponent(this.config.project!);
+		let team = encodeURIComponent(this.config.team!);
 
 		const clientFactory = (baseUrl: string) => {
 			const client = axios.create({
 				baseURL: baseUrl,
 				auth: {
 					username: "PAT",
-					password: config.token || ""
+					password: this.config.token || ""
 				},
 				headers: {
 					'Accept': 'application/json; api-version=5.0'
@@ -57,7 +60,7 @@ export class AzureClient implements vsc.Disposable {
 				validateStatus: status => status === 200
 			});
 
-			if (config.debug) {
+			if (this.config.debug) {
 				const id = client.interceptors.response.use(
 					res => this.logRequest(res.request, res),
 					err => this.logRequest(err.request, Promise.reject(err), err.response)
@@ -158,8 +161,10 @@ export class AzureClient implements vsc.Disposable {
 		const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
 		finish();
 
+		const userStoryType = this.getUserStoryWorkItemType();
+
 		return result.data.value
-			.filter(x => x.fields["System.WorkItemType"] === "User Story")
+			.filter(x => x.fields["System.WorkItemType"] === userStoryType)
 			.map(UserStoryInfoMapper.fromWorkItemInfo);
 	}
 
@@ -209,13 +214,13 @@ export class AzureClient implements vsc.Disposable {
 
 		return func<WorkItemInfo>(
 			url, request, {
-				headers: {
-					'Content-Type': 'application/json-patch+json'
-				}
-			}).then(res => {
-				this.logger.log(`#${res.data.id} Task '${task.title}' ${createNewTask ? 'created' : 'updated'} (${stopwatch.toString()})`);
-				return res.data.id;
-			})
+			headers: {
+				'Content-Type': 'application/json-patch+json'
+			}
+		}).then(res => {
+			this.logger.log(`#${res.data.id} Task '${task.title}' ${createNewTask ? 'created' : 'updated'} (${stopwatch.toString()})`);
+			return res.data.id;
+		})
 			.catch(err => {
 				console.error(err);
 				return Promise.reject(err);
@@ -225,22 +230,31 @@ export class AzureClient implements vsc.Disposable {
 	public createUserStory(title: string, iterationPath: string): Promise<WorkItemInfo> {
 		const request = this.workItemRequestBuilder.createUserStory(title, iterationPath);
 
+		const workItemType = encodeURIComponent(this.getUserStoryWorkItemType());
+
 		this.logger.log(`Creating User Story: ${title}...`);
 		let stopwatch = Stopwatch.startNew();
 
 		return this.client.post<WorkItemInfo>(
-			'/wit/workitems/$User%20Story', request, {
-				headers: {
-					'Content-Type': 'application/json-patch+json'
-				}
-			}).then(res => {
-				this.logger.log(`#${res.data.id} User story '${title}' created (${stopwatch.toString()})`);
-				return res.data;
-			})
-			.catch(err => {
-				console.error(err);
-				return Promise.reject(err);
-			});
+			`/wit/workitems/$${workItemType}`, request, {
+			headers: {
+				'Content-Type': 'application/json-patch+json'
+			}
+		}).then(res => {
+			this.logger.log(`#${res.data.id} User story '${title}' created (${stopwatch.toString()})`);
+			return res.data;
+		}).catch(err => {
+			console.error(err);
+			return Promise.reject(err);
+		});
+	}
+
+	private getUserStoryWorkItemType = () => {
+		switch (this.config.process) {
+			case "Agile": return "User Story";
+			case "Scrum": return "Product Backlog Item";
+			default: throw new Error("Process type not supported");
+		}
 	}
 }
 
