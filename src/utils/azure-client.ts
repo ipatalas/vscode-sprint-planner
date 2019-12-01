@@ -249,7 +249,7 @@ export class AzureClient implements vsc.Disposable {
 		});
 	}
 
-	private getUserStoryWorkItemType = () => {
+	private getUserStoryWorkItemType() {
 		switch (this.config.process) {
 			case "Agile": return "User Story";
 			case "Scrum": return "Product Backlog Item";
