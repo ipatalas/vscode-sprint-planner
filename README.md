@@ -1,4 +1,7 @@
 [![MarketPlace Tag](https://vsmarketplacebadge.apphb.com/version-short/ipatalas.vscode-sprint-planner.svg)](https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-sprint-planner)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/ipatalas.vscode-sprint-planner)](https://marketplace.visualstudio.com/items?itemName=ipatalas.vscode-sprint-planner)
+
+[![Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-$4-orange?logo=buy-me-a-coffee&style=flat)](https://www.buymeacoffee.com/0t1sqOM)
 
 # Azure DevOps planner
 
