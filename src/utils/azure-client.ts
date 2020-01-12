@@ -43,9 +43,10 @@ export class AzureClient implements vsc.Disposable {
 			this._interceptors = [];
 		}
 
-		let organization = encodeURIComponent(this.config.organization!);
-		let project = encodeURIComponent(this.config.project!);
-		let team = encodeURIComponent(this.config.team!);
+		const baseUrl = this.config.url!;
+		const organization = encodeURIComponent(this.config.organization!);
+		const project = encodeURIComponent(this.config.project!);
+		const team = encodeURIComponent(this.config.team!);
 
 		const clientFactory = (baseUrl: string) => {
 			const client = axios.create({
@@ -71,8 +72,8 @@ export class AzureClient implements vsc.Disposable {
 			return client;
 		};
 
-		this.client = clientFactory(`https://dev.azure.com/${organization}/${project}/_apis/`);
-		this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
+		this.client = clientFactory(`${baseUrl}/${organization}/${project}/_apis/`);
+		this.teamClient = clientFactory(`${baseUrl}/${organization}/${project}/${team}/_apis/`);
 	}
 
 	private logRequest(request: any, returnValue: any, response?: AxiosResponse) {

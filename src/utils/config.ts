@@ -12,6 +12,7 @@ export class Configuration implements vsc.Disposable {
     public project: string | undefined;
     public team: string | undefined;
     public token: string | undefined;
+    public url: string | undefined;
     public debug!: boolean;
     public defaultActivity: string | undefined;
     public snippets: { [name: string]: string } | undefined;
@@ -48,6 +49,7 @@ export class Configuration implements vsc.Disposable {
 
     private async load(loadSnippets: boolean) {
         const config = vsc.workspace.getConfiguration(ConfigurationKey);
+        this.url = config.get('url');
         this.organization = config.get('organization');
         this.project = config.get('project');
         this.team = config.get('team');

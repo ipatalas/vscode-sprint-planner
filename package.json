@@ -62,6 +62,12 @@
 		"configuration": {
 			"title": "Azure DevOps planner",
 			"properties": {
+                "planner.azure-devops.url": {
+                    "title": "Base URL",
+                    "default": "https://dev.azure.com",
+                    "description": "Base URL to be used when connecting to Azure DevOps. Change only for on-premise installation.",
+                    "type": "string"
+                },
 				"planner.azure-devops.organization": {
 					"title": "Organization",
 					"type": "string"
