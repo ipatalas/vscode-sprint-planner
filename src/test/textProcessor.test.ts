@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 var expect = require('expect.js') as (target?: any) => Expect.Root;
 import { TextProcessor } from '../utils/textProcessor';
 

@@ -129,11 +129,11 @@
 	},
 	"devDependencies": {
 		"@types/expect.js": "^0.3.29",
-		"@types/mocha": "5.2.7",
+		"@types/mocha": "^7.0.2",
 		"@types/node": "^10.12.21",
 		"@types/pretty-hrtime": "^1.0.0",
 		"expect.js": "0.3.1",
-		"mocha": "6.1.4",
+		"mocha": "^7.1.1",
 		"tslint": "^6.1.0",
 		"typescript": "^3.5.1",
 		"vscode": "^1.1.36"
