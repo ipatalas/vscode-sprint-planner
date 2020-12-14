@@ -8,8 +8,8 @@ export interface Task {
 }
 
 export interface UserStory {
-	line: number,
-	id?: number,
+	line: number;
+	id?: number;
 	title: string;
-	tasks: Task[]
+	tasks: Task[];
 }

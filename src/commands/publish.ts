@@ -96,7 +96,7 @@ export class PublishCommand extends LockableCommand {
 
 		const taskIds = us.tasks.filter(t => t.id).map(t => t.id!.toString());
 		if (createUserStory && taskIds.length > 0) {
-			throw new Error(`Tasks cannot have IDs when creating User Story (#${taskIds.join(', #')})`)
+			throw new Error(`Tasks cannot have IDs when creating User Story (#${taskIds.join(', #')})`);
 		}
 
 		const occurences = taskIds.reduce((acc, id) => {
@@ -107,7 +107,7 @@ export class PublishCommand extends LockableCommand {
 
 		const duplicateIds = Object.entries(occurences).filter(x => (<number>x[1]) > 1).map(x => '#' + x[0]);
 		if (duplicateIds.length > 0) {
-			throw new Error(`Duplicate tasks found: ${duplicateIds.join(', ')}`)
+			throw new Error(`Duplicate tasks found: ${duplicateIds.join(', ')}`);
 		}
 	}
 

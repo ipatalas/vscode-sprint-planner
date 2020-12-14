@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import { Logger } from './logger';
 import Axios from 'axios';
 
-const ConfigurationKey = 'planner.azure-devops';
-const SnippetsConfigurationKey = 'planner.azure-devops.snippets';
+const CONFIGURATION_KEY = 'planner.azure-devops';
+const SNIPPETS_CONFIGURATION_KEY = 'planner.azure-devops.snippets';
 
 export class Configuration implements vsc.Disposable {
     public process: string | undefined;
@@ -35,8 +35,8 @@ export class Configuration implements vsc.Disposable {
         });
 
         this._eventHandler = vsc.workspace.onDidChangeConfiguration(event => {
-            if (event.affectsConfiguration(ConfigurationKey)) {
-                const snippetsChanged = event.affectsConfiguration(SnippetsConfigurationKey);
+            if (event.affectsConfiguration(CONFIGURATION_KEY)) {
+                const snippetsChanged = event.affectsConfiguration(SNIPPETS_CONFIGURATION_KEY);
 
                 this.load(snippetsChanged).then(() => {
                     logger.log('Configuration reloaded');
@@ -47,7 +47,7 @@ export class Configuration implements vsc.Disposable {
     }
 
     private async load(loadSnippets: boolean) {
-        const config = vsc.workspace.getConfiguration(ConfigurationKey);
+        const config = vsc.workspace.getConfiguration(CONFIGURATION_KEY);
         this.organization = config.get('organization');
         this.project = config.get('project');
         this.team = config.get('team');

@@ -127,12 +127,12 @@ export class TextProcessor {
 
 		taskTitle = taskTitle.replace(Constants.TaskPrefixRegex, '');
 
-		const match_id = taskTitle.match(Constants.TaskIdRegex);
-		if (match_id !== null) {
-			const id = match_id.groups!.id;
+		const matchId = taskTitle.match(Constants.TaskIdRegex);
+		if (matchId !== null) {
+			const id = matchId.groups!.id;
 
 			task.id = parseInt(id);
-			taskTitle = taskTitle.replace(match_id[0], '');
+			taskTitle = taskTitle.replace(matchId[0], '');
 		}
 
 		const match = taskTitle.match(Constants.TaskEstimationRegex);
