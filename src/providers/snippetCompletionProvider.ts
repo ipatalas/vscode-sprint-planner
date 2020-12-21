@@ -7,7 +7,6 @@ export class SnippetCompletionProvider implements vsc.CompletionItemProvider {
 	constructor(private config: Configuration) {
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, _token: vsc.CancellationToken, _context: vsc.CompletionContext): vsc.CompletionItem[] {
 		const text = Document.getTextBeforeCursor(document, position);
 
