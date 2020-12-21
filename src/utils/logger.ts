@@ -10,13 +10,13 @@ export class Logger implements vsc.Disposable {
 		this.logger = vsc.window.createOutputChannel('Azure DevOps planner');
 	}
 
-	public log(text: string, appendLine: boolean = true) {
+	public log(text: string, appendLine = true): ((text: string) => void) | undefined {
 		if (this.isLineStillOpen) {
 			this.logger.appendLine('');
 			this.isLineStillOpen = false;
 		}
 
-		let message = `[${this.buildTimestamp()}] ${text}`;
+		const message = `[${this.buildTimestamp()}] ${text}`;
 
 		if (appendLine) {
 			this.logger.appendLine(message);
@@ -31,12 +31,15 @@ export class Logger implements vsc.Disposable {
 		}
 	}
 
-	public show() {
+	public show(): void {
 		this.logger.show(true);
 	}
 
-	public perf(text: string) {
-		const finishLogLine = this.log(text, false)!;
+	public perf(text: string): () => void {
+		const finishLogLine = this.log(text, false);
+		if (finishLogLine == null)
+			return () => undefined;
+
 		const stopwatch = Stopwatch.startNew();
 
 		return () => finishLogLine(` ${stopwatch.toString()}`);
@@ -49,7 +52,7 @@ export class Logger implements vsc.Disposable {
 		return `${time}.${millis}`;
 	}
 
-	dispose() {
+	dispose(): void {
 		this.logger.dispose();
 	}
 }

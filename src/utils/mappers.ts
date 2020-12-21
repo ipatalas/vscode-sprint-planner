@@ -2,7 +2,7 @@ import { WorkItemInfo } from "../models/azure-client/workItems";
 import { UserStoryInfo } from "./azure-client";
 
 export class UserStoryInfoMapper {
-	public static fromWorkItemInfo(workItem: WorkItemInfo) {
+	public static fromWorkItemInfo(workItem: WorkItemInfo): UserStoryInfo {
 		return (<UserStoryInfo>{
 			id: workItem.id,
 			url: workItem.url,

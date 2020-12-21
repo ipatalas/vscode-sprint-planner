@@ -30,11 +30,14 @@ export class AzureClient implements vsc.Disposable {
 		});
 	}
 
-	dispose() {
+	dispose(): void {
 		this._eventHandler.dispose();
 	}
 
 	private recreateClient() {
+		if (!this.config.isValid)
+			return;
+
 		if (this._interceptors.length > 0) {
 			this._interceptors.forEach(id => {
 				this.client.interceptors.response.eject(id);
@@ -43,9 +46,9 @@ export class AzureClient implements vsc.Disposable {
 			this._interceptors = [];
 		}
 
-		let organization = encodeURIComponent(this.config.organization!);
-		let project = encodeURIComponent(this.config.project!);
-		let team = encodeURIComponent(this.config.team!);
+		const organization = encodeURIComponent(this.config.organization ?? '');
+		const project = encodeURIComponent(this.config.project ?? '');
+		const team = encodeURIComponent(this.config.team ?? '');
 
 		const clientFactory = (baseUrl: string) => {
 			const client = axios.create({
@@ -75,8 +78,9 @@ export class AzureClient implements vsc.Disposable {
 		this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private logRequest(request: any, returnValue: any, response?: AxiosResponse) {
-		console.log(`[DEBUG] ${request.method!.toUpperCase()} ${request.path}`);
+		console.log(`[DEBUG] ${request.method.toUpperCase()} ${request.path}`);
 		if (response) {
 			console.log(`[DEBUG] Response: ${JSON.stringify(response.data)}`);
 		}
@@ -89,7 +93,7 @@ export class AzureClient implements vsc.Disposable {
 		finish();
 
 		if (result.data.count > 0) {
-			let iterations: IterationInfo[] = [];
+			const iterations: IterationInfo[] = [];
 			result.data.value.forEach(element => {
 				const iteration = <IterationInfo>{
 					id: element.id,
@@ -153,7 +157,7 @@ export class AzureClient implements vsc.Disposable {
 	public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
 		const finish = this.logger.perf('Getting user story info...');
 
-		const params = <any>{
+		const params: WorkItemRequestParams = {
 			ids: userStoryIds.join(','),
 			'$expand': 'Relations'
 		};
@@ -176,7 +180,7 @@ export class AzureClient implements vsc.Disposable {
 
 		const finish = this.logger.perf('Getting max stack rank for tasks...');
 
-		const params = <any>{
+		const params: WorkItemRequestParams = {
 			ids: taskIds.join(','),
 			fields: ['Microsoft.VSTS.Common.StackRank'].join(',')
 		};
@@ -207,7 +211,7 @@ export class AzureClient implements vsc.Disposable {
 		} else {
 			this.logger.log(`Updating task #${task.id}: ${task.title}...`);
 		}
-		let stopwatch = Stopwatch.startNew();
+		const stopwatch = Stopwatch.startNew();
 
 		const func = createNewTask ? this.client.post : this.client.patch;
 		const url = createNewTask ? '/wit/workitems/$Task' : `/wit/workitems/${task.id}`;
@@ -233,7 +237,7 @@ export class AzureClient implements vsc.Disposable {
 		const workItemType = encodeURIComponent(this.getUserStoryWorkItemType());
 
 		this.logger.log(`Creating User Story: ${title}...`);
-		let stopwatch = Stopwatch.startNew();
+		const stopwatch = Stopwatch.startNew();
 
 		return this.client.post<WorkItemInfo>(
 			`/wit/workitems/$${workItemType}`, request, {
@@ -290,4 +294,10 @@ export interface TaskInfo {
 	estimation?: number;
 	userStoryUrl: string;
 	stackRank?: number;
+}
+
+export interface WorkItemRequestParams {
+	ids: string;
+	'$expand'?: string;
+	fields?: string
 }

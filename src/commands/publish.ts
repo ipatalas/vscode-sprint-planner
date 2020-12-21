@@ -10,6 +10,7 @@ import { isNumber } from 'util';
 import { WorkItemInfo } from '../models/azure-client/workItems';
 import { UserStoryInfoMapper } from '../utils/mappers';
 import { LockableCommand } from './lockableCommand';
+import { notEmpty } from '../utils/typeCheck';
 
 export class PublishCommand extends LockableCommand {
 	constructor(
@@ -20,14 +21,14 @@ export class PublishCommand extends LockableCommand {
 		super();
 	}
 
-	async publish(line?: number) {
+	async publish(line?: number): Promise<void> {
 		const editor = vsc.window.activeTextEditor;
 		if (!editor) { return; }
 		if (!this.lock()) { return; }
 
 		await vsc.window.withProgress({ location: vsc.ProgressLocation.Notification }, async progress => {
 			try {
-				let currentLine = line !== undefined ? line : editor.selection.active.line;
+				const currentLine = line !== undefined ? line : editor.selection.active.line;
 				const lines = editor.document.getText().split(Constants.NewLineRegex);
 
 				const us = TextProcessor.getUserStory(lines, currentLine);
@@ -39,7 +40,7 @@ export class PublishCommand extends LockableCommand {
 
 				progress.report({ increment: 10, message: "Publishing..." });
 
-				let createUserStory = !us.id;
+				const createUserStory = !us.id;
 				let userStoryInfo: UserStoryInfo | undefined;
 
 				if (createUserStory) {
@@ -62,9 +63,9 @@ export class PublishCommand extends LockableCommand {
 
 				progress.report({ increment: 10 });
 
-				const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo!, t.id ? undefined : firstFreeStackRank++));
+				const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo as UserStoryInfo, t.id ? undefined : firstFreeStackRank++));
 
-				let taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
+				const taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
 
 				progress.report({ increment: 30 });
 
@@ -92,9 +93,9 @@ export class PublishCommand extends LockableCommand {
 	}
 
 	private validateUserStory(us: UserStory) {
-		let createUserStory = !us.id;
+		const createUserStory = !us.id;
 
-		const taskIds = us.tasks.filter(t => t.id).map(t => t.id!.toString());
+		const taskIds = us.tasks.map(t => t.id).filter(notEmpty).map(id => id.toString());
 		if (createUserStory && taskIds.length > 0) {
 			throw new Error(`Tasks cannot have IDs when creating User Story (#${taskIds.join(', #')})`);
 		}
@@ -115,7 +116,10 @@ export class PublishCommand extends LockableCommand {
 		if (this.isUserStory(us)) {
 			await this.sessionStore.ensureHasUserStories();
 
-			const userStoryInfo = this.sessionStore.userStories!.find(x => x.id === us.id);
+			if (!this.sessionStore.userStories)
+				return;
+
+			const userStoryInfo = this.sessionStore.userStories.find(x => x.id === us.id);
 
 			if (!userStoryInfo) {
 				console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
@@ -166,7 +170,7 @@ export class PublishCommand extends LockableCommand {
 			areaPath: userStory.areaPath,
 			teamProject: userStory.teamProject,
 			iterationPath: userStory.iterationPath,
-			activity: task.activity || this.config.defaultActivity!,
+			activity: task.activity || this.config.defaultActivity || '',
 			estimation: task.estimation,
 			userStoryUrl: userStory.url,
 			stackRank: stackRank

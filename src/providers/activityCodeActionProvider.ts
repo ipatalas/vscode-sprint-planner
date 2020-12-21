@@ -8,6 +8,7 @@ export class ActivityCodeActionProvider implements vsc.CodeActionProvider {
 	constructor(private store: ISessionStore, private logger: Logger) {
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	provideCodeActions(document: vsc.TextDocument, range: vsc.Range | vsc.Selection, context: vsc.CodeActionContext, _token: vsc.CancellationToken): vsc.ProviderResult<(vsc.Command | vsc.CodeAction)[]> {
 		const diag = context.diagnostics.find(d => d.range.contains(range));
 

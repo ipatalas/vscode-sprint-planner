@@ -11,7 +11,7 @@ const MissingUrlOrToken = "Missing URL or token in configuration";
 export class SessionStore implements ISessionStore {
 	private currentIteration?: IterationInfo;
 	private customIteration?: IterationInfo;
-	private fetchingActivityTypes: boolean = false;
+	private fetchingActivityTypes = false;
 
 	public activityTypes?: string[];
 	public iterations?: IterationInfo[];
@@ -30,7 +30,7 @@ export class SessionStore implements ISessionStore {
 				this.customIteration = undefined;
 				this.logger.log('Iteration not specified - will default to @CurrentIteration');
 			} else {
-				this.customIteration = this.iterations!.find(x => x.id === it.id);
+				this.customIteration = this.iterations?.find(x => x.id === it.id);
 				if (!this.customIteration) { return Promise.resolve(); }
 
 				this.logger.log(`Iteration set to ${this.customIteration.path.toString()}`);
@@ -57,7 +57,7 @@ export class SessionStore implements ISessionStore {
 		this.fetchingActivityTypes = true;
 
 		try {
-			let total = Stopwatch.startNew();
+			const total = Stopwatch.startNew();
 			this.activityTypes = await this.azureClient.getActivityTypes();
 			total.stop();
 
@@ -80,7 +80,7 @@ export class SessionStore implements ISessionStore {
 			return Promise.reject(MissingUrlOrToken);
 		}
 
-		let total = Stopwatch.startNew();
+		const total = Stopwatch.startNew();
 		this.iterations = await this.azureClient.getIterationsInfo();
 		total.stop();
 
@@ -95,8 +95,8 @@ export class SessionStore implements ISessionStore {
 			return Promise.reject(MissingUrlOrToken);
 		}
 
-		let total = Stopwatch.startNew();
-		let iteration = await this.determineIteration();
+		const total = Stopwatch.startNew();
+		const iteration = await this.determineIteration();
 
 		const workItemsIds = await this.azureClient.getIterationWorkItems(iteration.id);
 
@@ -114,7 +114,7 @@ export class SessionStore implements ISessionStore {
 		return Promise.resolve();
 	}
 
-	public async determineIteration() {
+	public async determineIteration(): Promise<IterationInfo> {
 		this.setCustomIteration();
 
 		if (!this.customIteration) {

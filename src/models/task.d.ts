@@ -13,3 +13,8 @@ export interface UserStory {
 	title: string;
 	tasks: Task[];
 }
+
+export interface IterationTextLine {
+	line: number,
+	id: string
+}

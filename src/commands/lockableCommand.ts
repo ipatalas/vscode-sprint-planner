@@ -2,7 +2,7 @@ export class LockableCommand {
 
 	private isLocked = false;
 
-	protected lock() {
+	protected lock(): boolean {
 		if (this.isLocked) {
 			return false;
 		}
@@ -11,7 +11,7 @@ export class LockableCommand {
 		return true;
 	}
 
-	protected unlock() {
+	protected unlock(): void {
 		this.isLocked = false;
 	}
 }

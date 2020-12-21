@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import { Logger } from './logger';
 import Axios from 'axios';
 
-const CONFIGURATION_KEY = 'planner.azure-devops';
-const SNIPPETS_CONFIGURATION_KEY = 'planner.azure-devops.snippets';
+const ConfigurationKey  = 'planner.azure-devops';
+const SnippetsConfigurationKey  = 'planner.azure-devops.snippets';
 
 export class Configuration implements vsc.Disposable {
     public process: string | undefined;
@@ -19,11 +19,11 @@ export class Configuration implements vsc.Disposable {
     private _onDidChange: vsc.EventEmitter<Configuration>;
     private _eventHandler: vsc.Disposable;
 
-    get onDidChange() {
+    get onDidChange(): vsc.Event<Configuration> {
         return this._onDidChange.event;
     }
 
-    get isValid() {
+    get isValid(): boolean {
         return !!this.organization && !!this.project && !!this.team && !!this.token;
     }
 
@@ -35,8 +35,8 @@ export class Configuration implements vsc.Disposable {
         });
 
         this._eventHandler = vsc.workspace.onDidChangeConfiguration(event => {
-            if (event.affectsConfiguration(CONFIGURATION_KEY)) {
-                const snippetsChanged = event.affectsConfiguration(SNIPPETS_CONFIGURATION_KEY);
+            if (event.affectsConfiguration(ConfigurationKey )) {
+                const snippetsChanged = event.affectsConfiguration(SnippetsConfigurationKey );
 
                 this.load(snippetsChanged).then(() => {
                     logger.log('Configuration reloaded');
@@ -47,7 +47,7 @@ export class Configuration implements vsc.Disposable {
     }
 
     private async load(loadSnippets: boolean) {
-        const config = vsc.workspace.getConfiguration(CONFIGURATION_KEY);
+        const config = vsc.workspace.getConfiguration(ConfigurationKey );
         this.organization = config.get('organization');
         this.project = config.get('project');
         this.team = config.get('team');
@@ -67,7 +67,7 @@ export class Configuration implements vsc.Disposable {
             return Promise.resolve({});
         }
 
-        const promises: Promise<any>[] = [];
+        const promises: Promise<void>[] = [];
         const result: SnippetConfig = {};
 
         for (const key in snippets) {
@@ -116,7 +116,7 @@ export class Configuration implements vsc.Disposable {
         }
     }
 
-    dispose() {
+    dispose(): void {
         this._eventHandler.dispose();
         this._onDidChange.dispose();
     }
