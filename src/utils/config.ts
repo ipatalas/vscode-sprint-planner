@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import { Logger } from './logger';
 import Axios from 'axios';
 
-const ConfigurationKey  = 'planner.azure-devops';
-const SnippetsConfigurationKey  = 'planner.azure-devops.snippets';
+const ConfigurationKey = 'planner.azure-devops';
+const SnippetsConfigurationKey = 'planner.azure-devops.snippets';
 
 export class Configuration implements vsc.Disposable {
     public process: string | undefined;
