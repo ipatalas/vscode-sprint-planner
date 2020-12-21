@@ -62,7 +62,7 @@ export class TextProcessor {
 		for (; currentLine >= 0; currentLine--) {
 			const match = Constants.UserStoryRegex.exec(lines[currentLine]);
 
-			if (match != null && match.groups != null) {
+			if (match?.groups != null) {
 				const { id, title } = match.groups;
 
 				return {
