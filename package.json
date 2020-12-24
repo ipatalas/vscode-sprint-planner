@@ -139,7 +139,7 @@
 		"vscode": "^1.1.36"
 	},
 	"dependencies": {
-		"axios": "^0.19.0",
+		"axios": "^0.21.1",
 		"didyoumean2": "^3.0.0",
 		"pretty-hrtime": "^1.0.3"
 	}
