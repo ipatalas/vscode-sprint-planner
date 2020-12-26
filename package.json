@@ -125,17 +125,20 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"lint": "eslint -c .eslintrc --ext .ts src"
 	},
 	"devDependencies": {
 		"@types/expect.js": "^0.3.29",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^10.12.21",
 		"@types/pretty-hrtime": "^1.0.0",
+		"@typescript-eslint/eslint-plugin": "^4.10.0",
+		"@typescript-eslint/parser": "^4.10.0",
+		"eslint": "^7.15.0",
 		"expect.js": "0.3.1",
 		"mocha": "^7.1.1",
-		"tslint": "^6.1.0",
-		"typescript": "^3.5.1",
+		"typescript": "^3.9.7",
 		"vscode": "^1.1.36"
 	},
 	"dependencies": {

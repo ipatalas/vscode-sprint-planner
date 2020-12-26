@@ -1,4 +1,5 @@
-export default function debounce(callback: Function, delay: number) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export default function debounce<Params extends any[]>(callback: (...args: Params) => any, delay: number): (...args: any) => void {
 	let timeout: NodeJS.Timeout;
 
 	return (...args: any) => {

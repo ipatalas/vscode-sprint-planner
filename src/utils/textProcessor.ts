@@ -1,9 +1,9 @@
 import * as Constants from '../constants';
-import { Task, UserStory } from '../models/task';
+import { IterationTextLine, Task, UserStory } from '../models/task';
 
 export class TextProcessor {
 
-	public static getUserStoryLineIndices(allLines: string[]) {
+	public static getUserStoryLineIndices(allLines: string[]): number[] {
 		const results: number[] = [];
 
 		for (let i = 0; i < allLines.length; i++) {
@@ -15,23 +15,23 @@ export class TextProcessor {
 		return results;
 	}
 
-	public static getIteration(allLines: string[], currentLine: number) {
+	public static getIteration(allLines: string[], currentLine: number): IterationTextLine | undefined {
 		const iterationInfo = TextProcessor.getIterationInfo(allLines, currentLine);
 		if (!iterationInfo) {
 			return;
 		}
 
-		return {
-			line: iterationInfo[0],
-			id: iterationInfo[1]
-		};
+		return iterationInfo;
 	}
 
-	private static getIterationInfo(lines: string[], currentLine: number) {
+	private static getIterationInfo(lines: string[], currentLine: number): IterationTextLine | undefined {
 		for (; currentLine >= 0; currentLine--) {
 			const id = TextProcessor.getIterationID(lines[currentLine]);
 			if (id) {
-				return [currentLine, id];
+				return <IterationTextLine>{
+					line: currentLine,
+					id: id
+				};
 			}
 		}
 	}
@@ -42,7 +42,7 @@ export class TextProcessor {
 		return match !== null && match[1];
 	}
 
-	public static getUserStory(allLines: string[], currentLine: number) {
+	public static getUserStory(allLines: string[], currentLine: number): UserStory | undefined {
 		const userStoryInfo = TextProcessor.getUserStoryInfo(allLines, currentLine);
 		if (!userStoryInfo) {
 			return;
@@ -62,8 +62,8 @@ export class TextProcessor {
 		for (; currentLine >= 0; currentLine--) {
 			const match = Constants.UserStoryRegex.exec(lines[currentLine]);
 
-			if (match !== null) {
-				const { id, title } = match.groups!;
+			if (match?.groups) {
+				const { id, title } = match.groups;
 
 				return {
 					line: currentLine,
@@ -127,21 +127,21 @@ export class TextProcessor {
 
 		taskTitle = taskTitle.replace(Constants.TaskPrefixRegex, '');
 
-		const match_id = taskTitle.match(Constants.TaskIdRegex);
-		if (match_id !== null) {
-			const id = match_id.groups!.id;
+		const matchId = taskTitle.match(Constants.TaskIdRegex);
+		if (matchId?.groups) {
+			const id = matchId.groups.id;
 
 			task.id = parseInt(id);
-			taskTitle = taskTitle.replace(match_id[0], '');
+			taskTitle = taskTitle.replace(matchId[0], '');
 		}
 
 		const match = taskTitle.match(Constants.TaskEstimationRegex);
-		if (match !== null) {
-			const est = match.groups!.estimation;
+		if (match?.groups) {
+			const est = match.groups.estimation;
 			if (est) {
 				task.estimation = parseFloat(est);
 			} else {
-				const minutes = parseInt(match.groups!.estimation_m);
+				const minutes = parseInt(match.groups.estimation_m);
 				task.estimation = Math.floor(minutes / 60 * 100) / 100;
 			}
 			taskTitle = taskTitle.replace(match[0], '');
@@ -155,7 +155,7 @@ export class TextProcessor {
 	}
 
 	private static isEndOfUserStory(line: string) {
-		let isEndOfUserStory = Constants.EndOfUserStoryRegex.test(line) || Constants.UserStoryRegex.test(line);
+		const isEndOfUserStory = Constants.EndOfUserStoryRegex.test(line) || Constants.UserStoryRegex.test(line);
 		return isEndOfUserStory;
 	}
 

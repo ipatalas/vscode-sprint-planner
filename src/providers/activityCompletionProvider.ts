@@ -8,7 +8,7 @@ export class ActivityCompletionProvider implements vsc.CompletionItemProvider {
 	constructor(private sessionStore: ISessionStore, private logger: Logger) {
 	}
 
-	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, _token: vsc.CancellationToken, _context: vsc.CompletionContext) {
+	async provideCompletionItems(document: vsc.TextDocument, position: vsc.Position, _token: vsc.CancellationToken, _context: vsc.CompletionContext): Promise<vsc.CompletionItem[]> {
 		const text = Document.getTextBeforeCursor(document, position);
 		const word = document.getText(document.getWordRangeAtPosition(position, /\w*:/));
 

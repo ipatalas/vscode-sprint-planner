@@ -1,15 +1,16 @@
+import { TaskOperation } from "../models/workItemRequestBuilder";
 import { TaskInfo } from "./azure-client";
 
 export class WorkItemRequestBuilder {
-	public createTaskRequest(task: TaskInfo) {
+	public createTaskRequest(task: TaskInfo): TaskOperation[]  {
 		return this.createOrUpdateTask(task, true);
 	}
 
-	public updateTaskRequest(task: TaskInfo) {
+	public updateTaskRequest(task: TaskInfo): TaskOperation[] {
 		return this.createOrUpdateTask(task, false);
 	}
 
-	private createOrUpdateTask(task: TaskInfo, createNewTask: boolean) {
+	private createOrUpdateTask(task: TaskInfo, createNewTask: boolean): TaskOperation[] {
 		const request = [
 			this.addOperation('/fields/System.Title', task.title),
 			this.addOperation('/fields/Microsoft.VSTS.Common.Activity', task.activity)
@@ -42,7 +43,7 @@ export class WorkItemRequestBuilder {
 		return request;
 	}
 
-	public createUserStory(title: string, iterationPath: string) {
+	public createUserStory(title: string, iterationPath: string): TaskOperation[] {
 		const request = [
 			this.addOperation('/fields/System.Title', title),
 			this.addOperation('/fields/System.IterationPath', iterationPath),
@@ -51,7 +52,8 @@ export class WorkItemRequestBuilder {
 		return request;
 	}
 
-	private addOperation(path: string, value: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	private addOperation(path: string, value: any): TaskOperation {
 		return {
 			op: 'add',
 			path,

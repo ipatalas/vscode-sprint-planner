@@ -1,0 +1,28 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-throw-literal": "error",
+        "eqeqeq": "error",
+        "curly": "error",
+        "comma-spacing": "error",
+        "brace-style": "error"
+    }
+}
