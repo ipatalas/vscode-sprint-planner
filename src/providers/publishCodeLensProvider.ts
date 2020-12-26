@@ -30,8 +30,8 @@ export class PublishCodeLensProvider implements vsc.CodeLensProvider {
 	}
 
 	private buildExtraInfo(tasks: Task[] | undefined) {
-		
-		if (tasks == null || tasks.length === 0) {
+
+		if (!tasks || tasks.length === 0) {
 			return 'no tasks';
 		}
 

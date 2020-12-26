@@ -62,7 +62,7 @@ export class TextProcessor {
 		for (; currentLine >= 0; currentLine--) {
 			const match = Constants.UserStoryRegex.exec(lines[currentLine]);
 
-			if (match?.groups != null) {
+			if (match?.groups) {
 				const { id, title } = match.groups;
 
 				return {
@@ -128,7 +128,7 @@ export class TextProcessor {
 		taskTitle = taskTitle.replace(Constants.TaskPrefixRegex, '');
 
 		const matchId = taskTitle.match(Constants.TaskIdRegex);
-		if (matchId !== null && matchId.groups != null) {
+		if (matchId?.groups) {
 			const id = matchId.groups.id;
 
 			task.id = parseInt(id);
@@ -136,7 +136,7 @@ export class TextProcessor {
 		}
 
 		const match = taskTitle.match(Constants.TaskEstimationRegex);
-		if (match !== null && match.groups != null) {
+		if (match?.groups) {
 			const est = match.groups.estimation;
 			if (est) {
 				task.estimation = parseFloat(est);
