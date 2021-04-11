@@ -22,7 +22,7 @@ const documentSelector = [
 	{ language: LanguageId, scheme: 'untitled' },
 ];
 
-export function activate(context: vsc.ExtensionContext) {
+export function activate(context: vsc.ExtensionContext): void {
 	const workItemRequestBuilder = new WorkItemRequestBuilder();
 	const logger = new Logger();
 	const config = new Configuration(logger);
@@ -52,4 +52,5 @@ export function activate(context: vsc.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export function deactivate(): void {}

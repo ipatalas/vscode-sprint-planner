@@ -1,6 +1,6 @@
 import { CollectionResult } from "./common";
 
-export interface WorkItemInfoResult extends CollectionResult<WorkItemInfo> {}
+export type WorkItemInfoResult = CollectionResult<WorkItemInfo>
 
 export interface WorkItemInfo {
 	id:         number;
@@ -17,6 +17,7 @@ export interface WorkItemFields {
 	"System.IterationPath":            string;
 	"System.Title":                    string;
 	"Microsoft.VSTS.Common.StackRank": number;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[key: string]: any;
 }
 
