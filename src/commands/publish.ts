@@ -135,7 +135,7 @@ export class PublishCommand extends LockableCommand {
 		await editor.edit((edit: vsc.TextEditorEdit) => {
 			if (createdUserStoryId) {
 				// Format of the line: US#new - <title>
-				const newIdx = 3;
+				const newIdx = Constants.UserStoryPrefix.length;
 				const startPos = new vsc.Position(us.line, newIdx);
 				edit.replace(new vsc.Range(startPos, startPos.translate(undefined, "new".length)), createdUserStoryId.toString());
 			}
@@ -143,8 +143,8 @@ export class PublishCommand extends LockableCommand {
 			for (let i = 0; i < us.tasks.length; i++) {
 				if (isNumber(taskIds[i])) {
 					const task = us.tasks[i];
-					const taskIsUpdated = task.id === taskIds[i];
-					if (!taskIsUpdated) {
+					const taskIdHasChanged = task.id !== taskIds[i];
+					if (taskIdHasChanged) {
 						const lineLength = editor.document.lineAt(task.line).text.length;
 						edit.insert(new vsc.Position(task.line, lineLength), ` [#${taskIds[i]}]`);
 					}
