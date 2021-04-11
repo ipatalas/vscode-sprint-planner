@@ -20,10 +20,16 @@ Authorization: Basic PAT {{token}}
 GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}/workitems?{{apiVersionPreviewParam}}
 Authorization: Basic PAT {{token}}
 
-
+### Get work item
+GET https://dev.azure.com/ipatalas/_apis/wit/workItems/1
+Authorization: Basic PAT {{token}}
 
 ### Get titles of User stories
 GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
+Authorization: Basic PAT {{token}}
+
+### Get titles of User stories
+GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&$expand=Relations,Links
 Authorization: Basic PAT {{token}}
 
 ###
