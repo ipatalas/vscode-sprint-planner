@@ -15,6 +15,7 @@ import { ActivityDiagnostics } from './providers/activityDiagnostics';
 import { ActivityCodeActionProvider } from './providers/activityCodeActionProvider';
 import { SnippetCompletionProvider } from './providers/snippetCompletionProvider';
 import { WorkItemRequestBuilder } from './utils/workItemRequestBuilder';
+import { WorkItemLinkProvider } from './providers/workItemLinkProvider';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -45,6 +46,7 @@ export function activate(context: vsc.ExtensionContext) {
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()),
 		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore, logger)),
+        vsc.languages.registerDocumentLinkProvider(documentSelector, new WorkItemLinkProvider(config)),
 		activityDiagnostics
 	]);
 }
