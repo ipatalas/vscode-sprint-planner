@@ -20,7 +20,7 @@
 			"name": "entity.name.function"
 		},
 		"user-story": {
-			"match": "^US#(\\d+|new)",
+			"match": "^US(#\\d+|#new)",
 			"name": "entity.name.function",
 			"captures": {
 				"1": { "name": "entity.name.tag" }
