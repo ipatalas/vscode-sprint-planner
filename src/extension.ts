@@ -7,7 +7,7 @@ import { UserStoryCompletionProvider } from './providers/userStoryCompletionProv
 import { SessionStore } from './store';
 import { AzureClient } from './utils/azure-client';
 import { Commands, LanguageId } from './constants';
-import { PublishCodeLensProvider } from './providers/publishCodeLensProvider';
+import { UserStoryCodeLensProvider } from './providers/userStoryCodeLensProvider';
 import { Logger } from './utils/logger';
 import { Configuration } from './utils/config';
 import { ActivityCompletionProvider } from './providers/activityCompletionProvider';
@@ -16,6 +16,7 @@ import { ActivityCodeActionProvider } from './providers/activityCodeActionProvid
 import { SnippetCompletionProvider } from './providers/snippetCompletionProvider';
 import { WorkItemRequestBuilder } from './utils/workItemRequestBuilder';
 import { WorkItemLinkProvider } from './providers/workItemLinkProvider';
+import { SyncTasksCommand } from './commands/syncTasks';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -30,6 +31,7 @@ export function activate(context: vsc.ExtensionContext): void {
 	const sessionStore = new SessionStore(azureClient, config, logger);
 
 	const publishCommand = new PublishCommand(sessionStore, azureClient, logger, config);
+	const syncTasksCommand = new SyncTasksCommand(azureClient, logger, config);
 
 	const alphabet = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 
@@ -40,11 +42,12 @@ export function activate(context: vsc.ExtensionContext): void {
 		logger,
 		config,
 		vsc.commands.registerCommand(Commands.publish, publishCommand.publish, publishCommand),
+		vsc.commands.registerCommand(Commands.syncTasks, syncTasksCommand.sync, syncTasksCommand),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new ActivityCompletionProvider(sessionStore, logger), ...alphabet),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new SnippetCompletionProvider(config), ...alphabet),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
-		vsc.languages.registerCodeLensProvider(documentSelector, new PublishCodeLensProvider()),
+		vsc.languages.registerCodeLensProvider(documentSelector, new UserStoryCodeLensProvider()),
 		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore, logger)),
         vsc.languages.registerDocumentLinkProvider(documentSelector, new WorkItemLinkProvider(config)),
 		activityDiagnostics

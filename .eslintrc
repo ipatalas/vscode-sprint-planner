@@ -23,6 +23,7 @@
         "eqeqeq": "error",
         "curly": "error",
         "comma-spacing": "error",
-        "brace-style": "error"
+        "brace-style": "error",
+        "@typescript-eslint/no-non-null-assertion": "off"
     }
 }

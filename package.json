@@ -45,6 +45,10 @@
 			{
 				"command": "sprintplanner.publish",
 				"title": "Publish planning"
+			},
+			{
+				"command": "sprintplanner.syncTasks",
+				"title": "Sync tasks from Azure DevOps"
 			}
 		],
 		"snippets": [
@@ -130,6 +134,7 @@
 	},
 	"devDependencies": {
 		"@types/expect.js": "^0.3.29",
+		"@types/lodash.sortby": "^4.7.6",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^10.12.21",
 		"@types/pretty-hrtime": "^1.0.0",
@@ -139,11 +144,12 @@
 		"expect.js": "0.3.1",
 		"mocha": "^7.1.1",
 		"typescript": "^3.9.7",
-		"vscode": "^1.1.36"
+		"vscode": "^1.1.37"
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
 		"didyoumean2": "^3.0.0",
-		"pretty-hrtime": "^1.0.3"
+		"pretty-hrtime": "^1.0.3",
+		"lodash.sortby": "^4.7.0"
 	}
 }

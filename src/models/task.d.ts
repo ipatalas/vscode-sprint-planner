@@ -5,6 +5,7 @@ export interface Task {
 	description?: string[];
 	activity?: string;
 	line: number;
+    stackRank?: number;
 }
 
 export interface UserStory {

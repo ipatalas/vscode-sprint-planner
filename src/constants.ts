@@ -19,5 +19,6 @@ export const TaskDescriptionRegex = /^\t/;
 export const WorkItemIdFromUrl = /\/workItems\/(\d+)/;
 
 export const Commands = {
-	publish: 'sprintplanner.publish'
+	publish: 'sprintplanner.publish',
+	syncTasks: 'sprintplanner.syncTasks'
 };

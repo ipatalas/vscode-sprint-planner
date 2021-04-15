@@ -9,17 +9,17 @@ import { Logger } from './logger';
 import { Stopwatch } from './stopwatch';
 import { Configuration } from './config';
 import { WorkItemRequestBuilder } from './workItemRequestBuilder';
-import { UserStoryInfoMapper } from './mappers';
+import { TaskInfoMapper, UserStoryInfoMapper } from './mappers';
 
 export class AzureClient implements vsc.Disposable {
     private _apiVersionPreview = {
         'api-version': '5.0-preview.1'
     };
 
-    client!: AxiosInstance;
-    teamClient!: AxiosInstance;
-    _eventHandler: vsc.Disposable;
-    _interceptors: number[] = [];
+    private client!: AxiosInstance;
+    private teamClient!: AxiosInstance;
+    private _eventHandler: vsc.Disposable;
+    private _interceptors: number[] = [];
 
     constructor(private config: Configuration, private logger: Logger, private workItemRequestBuilder: WorkItemRequestBuilder) {
         this.recreateClient();
@@ -191,14 +191,28 @@ export class AzureClient implements vsc.Disposable {
 
         finish();
 
-        const max = stackRanks.reduce((acc, current) => {
-            acc = Math.max(acc, current || 0);
-            return acc;
-        }, 0);
-
+        const max = Math.max(...stackRanks);
         this.logger.log(`Max Stack Rank: ${max}`);
 
         return max;
+    }
+
+    public async getTasksInfo(taskIds: number[]): Promise<TaskInfo[]> {
+        if (taskIds.length === 0) {
+            this.logger.log('No tasks in User Story');
+            return [];
+        }
+
+        const finish = this.logger.perf('Getting tasks info...');
+
+        const params: WorkItemRequestParams = {
+            ids: taskIds.join(',')
+        };
+
+        const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
+        finish();
+
+        return result.data.value.map(TaskInfoMapper.fromWorkItemInfo);
     }
 
     public createOrUpdateTask(task: TaskInfo): Promise<number> {
