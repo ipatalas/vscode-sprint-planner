@@ -42,12 +42,12 @@ export class SyncTasksCommand extends LockableCommand {
 
                 const [userStoryInfo] = await this.client.getUserStoryInfo([us.id!]);
 
-                progress.report({ increment: 40, message: "Getting tasks..." });
+                progress.report({ increment: 30, message: "Getting tasks..." });
 
                 const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
                 const vsoTasks = (await this.client.getTasksInfo(vsoTaskIds)).map(TaskMapper.fromTaskInfo);
 
-                progress.report({ increment: 60 });
+                progress.report({ increment: 40 });
 
                 const newTasks = us.tasks.filter(t => !vsoTaskIds.includes(t.id!)).map(t => {
                     t.activity = t.activity || this.config.defaultActivity || "";
