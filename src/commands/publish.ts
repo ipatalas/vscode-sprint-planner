@@ -23,10 +23,7 @@ export class PublishCommand extends LockableCommand {
 
     async publish(line?: number): Promise<void> {
         const editor = vsc.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-        if (!this.lock()) {
+        if (!editor || !this.lock()) {
             return;
         }
 
@@ -55,7 +52,7 @@ export class PublishCommand extends LockableCommand {
                     userStoryInfo = await this.getUserStoryInfo(us);
                 }
 
-                progress.report({ increment: 50 });
+                progress.report({ increment: 10 });
 
                 if (!userStoryInfo) {
                     return;
@@ -69,9 +66,13 @@ export class PublishCommand extends LockableCommand {
 
                 const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo as UserStoryInfo, t.id ? undefined : firstFreeStackRank++));
 
-                const taskIds = await Promise.all(requests.map(r => this.client.createOrUpdateTask(r)));
+                const increment = 70 / requests.length;
+                const taskIds: number[] = [];
 
-                progress.report({ increment: 30 });
+                for (const request of requests) {
+                    taskIds.push(await this.client.createOrUpdateTask(request));
+                    progress.report({ increment });
+                }
 
                 await this.updateEditor(editor, us, taskIds, createUserStory ? userStoryInfo.id : undefined);
                 this.showSummary(userStoryInfo.id, us.tasks);
@@ -81,12 +82,12 @@ export class PublishCommand extends LockableCommand {
                 if (err) {
                     vsc.window.showErrorMessage(err.message);
                     this.logger.log(err);
-                    return Promise.reject();
+                    return Promise.resolve();
                 }
+            } finally {
+                this.unlock();
             }
         });
-
-        this.unlock();
     }
 
     private showSummary(usId: number, tasks: Task[]) {

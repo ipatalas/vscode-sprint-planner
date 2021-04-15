@@ -239,11 +239,10 @@ export class AzureClient implements vsc.Disposable {
         }).then(res => {
             this.logger.log(`#${res.data.id} Task '${task.title}' ${createNewTask ? 'created' : 'updated'} (${stopwatch.toString()})`);
             return res.data.id;
-        })
-            .catch(err => {
-                console.error(err);
-                return Promise.reject(err);
-            });
+        }).catch(err => {
+            console.error(err);
+            return Promise.reject(err);
+        });
     }
 
     public createUserStory(title: string, iterationPath: string): Promise<WorkItemInfo> {
