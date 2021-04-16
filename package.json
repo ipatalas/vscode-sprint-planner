@@ -93,6 +93,11 @@
 					],
 					"description": "Process used in the project (see your Project settings)"
 				},
+				"planner.azure-devops.default.area": {
+					"title": "Default area",
+					"type": "string",
+					"description": "Default area used when nothing is provided in the file"
+				},
 				"planner.azure-devops.default.activity": {
 					"title": "Default Activity",
 					"type": "string",

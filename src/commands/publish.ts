@@ -46,7 +46,7 @@ export class PublishCommand extends LockableCommand {
 
                 if (createUserStory) {
                     const iteration = await this.sessionStore.determineIteration();
-                    const workItem = await this.client.createUserStory(us.title, iteration.path);
+                    const workItem = await this.client.createUserStory(us.title, iteration.path, us.areaPath || this.config.defaultArea);
                     userStoryInfo = await this.getUserStoryInfo(workItem);
                 } else {
                     userStoryInfo = await this.getUserStoryInfo(us);
@@ -64,7 +64,7 @@ export class PublishCommand extends LockableCommand {
 
                 progress.report({ increment: 10 });
 
-                const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo as UserStoryInfo, t.id ? undefined : firstFreeStackRank++));
+                const requests = us.tasks.map(t => this.buildTaskInfo(t, userStoryInfo!, t.id ? undefined : firstFreeStackRank++));
 
                 const increment = 70 / requests.length;
                 const taskIds: number[] = [];

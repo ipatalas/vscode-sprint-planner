@@ -12,6 +12,7 @@ export interface UserStory {
 	line: number;
 	id?: number;
 	title: string;
+    areaPath: string;
 	tasks: Task[];
 }
 

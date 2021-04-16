@@ -115,4 +115,27 @@ Development:
 		expect(results!.id).to.be.equal(undefined);
 		expect(results!.tasks.length).to.be.equal(3);
 	});
+
+    it("when calling getUserStory with areas", function () {
+		const lines = `US#1
+Area: A1
+US#2
+US#3
+
+Area: A2
+US#4
+Area: A3
+US#5
+		`.split("\n");
+
+		const results = TextProcessor.getUserStoryLineIndices(lines);
+        const userStories = results.map(line => TextProcessor.getUserStory(lines, line)!);
+
+		expect(results).to.be.eql([0, 2, 3, 6, 8]);
+        expect(userStories[0].areaPath).to.be.equal(undefined);
+        expect(userStories[1].areaPath).to.be.equal('A1');
+        expect(userStories[2].areaPath).to.be.equal('A1');
+        expect(userStories[3].areaPath).to.be.equal('A2');
+        expect(userStories[4].areaPath).to.be.equal('A3');
+	});
 });

@@ -14,6 +14,7 @@ export class Configuration implements vsc.Disposable {
     public token: string | undefined;
     public debug!: boolean;
     public defaultActivity: string | undefined;
+    public defaultArea: string | undefined;
     public snippets: { [name: string]: string } | undefined;
 
     private _onDidChange: vsc.EventEmitter<Configuration>;
@@ -55,6 +56,7 @@ export class Configuration implements vsc.Disposable {
         this.process = config.get('process');
         this.debug = config.get<boolean>('debug', false);
         this.defaultActivity = config.get('default.activity');
+        this.defaultArea = config.get('default.area');
 
         if (loadSnippets) {
             const snippets = config.get<SnippetConfig>('snippets');

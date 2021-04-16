@@ -10,6 +10,7 @@ import { Stopwatch } from './stopwatch';
 import { Configuration } from './config';
 import { WorkItemRequestBuilder } from './workItemRequestBuilder';
 import { TaskInfoMapper, UserStoryInfoMapper } from './mappers';
+import { AreaDefinition } from '../models/azure-client/areas';
 
 export class AzureClient implements vsc.Disposable {
     private _apiVersionPreview = {
@@ -155,6 +156,22 @@ export class AzureClient implements vsc.Disposable {
         return result.data.allowedValues;
     }
 
+    public async getProjectAreas(): Promise<string[]> {
+        const finish = this.logger.perf('Getting project areas...');
+        const result = await this.client.get<AreaDefinition>(`/wit/classificationNodes/areas?$depth=10`);
+
+        finish();
+
+        return [result.data.name, ...getChildren(result.data.name, result.data.children)];
+
+        function getChildren(prefix: string, children: AreaDefinition[]): string[] {
+            return [...(children || []).flatMap(x => {
+                const name = `${prefix}\\${x.name}`;
+                return [name, ...getChildren(name, x.children)];
+            })];
+        }
+    }
+
     public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
         const finish = this.logger.perf('Getting user story info...');
 
@@ -245,8 +262,8 @@ export class AzureClient implements vsc.Disposable {
         });
     }
 
-    public createUserStory(title: string, iterationPath: string): Promise<WorkItemInfo> {
-        const request = this.workItemRequestBuilder.createUserStory(title, iterationPath);
+    public createUserStory(title: string, iterationPath: string, areaPath?: string): Promise<WorkItemInfo> {
+        const request = this.workItemRequestBuilder.createUserStory(title, iterationPath, areaPath);
 
         const workItemType = encodeURIComponent(this.getUserStoryWorkItemType());
 

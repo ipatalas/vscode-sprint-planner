@@ -5,6 +5,8 @@ export const ActivityTypeTriggerRegex = /^[a-z]*$/i;
 export const SnippetTriggerRegex = /^[a-z]*$/i;
 export const ActivityTypeLine = /^[a-z]+:$/i;
 
+export const AreaPrefix = 'Area: ';
+
 export const IterationPrefix = 'IT#';
 export const IterationRegex = /^IT#([\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12})/i;
 

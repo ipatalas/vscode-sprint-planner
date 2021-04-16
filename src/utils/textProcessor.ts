@@ -48,12 +48,14 @@ export class TextProcessor {
 			return;
 		}
 
+        const areaIdx = TextProcessor.getAreasIndices(allLines, userStoryInfo.line).pop();
 		const tasks = TextProcessor.getTasksInfo(allLines, userStoryInfo.line + 1);
 
 		return <UserStory>{
 			line: userStoryInfo.line,
 			id: userStoryInfo.id,
 			title: userStoryInfo.title,
+            areaPath: typeof areaIdx === "number" && TextProcessor.getAreaName(allLines, areaIdx),
 			tasks
 		};
 	}
@@ -73,6 +75,22 @@ export class TextProcessor {
 			}
 		}
 	}
+
+    private static getAreasIndices(allLines: string[], userStoryLine: number): number[] {
+        const results: number[] = [];
+
+		for (let i = 0; i < userStoryLine; i++) {
+			if (allLines[i].startsWith(Constants.AreaPrefix)) {
+				results.push(i);
+			}
+		}
+
+		return results;
+	}
+
+    private static getAreaName(allLines: string[], currentLine: number) {
+        return allLines[currentLine].substring(Constants.AreaPrefix.length);
+    }
 
 	private static getTasksInfo(lines: string[], currentLine: number) {
 		const firstTaskLine = currentLine;

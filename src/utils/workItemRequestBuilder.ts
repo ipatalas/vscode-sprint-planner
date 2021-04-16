@@ -43,11 +43,15 @@ export class WorkItemRequestBuilder {
 		return request;
 	}
 
-	public createUserStory(title: string, iterationPath: string): TaskOperation[] {
+	public createUserStory(title: string, iterationPath: string, areaPath?: string): TaskOperation[] {
 		const request = [
 			this.addOperation('/fields/System.Title', title),
-			this.addOperation('/fields/System.IterationPath', iterationPath),
+			this.addOperation('/fields/System.IterationPath', iterationPath)
 		];
+
+        if (areaPath) {
+            request.push(this.addOperation('/fields/System.AreaPath', areaPath));
+        }
 
 		return request;
 	}

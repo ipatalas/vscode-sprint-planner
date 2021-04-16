@@ -17,6 +17,7 @@ import { SnippetCompletionProvider } from './providers/snippetCompletionProvider
 import { WorkItemRequestBuilder } from './utils/workItemRequestBuilder';
 import { WorkItemLinkProvider } from './providers/workItemLinkProvider';
 import { SyncTasksCommand } from './commands/syncTasks';
+import { AreaCompletionProvider } from './providers/areaCompletionProvider';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -47,6 +48,7 @@ export function activate(context: vsc.ExtensionContext): void {
 		vsc.languages.registerCompletionItemProvider(documentSelector, new SnippetCompletionProvider(config), ...alphabet),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
+		vsc.languages.registerCompletionItemProvider(documentSelector, new AreaCompletionProvider(sessionStore, logger), ' '),
 		vsc.languages.registerCodeLensProvider(documentSelector, new UserStoryCodeLensProvider()),
 		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore, logger)),
         vsc.languages.registerDocumentLinkProvider(documentSelector, new WorkItemLinkProvider(config)),
