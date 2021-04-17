@@ -1,5 +1,5 @@
 import * as vsc from 'vscode';
-import { LanguageId, NewLineRegex } from '../constants';
+import { Diagnostics, LanguageId, NewLineRegex } from '../constants';
 import { ISessionStore } from '../store';
 import debounce from '../utils/debounce';
 import { TextProcessor } from '../utils/textProcessor';
@@ -15,10 +15,8 @@ export class ActivityDiagnostics implements vsc.Disposable {
 	}
 
 	dispose(): void {
-		// tslint:disable: no-unused-expression
 		this.collection && this.collection.dispose();
 		this.handler && this.handler.dispose();
-		// tslint:enable: no-unused-expression
 		this.decorations.forEach(d => d.dispose());
 	}
 
@@ -67,7 +65,7 @@ export class ActivityDiagnostics implements vsc.Disposable {
 				if (!activities.includes(activity)) {
 					const range = new vsc.Range(line, 0, line, activity.length);
 					const diagnostic = new vsc.Diagnostic(range, `${activity} is not a valid Activity`);
-					diagnostic.code = activity;
+					diagnostic.code = `${Diagnostics.InvalidActivity}:${activity}`;
 					diagnostics.push(diagnostic);
 				} else if (textEditor) {
 					const userStory = this.findUserStory(userStories, line);

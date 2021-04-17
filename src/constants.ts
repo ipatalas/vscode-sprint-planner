@@ -24,3 +24,8 @@ export const Commands = {
 	publish: 'sprintplanner.publish',
 	syncTasks: 'sprintplanner.syncTasks'
 };
+
+export const Diagnostics = {
+    InvalidActivity: 'invalid-activity',
+    InvalidArea: 'invalid-area'
+};

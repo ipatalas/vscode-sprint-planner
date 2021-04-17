@@ -18,6 +18,8 @@ import { WorkItemRequestBuilder } from './utils/workItemRequestBuilder';
 import { WorkItemLinkProvider } from './providers/workItemLinkProvider';
 import { SyncTasksCommand } from './commands/syncTasks';
 import { AreaCompletionProvider } from './providers/areaCompletionProvider';
+import { AreaDiagnostics } from './providers/areaDiagnostics';
+import { AreaCodeActionProvider } from './providers/areaCodeActionProvider';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -39,6 +41,9 @@ export function activate(context: vsc.ExtensionContext): void {
 	const activityDiagnostics = new ActivityDiagnostics(sessionStore);
 	activityDiagnostics.register();
 
+    const areaDiagnostics = new AreaDiagnostics(sessionStore);
+    areaDiagnostics.register();
+
 	context.subscriptions.push(...[
 		logger,
 		config,
@@ -50,9 +55,11 @@ export function activate(context: vsc.ExtensionContext): void {
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new AreaCompletionProvider(sessionStore, logger), ' '),
 		vsc.languages.registerCodeLensProvider(documentSelector, new UserStoryCodeLensProvider()),
-		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore, logger)),
+		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore)),
+		vsc.languages.registerCodeActionsProvider(documentSelector, new AreaCodeActionProvider(sessionStore)),
         vsc.languages.registerDocumentLinkProvider(documentSelector, new WorkItemLinkProvider(config)),
-		activityDiagnostics
+		activityDiagnostics,
+        areaDiagnostics
 	]);
 }
 

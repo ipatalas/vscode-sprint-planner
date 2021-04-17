@@ -2,15 +2,14 @@ import * as vsc from 'vscode';
 import didYouMean from 'didyoumean2';
 
 import { ISessionStore } from '../store';
-import { Logger } from '../utils/logger';
+import { Diagnostics } from '../constants';
 
 export class ActivityCodeActionProvider implements vsc.CodeActionProvider {
-	constructor(private store: ISessionStore, private logger: Logger) {
+	constructor(private store: ISessionStore) {
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	provideCodeActions(document: vsc.TextDocument, range: vsc.Range | vsc.Selection, context: vsc.CodeActionContext, _token: vsc.CancellationToken): vsc.ProviderResult<(vsc.Command | vsc.CodeAction)[]> {
-		const diag = context.diagnostics.find(d => d.range.contains(range));
+		const diag = context.diagnostics.find(d => d.code?.toString().startsWith(Diagnostics.InvalidActivity) && d.range.contains(range));
 
 		if (diag) {
 			return this.getCodeActions(document, diag);
@@ -22,7 +21,9 @@ export class ActivityCodeActionProvider implements vsc.CodeActionProvider {
 	private async getCodeActions(document: vsc.TextDocument, diag: vsc.Diagnostic) {
 		await this.store.ensureHasActivityTypes();
 
-		const result = didYouMean(diag.code as string, this.store.activityTypes || []);
+        const [, activity] = (diag.code as string).split(':', 2);
+
+		const result = didYouMean(activity, this.store.activityTypes || []);
 		if (result) {
 			const rangeToReplace = diag.range;
 

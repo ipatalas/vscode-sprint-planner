@@ -76,10 +76,10 @@ export class TextProcessor {
 		}
 	}
 
-    private static getAreasIndices(allLines: string[], userStoryLine: number): number[] {
+    public static getAreasIndices(allLines: string[], userStoryLine?: number): number[] {
         const results: number[] = [];
 
-		for (let i = 0; i < userStoryLine; i++) {
+		for (let i = 0; i < (userStoryLine || allLines.length); i++) {
 			if (allLines[i].startsWith(Constants.AreaPrefix)) {
 				results.push(i);
 			}
@@ -88,7 +88,7 @@ export class TextProcessor {
 		return results;
 	}
 
-    private static getAreaName(allLines: string[], currentLine: number) {
+    public static getAreaName(allLines: string[], currentLine: number): string {
         return allLines[currentLine].substring(Constants.AreaPrefix.length);
     }
 
