@@ -5,8 +5,8 @@ import { ISessionStore } from '../store';
 import { AzureClient, TaskInfo, UserStoryInfo } from '../utils/azure-client';
 import { Task, UserStory } from '../models/task';
 import { Logger } from '../utils/logger';
+import { inspect } from 'util';
 import { Configuration } from '../utils/config';
-import { isNumber } from 'util';
 import { WorkItemInfo } from '../models/azure-client/workItems';
 import { UserStoryInfoMapper } from '../utils/mappers';
 import { LockableCommand } from './lockableCommand';
@@ -80,8 +80,8 @@ export class PublishCommand extends LockableCommand {
                 return Promise.resolve();
             } catch (err) {
                 if (err) {
-                    vsc.window.showErrorMessage(err.message);
-                    this.logger.log(err);
+                    vsc.window.showErrorMessage(err.response?.data?.message || err.message);
+                    this.logger.log(inspect(err.response.data, { depth: 3 }));
                     return Promise.resolve();
                 }
             } finally {
@@ -151,7 +151,7 @@ export class PublishCommand extends LockableCommand {
             }
 
             for (let i = 0; i < us.tasks.length; i++) {
-                if (isNumber(taskIds[i])) {
+                if (typeof taskIds[i] === 'number') {
                     const task = us.tasks[i];
                     const taskIdHasChanged = task.id !== taskIds[i];
                     if (taskIdHasChanged) {

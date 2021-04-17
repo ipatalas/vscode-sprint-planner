@@ -9,6 +9,7 @@ import { TaskMapper } from '../utils/mappers';
 import { LockableCommand } from './lockableCommand';
 
 import sortBy = require('lodash.sortby');
+import { inspect } from 'util';
 
 export class SyncTasksCommand extends LockableCommand {
     constructor(
@@ -64,9 +65,9 @@ export class SyncTasksCommand extends LockableCommand {
                     if (err.response.status === 404) {
                         vsc.window.showErrorMessage("User story not found or you don't have permission to read it");
                     } else {
-                        vsc.window.showErrorMessage(err.message);
+                        vsc.window.showErrorMessage(err.response?.data?.message || err.message);
                     }
-                    this.logger.log(err);
+                    this.logger.log(inspect(err.response.data, { depth: 3 }));
                     return Promise.resolve();
                 }
             } finally {
