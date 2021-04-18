@@ -3,6 +3,14 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.5.0]
+### Added
+- Support for setting Area Path for user stories (addresses [#23](https://github.com/ipatalas/vscode-sprint-planner/issues/23))
+- Command to sync tasks from Azure DevOps (addresses [#11](https://github.com/ipatalas/vscode-sprint-planner/issues/11))
+### Changed
+- Better error handling for Publish/Sync tasks commands (show original Azure DevOps error which should be more helpful)
+- Order of added tasks should now be preserved (fixes [#25](https://github.com/ipatalas/vscode-sprint-planner/issues/25))
+
 ## [0.4.0]
 ### Added
 - Support for Scrum process type (with Product Backlog Items)

@@ -25,9 +25,31 @@ Then it's time to enter some tasks in the following manner:
 
 ![user story autocomplete](images/planner-tasks.png)
 
-he image should be pretty self-explanatory I hope. The numbers following the tasks are estimations. They will be filled in both **Original** and **Remaining Estimation** field in Azure DevOps. As you can see it can be specified in both hours (up to 2 decimal places) and minutes (integer).
+The image should be pretty self-explanatory I hope. The numbers following the tasks are estimations. They will be filled in both **Original** and **Remaining Estimation** field in Azure DevOps. As you can see it can be specified in both hours (up to 2 decimal places) and minutes (integer).
 
 At this point there is a Code Lens action above the user story that lets you publish the changes. Check it out. In case of something is not working just open Output panel and pick `Azure DevOps planner` channel to see what might be wrong. If it's not obvious just raise an issue.
+
+### Setting area path (since **0.5.0**)
+
+There is an option to override default area path set by Azure DevOps. One can do so either in the settings (global and can be persisted between sessions) or inline:
+![area](images/areas.png)
+
+Area set inline applies to all user stories in all lines below until another area is specified. This means it can be combined like this:
+```
+Area: Area1
+
+US#1
+US#2
+US#3
+
+Area: Area2
+
+US#4
+US#5
+...
+```
+
+It supports autocompletion and some basic diagnostics to avoid typos.
 
 ### Updating tasks
 
@@ -43,6 +65,16 @@ After publishing you will get User Story ID filled and you can add more tasks th
 
 ![user story created](images/user-story-created.png)
 
+### Synchronize tasks from Azure DevOps (since **0.5.0**)
+
+It's now possible to pull the tasks from Azure DevOps:
+
+![sync-tasks](images/sync-tasks.gif)
+
+All unsaved tasks added prior to synchronization will be preserved and merged into respective Activity.
+When you modify a task which is already saved in Azure DevOps and pull the tasks from Azure DevOps before publishing your changes, it will be overwritten by the data pulled from Azure DevOps. There is no confilct resolution feature available. When pulling, the one being pulled always wins.
+It's just as Publish feature have worked since the beginning. When pushing changes they will always overwrite the original task/user story even if it has been modified by someone else in the meantime so please bear that in mind and be careful.
+
 ## Configuration
 
 This extension contributes the following settings:
@@ -54,6 +86,7 @@ This extension contributes the following settings:
 * `planner.azure-devops.process`: Project process (currently only Agile and Scrum are supported)
 * `planner.azure-devops.debug`: whether to turn debug logging on or off
 * `planner.azure-devops.default.activity`: default Activity used when none is provided for the task (default: Development)
+* `planner.azure-devops.default.area`: default Area used when none is provided inline (default: empty -> Azure DevOps default)
 * `planner.azure-devops.snippets`: custom tasks snippets that can be used (see [Task snippets](#task-snippets))
 
 To change the settings please use `Preferences: Open User Settings` command (or `Workspace Settings` if you like to use different Azure DevOps accounts per workspace). This is by default bound to `Ctrl+,`.
