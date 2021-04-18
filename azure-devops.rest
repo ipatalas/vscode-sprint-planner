@@ -21,7 +21,7 @@ GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}/workitems?{{apiVers
 Authorization: Basic PAT {{token}}
 
 ### Get work item
-GET https://dev.azure.com/ipatalas/_apis/wit/workItems/1
+GET {{baseUrl}}/wit/workItems/1?$expand=Relations
 Authorization: Basic PAT {{token}}
 
 ### Get titles of User stories
@@ -30,6 +30,26 @@ Authorization: Basic PAT {{token}}
 
 ### Get titles of User stories
 GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&$expand=Relations,Links
+Authorization: Basic PAT {{token}}
+
+### Get tasks info
+GET {{baseUrl}}/wit/workitems?ids=66&{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+
+### Get areas
+GET {{baseUrl}}/wit/classificationNodes/Areas?$depth=10&{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+
+### Get tags
+GET {{baseUrl}}/wit/tags?api-version=6.0-preview.1
+Authorization: Basic PAT {{token}}
+
+### Get project info
+GET {{orgUrl}}/projects/Scrum?api-version=6.0
+Authorization: Basic PAT {{token}}
+
+### Get team members
+GET {{orgUrl}}/projects/Scrum/teams/Scrum%20Team/members
 Authorization: Basic PAT {{token}}
 
 ###
@@ -100,7 +120,7 @@ Content-Type: application/json-patch+json
 
 ### Update task
 # https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0
-PATCH {{baseUrl}}/wit/workitems/10?{{apiVersionParam}}
+PATCH {{baseUrl}}/wit/workitems/66?{{apiVersionParam}}
 Authorization: Basic PAT {{token}}
 Content-Type: application/json-patch+json
 
@@ -124,7 +144,17 @@ Content-Type: application/json-patch+json
 		"op": "add",
 		"path": "/fields/Microsoft.VSTS.Scheduling.OriginalEstimate",
 		"value": 2
-  	}
+  	},
+	{
+		"op": "add",
+		"path": "/fields/System.AssignedTo",
+		"value": "Ireneusz Patalas<fido@list.pl>"
+  	},
+    {
+        "op": "add",
+        "path": "/fields/System.Tags",
+        "value": "Tag1; Tag2"
+    }
 ]
 
 ### Create User story
