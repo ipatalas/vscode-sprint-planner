@@ -104,6 +104,14 @@ Given that activities we have 6 common tasks (actually it's even more but you ge
 
 Let's handle this like a pro! Go to settings file (UI doesn't provide option to define this yet) so `Preferences: Open Settings (JSON)` command. Then just add a new setting called `planner.azure-devops.snippets` which is a map of snippets:
 
+``` JSON
+"planner.azure-devops.snippets": {
+    "local_relative": "./.planner/relative_snippet",
+    "local_absolute": "D:\\my-snippets\\absolute_snippet",
+    "pastebin": "https://pastebin.com/raw/5eSr8eLZ"
+},
+```
+
 ![snippets](images/snippets-config.png)
 
 > Note: it can be either a local file or HTTP(S) direct link to a file

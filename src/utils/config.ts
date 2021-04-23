@@ -1,5 +1,6 @@
 import * as vsc from 'vscode';
 import * as fs from 'fs';
+import * as path from 'path';
 import { Logger } from './logger';
 import Axios from 'axios';
 
@@ -97,17 +98,26 @@ export class Configuration implements vsc.Disposable {
     }
 
     private async loadSingleSnippet(url: string) {
-        if (url.startsWith('http')) {
+        if (url.startsWith("http") || url.startsWith("https")) {
             if (this.debug) {
                 console.log(`[DEBUG] Getting ${url}`);
             }
-            return Axios.get(url).then(r => r.data as string);
+            return Axios.get(url).then((r) => r.data as string);
         } else {
             return new Promise<string>((resolve, reject) => {
                 if (this.debug) {
                     console.log(`[DEBUG] Reading ${url}`);
                 }
-                fs.readFile(url, { encoding: "UTF8" }, (err, data) => {
+
+                let filePath = url;
+                if (vsc.workspace.workspaceFolders !== undefined && !path.isAbsolute(url)) {
+                    filePath = path.join(
+                        vsc.workspace.workspaceFolders[0].uri.fsPath,
+                        filePath
+                    );
+                }
+
+                fs.readFile(filePath, { encoding: "UTF8" }, (err, data) => {
                     if (err) {
                         reject(err);
                     } else {
