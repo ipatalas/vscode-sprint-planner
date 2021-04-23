@@ -112,8 +112,6 @@ Let's handle this like a pro! Go to settings file (UI doesn't provide option to 
 },
 ```
 
-![snippets](images/snippets-config.png)
-
 > Note: it can be either a local file or HTTP(S) direct link to a file
 
 The format of the file is as in the example: https://gist.github.com/ipatalas/8bb7b2fdb2e1c26dc8249659791cf56e#file-taxes
