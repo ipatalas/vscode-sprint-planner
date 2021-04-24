@@ -3,8 +3,8 @@
 const expect = require('expect.js') as (target?: any) => Expect.Root;
 import { TextProcessor } from '../utils/textProcessor';
 
-describe("Given TextProcessor", function () {
-	it("when calling getUserStoryLineIndices", function () {
+describe('Given TextProcessor', function () {
+	it('when calling getUserStoryLineIndices', function () {
 		const lines = [
 			'US#1',
 			'US#2',
@@ -32,7 +32,7 @@ Testing:
 - Integration tests, 2h [#103]
 - UI tests, 4h [#104]
 - small task, 0.5h [#105]
-- even smaller one, 3m`.split("\n");
+- even smaller one, 3m`.split('\n');
 
 		const results = TextProcessor.getUserStory(lines, 0);
 
@@ -106,7 +106,7 @@ Development:
 - Create metrics for User Story, 4h
 	Description of the task, leading whitespaces will be trimmed
 	It can be multiline as well, emojis more than welcome 👌😎
-- New sample task`.split("\n");
+- New sample task`.split('\n');
 
 		const results = TextProcessor.getUserStory(lines, 0);
 
@@ -116,7 +116,7 @@ Development:
 		expect(results!.tasks.length).to.be.equal(3);
 	});
 
-    it("when calling getUserStory with areas", function () {
+    it('when calling getUserStory with areas', function () {
 		const lines = `US#1
 Area: A1
 US#2
@@ -126,7 +126,7 @@ Area: A2
 US#4
 Area: A3
 US#5
-		`.split("\n");
+		`.split('\n');
 
 		const results = TextProcessor.getUserStoryLineIndices(lines);
         const userStories = results.map(line => TextProcessor.getUserStory(lines, line)!);

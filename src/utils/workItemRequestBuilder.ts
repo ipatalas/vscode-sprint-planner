@@ -1,5 +1,5 @@
-import { TaskOperation } from "../models/workItemRequestBuilder";
-import { TaskInfo } from "./azure-client";
+import { TaskOperation } from '../models/workItemRequestBuilder';
+import { TaskInfo } from './azure-client';
 
 export class WorkItemRequestBuilder {
 	public createTaskRequest(task: TaskInfo): TaskOperation[]  {
@@ -30,7 +30,7 @@ export class WorkItemRequestBuilder {
 		}
 
 		if (task.description && task.description.length > 0) {
-			request.push(this.addOperation('/fields/System.Description', `<div>${task.description.join("</div><div>")}</div>`));
+			request.push(this.addOperation('/fields/System.Description', `<div>${task.description.join('</div><div>')}</div>`));
 		}
 
 		if (task.estimation) {
@@ -67,7 +67,7 @@ export class WorkItemRequestBuilder {
 
 	private userStoryLink(url: string) {
 		return {
-			rel: "System.LinkTypes.Hierarchy-Reverse",
+			rel: 'System.LinkTypes.Hierarchy-Reverse',
 			url
 		};
 	}

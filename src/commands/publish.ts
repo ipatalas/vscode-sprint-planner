@@ -39,7 +39,7 @@ export class PublishCommand extends LockableCommand {
 
                 this.validateUserStory(us);
 
-                progress.report({ increment: 10, message: "Publishing..." });
+                progress.report({ increment: 10, message: 'Publishing...' });
 
                 const createUserStory = !us.id;
                 let userStoryInfo: UserStoryInfo | undefined;
@@ -147,7 +147,7 @@ export class PublishCommand extends LockableCommand {
                 // Format of the line: US#new - <title>
                 const newIdx = Constants.UserStoryPrefix.length;
                 const startPos = new vsc.Position(us.line, newIdx);
-                edit.replace(new vsc.Range(startPos, startPos.translate(undefined, "new".length)), createdUserStoryId.toString());
+                edit.replace(new vsc.Range(startPos, startPos.translate(undefined, 'new'.length)), createdUserStoryId.toString());
             }
 
             for (let i = 0; i < us.tasks.length; i++) {

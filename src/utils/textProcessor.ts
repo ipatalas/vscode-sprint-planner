@@ -55,7 +55,7 @@ export class TextProcessor {
 			line: userStoryInfo.line,
 			id: userStoryInfo.id,
 			title: userStoryInfo.title,
-            areaPath: typeof areaIdx === "number" && TextProcessor.getAreaName(allLines, areaIdx),
+            areaPath: typeof areaIdx === 'number' && TextProcessor.getAreaName(allLines, areaIdx),
 			tasks
 		};
 	}

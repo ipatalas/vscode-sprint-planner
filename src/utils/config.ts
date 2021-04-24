@@ -107,7 +107,7 @@ export class Configuration implements vsc.Disposable {
                 if (this.debug) {
                     console.log(`[DEBUG] Reading ${url}`);
                 }
-                fs.readFile(url, { encoding: "UTF8" }, (err, data) => {
+                fs.readFile(url, { encoding: 'UTF8' }, (err, data) => {
                     if (err) {
                         reject(err);
                     } else {
