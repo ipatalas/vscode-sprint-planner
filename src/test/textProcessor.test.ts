@@ -125,8 +125,7 @@ US#3
 Area: A2
 US#4
 Area: A3
-US#5
-		`.split('\n');
+US#5`.split('\n');
 
 		const results = TextProcessor.getUserStoryLineIndices(lines);
         const userStories = results.map(line => TextProcessor.getUserStory(lines, line)!);

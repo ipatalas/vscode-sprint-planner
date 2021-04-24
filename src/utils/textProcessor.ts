@@ -55,7 +55,7 @@ export class TextProcessor {
 			line: userStoryInfo.line,
 			id: userStoryInfo.id,
 			title: userStoryInfo.title,
-            areaPath: typeof areaIdx === 'number' && TextProcessor.getAreaName(allLines, areaIdx),
+            areaPath: typeof areaIdx === 'number' && TextProcessor.getAreaName(allLines, areaIdx) || undefined,
 			tasks
 		};
 	}
@@ -78,8 +78,9 @@ export class TextProcessor {
 
     public static getAreasIndices(allLines: string[], userStoryLine?: number): number[] {
         const results: number[] = [];
+        const maxAreaIdx = typeof userStoryLine === 'number' ? userStoryLine : allLines.length;
 
-		for (let i = 0; i < (userStoryLine || allLines.length); i++) {
+		for (let i = 0; i < maxAreaIdx; i++) {
 			if (allLines[i].startsWith(Constants.AreaPrefix)) {
 				results.push(i);
 			}
