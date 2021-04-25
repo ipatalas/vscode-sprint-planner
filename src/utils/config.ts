@@ -109,7 +109,7 @@ export class Configuration implements vsc.Disposable {
     }
 
     private async loadSingleSnippet(url: string) {
-        if (url.startsWith('http') || url.startsWith('https')) {
+        if (url.startsWith('http')) {
             if (this.debug) {
                 console.log(`[DEBUG] Getting ${url}`);
             }
