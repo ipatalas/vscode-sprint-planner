@@ -1,3 +1,5 @@
+Area: Scrum\Second team\Level 3
+
 US#13 - User Story Title (just informational)
 Development:
 - Discussion of the idea, 1h
@@ -5,11 +7,13 @@ Development:
 	Description of the task, leading whitespaces will be trimmed
 	It can be multiline as well, emojis more than welcome 👌😎
 - New sample task
-Testing:
+Testng:
 - Integration tests, 2h
 - UI tests, 4h
 - small task, 0.5h
 - even smaller one, 15m
 
 US#14 - Another User Story
-Prepare data, 30m
+- Prepare data, 30m
+
+US#64 - New User story - which area?

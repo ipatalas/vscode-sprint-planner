@@ -19,6 +19,10 @@
             "error",
             "always"
         ],
+        "quotes": [
+            "warn",
+            "single"
+        ],
         "no-throw-literal": "error",
         "eqeqeq": "error",
         "curly": "error",

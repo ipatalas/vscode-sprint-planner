@@ -13,7 +13,7 @@ export class SnippetCompletionProvider implements vsc.CompletionItemProvider {
 		if (this.config?.snippets && SnippetTriggerRegex.test(text)) {
 			return Object.entries(this.config.snippets).map(([name, value]) => {
 				const item = new vsc.CompletionItem(name, vsc.CompletionItemKind.Snippet);
-				item.detail = "Tasks snippet";
+				item.detail = 'Tasks snippet';
 				item.insertText = value;
 				item.documentation = item.insertText;
 

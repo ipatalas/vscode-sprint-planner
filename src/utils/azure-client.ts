@@ -56,8 +56,8 @@ export class AzureClient implements vsc.Disposable {
             const client = axios.create({
                 baseURL: baseUrl,
                 auth: {
-                    username: "PAT",
-                    password: this.config.token || ""
+                    username: 'PAT',
+                    password: this.config.token || ''
                 },
                 headers: {
                     'Accept': 'application/json; api-version=5.0'
@@ -91,7 +91,7 @@ export class AzureClient implements vsc.Disposable {
 
     public async getIterationsInfo(): Promise<IterationInfo[]> {
         const finish = this.logger.perf('Getting iterations info...');
-        const result = await this.teamClient.get<IterationsResult>("/work/teamsettings/iterations");
+        const result = await this.teamClient.get<IterationsResult>('/work/teamsettings/iterations');
         finish();
 
         if (result.data.count > 0) {
@@ -109,12 +109,12 @@ export class AzureClient implements vsc.Disposable {
 
         }
 
-        throw new Error("Iterations not found");
+        throw new Error('Iterations not found');
     }
 
     public async getCurrentIterationInfo(): Promise<IterationInfo> {
         const finish = this.logger.perf('Getting current iteration info...');
-        const result = await this.teamClient.get<IterationsResult>("/work/teamsettings/iterations?$timeframe=current");
+        const result = await this.teamClient.get<IterationsResult>('/work/teamsettings/iterations?$timeframe=current');
         finish();
 
         if (result.data.count > 0) {
@@ -126,7 +126,7 @@ export class AzureClient implements vsc.Disposable {
             };
         }
 
-        throw new Error("Current iteration not found");
+        throw new Error('Current iteration not found');
     }
 
     public async getIterationWorkItems(iterationId: string): Promise<UserStoryIdentifier[]> {
@@ -149,7 +149,7 @@ export class AzureClient implements vsc.Disposable {
 
     public async getActivityTypes(): Promise<string[]> {
         const finish = this.logger.perf('Getting activity types...');
-        const result = await this.client.get<FieldDefinition>(`/wit/workitemtypes/Task/fields/Microsoft.VSTS.Common.Activity?$expand=All`);
+        const result = await this.client.get<FieldDefinition>('/wit/workitemtypes/Task/fields/Microsoft.VSTS.Common.Activity?$expand=All');
 
         finish();
 
@@ -158,7 +158,7 @@ export class AzureClient implements vsc.Disposable {
 
     public async getProjectAreas(): Promise<string[]> {
         const finish = this.logger.perf('Getting project areas...');
-        const result = await this.client.get<AreaDefinition>(`/wit/classificationNodes/areas?$depth=10`);
+        const result = await this.client.get<AreaDefinition>('/wit/classificationNodes/areas?$depth=10');
 
         finish();
 
@@ -186,7 +186,7 @@ export class AzureClient implements vsc.Disposable {
         const userStoryType = this.getUserStoryWorkItemType();
 
         return result.data.value
-            .filter(x => x.fields["System.WorkItemType"] === userStoryType)
+            .filter(x => x.fields['System.WorkItemType'] === userStoryType)
             .map(UserStoryInfoMapper.fromWorkItemInfo);
     }
 
@@ -204,7 +204,7 @@ export class AzureClient implements vsc.Disposable {
         };
 
         const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
-        const stackRanks = result.data.value.map(t => t.fields["Microsoft.VSTS.Common.StackRank"]);
+        const stackRanks = result.data.value.map(t => t.fields['Microsoft.VSTS.Common.StackRank']);
 
         finish();
 
@@ -286,9 +286,9 @@ export class AzureClient implements vsc.Disposable {
 
     private getUserStoryWorkItemType() {
         switch (this.config.process) {
-            case "Agile": return "User Story";
-            case "Scrum": return "Product Backlog Item";
-            default: throw new Error("Process type not supported");
+            case 'Agile': return 'User Story';
+            case 'Scrum': return 'Product Backlog Item';
+            default: throw new Error('Process type not supported');
         }
     }
 }

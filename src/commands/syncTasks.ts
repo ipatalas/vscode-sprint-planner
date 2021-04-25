@@ -27,7 +27,7 @@ export class SyncTasksCommand extends LockableCommand {
 
         await vsc.window.withProgress({ location: vsc.ProgressLocation.Notification }, async progress => {
             try {
-                const currentLine = typeof line === "number" ? line : editor.selection.active.line;
+                const currentLine = typeof line === 'number' ? line : editor.selection.active.line;
                 const lines = editor.document.getText().split(Constants.NewLineRegex);
 
                 const us = TextProcessor.getUserStory(lines, currentLine);
@@ -39,11 +39,11 @@ export class SyncTasksCommand extends LockableCommand {
                     return;
                 }
 
-                progress.report({ increment: 20, message: "Getting User story info..." });
+                progress.report({ increment: 20, message: 'Getting User story info...' });
 
                 const [userStoryInfo] = await this.client.getUserStoryInfo([us.id!]);
 
-                progress.report({ increment: 30, message: "Getting tasks..." });
+                progress.report({ increment: 30, message: 'Getting tasks...' });
 
                 const vsoTaskIds = userStoryInfo.taskUrls.map(this.extractTaskId).filter(x => x) as number[];
                 const vsoTasks = (await this.client.getTasksInfo(vsoTaskIds)).map(TaskMapper.fromTaskInfo);
@@ -51,7 +51,7 @@ export class SyncTasksCommand extends LockableCommand {
                 progress.report({ increment: 40 });
 
                 const newTasks = us.tasks.filter(t => !vsoTaskIds.includes(t.id!)).map(t => {
-                    t.activity = t.activity || this.config.defaultActivity || "";
+                    t.activity = t.activity || this.config.defaultActivity || '';
                     return t;
                 });
 
@@ -63,7 +63,7 @@ export class SyncTasksCommand extends LockableCommand {
             } catch (err) {
                 if (err) {
                     if (err.response.status === 404) {
-                        vsc.window.showErrorMessage("User story not found or you don't have permission to read it");
+                        vsc.window.showErrorMessage('User story not found or you don\'t have permission to read it');
                     } else {
                         vsc.window.showErrorMessage(err.response?.data?.message || err.message);
                     }
@@ -95,19 +95,19 @@ export class SyncTasksCommand extends LockableCommand {
             taskLines.push(...groupedTasks[activity].map(this.buildTaskLine));
         }
 
-        let replacement = taskLines.join("\n");
+        let replacement = taskLines.join('\n');
 
         if (firstLine === editor.document.lineCount) {
-            replacement = "\n" + replacement;
+            replacement = '\n' + replacement;
         } else {
-            replacement += "\n";
+            replacement += '\n';
         }
 
         await editor.edit((edit: vsc.TextEditorEdit) => edit.replace(range, replacement));
     }
 
     private buildTaskLine(task: Task): string {
-        let estimation = "";
+        let estimation = '';
         if (task.estimation) {
             if (task.estimation < 1) {
                 estimation = `, ${task.estimation * 60}m`;
@@ -116,7 +116,7 @@ export class SyncTasksCommand extends LockableCommand {
             }
         }
 
-        const id = task.id ? ` [#${task.id}]` : "";
+        const id = task.id ? ` [#${task.id}]` : '';
 
         return `- ${task.title}${estimation}${id}`;
     }

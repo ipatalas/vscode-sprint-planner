@@ -22,7 +22,7 @@ export interface WorkItemRelation {
 }
 
 export enum Rel {
-	SystemLinkTypesHierarchyForward = "System.LinkTypes.Hierarchy-Forward",
+	SystemLinkTypesHierarchyForward = 'System.LinkTypes.Hierarchy-Forward',
 }
 
 export interface Target {

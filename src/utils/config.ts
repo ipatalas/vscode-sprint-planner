@@ -37,8 +37,8 @@ export class Configuration implements vsc.Disposable {
         });
 
         this._eventHandler = vsc.workspace.onDidChangeConfiguration(event => {
-            if (event.affectsConfiguration(ConfigurationKey )) {
-                const snippetsChanged = event.affectsConfiguration(SnippetsConfigurationKey );
+            if (event.affectsConfiguration(ConfigurationKey)) {
+                const snippetsChanged = event.affectsConfiguration(SnippetsConfigurationKey);
 
                 this.load(snippetsChanged).then(() => {
                     logger.log('Configuration reloaded');
@@ -49,7 +49,7 @@ export class Configuration implements vsc.Disposable {
     }
 
     private async load(loadSnippets: boolean) {
-        const config = vsc.workspace.getConfiguration(ConfigurationKey );
+        const config = vsc.workspace.getConfiguration(ConfigurationKey);
         this.organization = config.get('organization');
         this.project = config.get('project');
         this.team = config.get('team');
@@ -74,31 +74,42 @@ export class Configuration implements vsc.Disposable {
         const result: SnippetConfig = {};
 
         for (const key in snippets) {
-            promises.push(this.loadSingleSnippet(snippets[key]).then(data => {
-                result[key] = data;
-            }).catch((err: Error) => {
-                this.logger.log(`Error loading snippet '${key}': ${err.message}`, true);
-                console.log(err);
-                throw err;
-            }));
+            promises.push(this.loadSingleSnippet(snippets[key])
+                    .then(data => {
+                        result[key] = data;
+                    })
+                    .catch((err: Error) => {
+                        this.logger.log(
+                            `Error loading snippet '${key}': ${err.message}`,
+                            true
+                        );
+                        console.log(err);
+                        throw err;
+                    })
+            );
         }
 
         try {
             await Promise.all(promises);
         } catch (err) {
             const seeDetailsAction = 'See details';
-            vsc.window.showErrorMessage('Some snippets could not have been loaded', seeDetailsAction).then(item => {
-                if (item === seeDetailsAction) {
-                    this.logger.show();
-                }
-            });
+            vsc.window
+                .showErrorMessage(
+                    'Some snippets could not have been loaded',
+                    seeDetailsAction
+                )
+                .then((item) => {
+                    if (item === seeDetailsAction) {
+                        this.logger.show();
+                    }
+                });
         }
 
         return result;
     }
 
     private async loadSingleSnippet(url: string) {
-        if (url.startsWith("http") || url.startsWith("https")) {
+        if (url.startsWith('http') || url.startsWith('https')) {
             if (this.debug) {
                 console.log(`[DEBUG] Getting ${url}`);
             }
@@ -117,7 +128,7 @@ export class Configuration implements vsc.Disposable {
                     );
                 }
 
-                fs.readFile(filePath, { encoding: "UTF8" }, (err, data) => {
+                fs.readFile(filePath, { encoding: 'UTF8' }, (err, data) => {
                     if (err) {
                         reject(err);
                     } else {

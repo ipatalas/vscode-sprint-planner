@@ -1,4 +1,4 @@
-import prettyHrtime = require("pretty-hrtime");
+import prettyHrtime = require('pretty-hrtime');
 
 export class Stopwatch {
 	private time: [number, number];

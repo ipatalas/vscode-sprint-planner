@@ -32,7 +32,7 @@ export class UserStoryCodeLensProvider implements vsc.CodeLensProvider {
                 results.push(new vsc.CodeLens(
                     range,
                     {
-                        title: `🔄 Sync tasks from Azure DevOps`,
+                        title: '🔄 Sync tasks from Azure DevOps',
                         command: Commands.syncTasks,
                         arguments: [line]
                     }

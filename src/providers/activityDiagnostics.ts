@@ -112,9 +112,9 @@ export class ActivityDiagnostics implements vsc.Disposable {
 			isWholeLine: true,
 			after: {
 				contentText: `${stats.tasks} tasks (${stats.hours}h - ${percentage}% of US)`,
-				margin: "0 0 0 10px",
-				fontStyle: "italic",
-				color: new vsc.ThemeColor("editorCodeLens.foreground")
+				margin: '0 0 0 10px',
+				fontStyle: 'italic',
+				color: new vsc.ThemeColor('editorCodeLens.foreground')
 			}
 		});
 	}

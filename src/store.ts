@@ -6,7 +6,7 @@ import { Stopwatch } from './utils/stopwatch';
 import { Configuration } from './utils/config';
 import { TextProcessor } from './utils/textProcessor';
 
-const MissingUrlOrToken = "Missing URL or token in configuration";
+const MissingUrlOrToken = 'Missing URL or token in configuration';
 
 export class SessionStore implements ISessionStore {
     private currentIteration?: IterationInfo;
@@ -122,7 +122,7 @@ export class SessionStore implements ISessionStore {
         const workItemsIds = await this.azureClient.getIterationWorkItems(iteration.id);
 
         if (workItemsIds.length === 0) {
-            this.logger.log(`No user stories found in iteration`);
+            this.logger.log('No user stories found in iteration');
             return Promise.reject();
         }
 
