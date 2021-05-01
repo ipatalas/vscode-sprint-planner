@@ -155,6 +155,7 @@
 		"axios": "^0.21.1",
 		"didyoumean2": "^3.0.0",
 		"pretty-hrtime": "^1.0.3",
-		"lodash.sortby": "^4.7.0"
+		"lodash.sortby": "^4.7.0",
+		"https-proxy-agent": "^5.0.0"
 	}
 }

@@ -11,6 +11,7 @@ import { Configuration } from './config';
 import { WorkItemRequestBuilder } from './workItemRequestBuilder';
 import { TaskInfoMapper, UserStoryInfoMapper } from './mappers';
 import { AreaDefinition } from '../models/azure-client/areas';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 export class AzureClient implements vsc.Disposable {
     private _apiVersionPreview = {
@@ -51,6 +52,7 @@ export class AzureClient implements vsc.Disposable {
         const organization = encodeURIComponent(this.config.organization ?? '');
         const project = encodeURIComponent(this.config.project ?? '');
         const team = encodeURIComponent(this.config.team ?? '');
+        const proxyConfiguration = this.getProxyAgentConfiguration();
 
         const clientFactory = (baseUrl: string) => {
             const client = axios.create({
@@ -62,6 +64,8 @@ export class AzureClient implements vsc.Disposable {
                 headers: {
                     'Accept': 'application/json; api-version=5.0'
                 },
+                proxy: false,
+                ...proxyConfiguration,
                 validateStatus: status => status === 200
             });
 
@@ -78,6 +82,20 @@ export class AzureClient implements vsc.Disposable {
 
         this.client = clientFactory(`https://dev.azure.com/${organization}/${project}/_apis/`);
         this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
+    }
+
+    private getProxyAgentConfiguration() {
+        const proxyConfig: string | undefined = process.env.https_proxy || process.env.http_proxy;
+
+        if (proxyConfig) {
+            const [protocol] = proxyConfig.split(':', 2);
+
+            return {
+                [protocol.toLowerCase() + 'Agent']: new HttpsProxyAgent(proxyConfig),
+            };
+        }
+
+        return {};
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
