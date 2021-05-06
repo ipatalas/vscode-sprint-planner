@@ -93,6 +93,11 @@
 					],
 					"description": "Process used in the project (see your Project settings)"
 				},
+				"planner.azure-devops.proxy": {
+					"title": "Proxy",
+					"type": "string",
+					"markdownDescription": "URL of proxy to be used for connecting to Azure DevOps API (leave empty if your proxy is set in env under $HTTPS_PROXY or $HTTP_PROXY)"
+				},
 				"planner.azure-devops.default.area": {
 					"title": "Default area",
 					"type": "string",

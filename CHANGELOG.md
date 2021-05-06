@@ -3,6 +3,10 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.0]
+### Added
+- Support for proxy url (addresses [#28](https://github.com/ipatalas/vscode-sprint-planner/issues/28))
+
 ## [0.5.0]
 ### Added
 - Support for setting Area Path for user stories (addresses [#23](https://github.com/ipatalas/vscode-sprint-planner/issues/23))

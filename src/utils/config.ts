@@ -17,6 +17,7 @@ export class Configuration implements vsc.Disposable {
     public defaultActivity: string | undefined;
     public defaultArea: string | undefined;
     public snippets: { [name: string]: string } | undefined;
+    public proxy: string | undefined;
 
     private _onDidChange: vsc.EventEmitter<Configuration>;
     private _eventHandler: vsc.Disposable;
@@ -58,6 +59,7 @@ export class Configuration implements vsc.Disposable {
         this.debug = config.get<boolean>('debug', false);
         this.defaultActivity = config.get('default.activity');
         this.defaultArea = config.get('default.area');
+        this.proxy = config.get('proxy') || process.env.https_proxy || process.env.http_proxy;
 
         if (loadSnippets) {
             const snippets = config.get<SnippetConfig>('snippets');

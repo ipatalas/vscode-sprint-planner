@@ -85,10 +85,12 @@ export class AzureClient implements vsc.Disposable {
     }
 
     private getProxyAgentConfiguration() {
-        const proxyConfig: string | undefined = process.env.https_proxy || process.env.http_proxy;
+        const proxyConfig = this.config.proxy;
 
-        if (proxyConfig) {
+        if (proxyConfig && /^https?:\/\//i.test(proxyConfig)) {
             const [protocol] = proxyConfig.split(':', 2);
+
+            this.logger.log(`Setting proxy to: ${proxyConfig}`);
 
             return {
                 [protocol.toLowerCase() + 'Agent']: new HttpsProxyAgent(proxyConfig),
