@@ -194,21 +194,33 @@ export class AzureClient implements vsc.Disposable {
 
     public async getUserStoryInfo(userStoryIds: number[]): Promise<UserStoryInfo[]> {
         const finish = this.logger.perf('Getting user story info...');
-
-        const params: WorkItemRequestParams = {
-            ids: userStoryIds.join(','),
-            '$expand': 'Relations'
-        };
-
-        const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
-        finish();
-
         const userStoryType = this.getUserStoryWorkItemType();
-
-        return result.data.value
-            .filter(x => x.fields['System.WorkItemType'] === userStoryType)
-            .map(UserStoryInfoMapper.fromWorkItemInfo);
-    }
+    
+        const batchSize = 200;
+    
+        const batches = Array(Math.ceil(userStoryIds.length / batchSize)).fill(null).map((_, i) => {
+            return userStoryIds.slice(i * batchSize, (i + 1) * batchSize);
+        });
+    
+        const results: UserStoryInfo[] = [];
+    
+        for (const batch of batches) {
+            const params: WorkItemRequestParams = {
+                ids: batch.join(','),
+                '$expand': 'Relations'
+            };
+    
+            const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
+    
+            const batchResults = result.data.value
+                .filter(x => x.fields['System.WorkItemType'] === userStoryType)
+                .map(UserStoryInfoMapper.fromWorkItemInfo);
+            results.push(...batchResults);
+        }
+    
+        finish();
+        return results;
+    }    
 
     public async getMaxTaskStackRank(taskIds: number[]): Promise<number> {
         if (taskIds.length === 0) {
