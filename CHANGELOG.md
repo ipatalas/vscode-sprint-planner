@@ -3,6 +3,10 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.2]
+### Fixed
+- Fixed [#46](https://github.com/ipatalas/vscode-sprint-planner/issues/46)
+
 ## [0.6.1]
 ### Added
 - Merged [#43](https://github.com/ipatalas/vscode-sprint-planner/pull/43) to fix [#42](https://github.com/ipatalas/vscode-sprint-planner/issues/42)
