@@ -15,14 +15,14 @@ export const UserStoryRegex = /^US#(?<id>\d+|new)( - (?<title>.*))?/;
 export const EndOfUserStoryRegex = /^(---|\s*)$/;
 
 export const TaskPrefixRegex = /^\s*[-*]\s*/;
-export const TaskEstimationRegex = /\s*[,-]\s*((?<estimation_m>\d+)m|(?<estimation>\d+(?:\.\d+)?)h?)/;
+export const TaskEstimationRegex = /\s*,\s*((?<estimation_m>\d+)m|(?<estimation>\d+(?:\.\d+)?)h?)$/;
 export const TaskIdRegex = /\s*\[#(?<id>\d+)\]$/;
 export const TaskDescriptionRegex = /^\t/;
 export const WorkItemIdFromUrl = /\/workItems\/(\d+)/;
 
 export const Commands = {
-	publish: 'sprintplanner.publish',
-	syncTasks: 'sprintplanner.syncTasks'
+    publish: 'sprintplanner.publish',
+    syncTasks: 'sprintplanner.syncTasks'
 };
 
 export const Diagnostics = {
