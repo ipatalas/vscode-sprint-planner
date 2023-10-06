@@ -1,4 +1,5 @@
 import * as vsc from 'vscode';
+import axios from 'axios';
 import * as Constants from '../constants';
 import { TextProcessor } from '../utils/textProcessor';
 import { ISessionStore } from '../store';
@@ -79,9 +80,13 @@ export class PublishCommand extends LockableCommand {
 
                 return Promise.resolve();
             } catch (err) {
-                if (err) {
+                if (axios.isAxiosError(err)) {
                     vsc.window.showErrorMessage(err.response?.data?.message || err.message);
-                    this.logger.log(inspect(err.response.data, { depth: 3 }));
+                    this.logger.log(inspect(err.response?.data, { depth: 3 }));
+                    return Promise.resolve();
+                } else if (err instanceof Error) {
+                    vsc.window.showErrorMessage(`An error occured, see extension's output channel for details`);
+                    this.logger.log(err.message);
                     return Promise.resolve();
                 }
             } finally {

@@ -21,7 +21,11 @@
         ],
         "quotes": [
             "warn",
-            "single"
+            "single",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
         ],
         "no-throw-literal": "error",
         "eqeqeq": "error",
