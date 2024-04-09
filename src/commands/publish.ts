@@ -35,7 +35,7 @@ export class PublishCommand extends LockableCommand {
 
                 const us = TextProcessor.getUserStory(lines, currentLine);
                 if (!us) {
-                    return console.log('Cannot find user story info in that line');
+                    return this.logger.log('Cannot find user story info in that line');
                 }
 
                 this.validateUserStory(us);
@@ -133,7 +133,7 @@ export class PublishCommand extends LockableCommand {
             const userStoryInfo = this.sessionStore.userStories.find(x => x.id === us.id);
 
             if (!userStoryInfo) {
-                console.log(`US#${us.id} is not present in session cache, is the ID correct?`);
+                this.logger.log(`US#${us.id} is not present in session cache, is the ID correct?`);
             }
 
             return userStoryInfo;

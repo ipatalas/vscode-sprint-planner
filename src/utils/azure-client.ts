@@ -102,9 +102,9 @@ export class AzureClient implements vsc.Disposable {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private logRequest(request: any, returnValue: any, response?: AxiosResponse) {
-        console.log(`[DEBUG] ${request.method.toUpperCase()} ${request.path}`);
+        this.logger.debug(`${request.method.toUpperCase()} ${request.path}`);
         if (response) {
-            console.log(`[DEBUG] Response: ${JSON.stringify(response.data)}`);
+            this.logger.debug(`Response: ${response.status} ${response.statusText}\n${JSON.stringify(response.data)}`);
         }
         return returnValue;
     }

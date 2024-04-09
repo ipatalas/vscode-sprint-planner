@@ -61,6 +61,8 @@ export class Configuration implements vsc.Disposable {
         this.defaultArea = config.get('default.area');
         this.proxy = config.get('proxy') || process.env.https_proxy || process.env.http_proxy;
 
+        this.logger.debugEnabled = this.debug;
+
         if (loadSnippets) {
             const snippets = config.get<SnippetConfig>('snippets');
             this.snippets = await this.loadSnippets(snippets);
@@ -77,17 +79,17 @@ export class Configuration implements vsc.Disposable {
 
         for (const key in snippets) {
             promises.push(this.loadSingleSnippet(snippets[key])
-                    .then(data => {
-                        result[key] = data;
-                    })
-                    .catch((err: Error) => {
-                        this.logger.log(
-                            `Error loading snippet '${key}': ${err.message}`,
-                            true
-                        );
-                        console.log(err);
-                        throw err;
-                    })
+                .then(data => {
+                    result[key] = data;
+                })
+                .catch((err: Error) => {
+                    this.logger.log(
+                        `Error loading snippet '${key}': ${err.message}`,
+                        true
+                    );
+                    this.logger.debug(`[DEBUG] ${err.stack}`);
+                    throw err;
+                })
             );
         }
 
@@ -112,15 +114,11 @@ export class Configuration implements vsc.Disposable {
 
     private async loadSingleSnippet(url: string) {
         if (url.startsWith('http')) {
-            if (this.debug) {
-                console.log(`[DEBUG] Getting ${url}`);
-            }
+            this.logger.debug(`[DEBUG] Getting ${url}`);
             return Axios.get(url).then((r) => r.data as string);
         } else {
             return new Promise<string>((resolve, reject) => {
-                if (this.debug) {
-                    console.log(`[DEBUG] Reading ${url}`);
-                }
+                this.logger.debug(`[DEBUG] Reading ${url}`);
 
                 let filePath = url;
                 if (vsc.workspace.workspaceFolders !== undefined && !path.isAbsolute(url)) {

@@ -25,11 +25,15 @@
         "languages": [
             {
                 "id": "planner",
+                "icon": {
+                    "light": "images/logo128.png",
+                    "dark": "images/logo128.png"
+                },
                 "extensions": [
                     ".plan"
                 ],
                 "aliases": [
-                    "planner"
+                    "Azure DevOps planner"
                 ],
                 "configuration": "./language-configuration.json"
             }

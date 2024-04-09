@@ -6,6 +6,8 @@ export class Logger implements vsc.Disposable {
 
     private isLineStillOpen = false;
 
+    public debugEnabled = false;
+
     constructor() {
         this.logger = vsc.window.createOutputChannel('Azure DevOps planner');
     }
@@ -33,6 +35,12 @@ export class Logger implements vsc.Disposable {
 
     public show(): void {
         this.logger.show(true);
+    }
+
+    public debug(text: string): void {
+        if (this.debugEnabled) {
+            this.log(`DEBUG: ${text}`);
+        }
     }
 
     public perf(text: string): () => void {

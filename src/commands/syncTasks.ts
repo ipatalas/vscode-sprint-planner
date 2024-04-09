@@ -32,7 +32,7 @@ export class SyncTasksCommand extends LockableCommand {
 
                 const us = TextProcessor.getUserStory(lines, currentLine);
                 if (!us) {
-                    return console.log('Cannot find user story info in that line');
+                    return this.logger.log('Cannot find user story info in that line');
                 }
 
                 if (!us.id) {
