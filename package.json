@@ -3,7 +3,7 @@
     "displayName": "Azure DevOps planner",
     "description": "Azure DevOps planner",
     "publisher": "ipatalas",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -134,6 +134,11 @@
                             "description": "Either a local path or a HTTP link"
                         }
                     }
+                },
+                "planner.azure-devops.baseUrl": {
+                    "title": "Base URL",
+                    "type": "string",
+                    "description": "Base URL of Azure DevOps API (leave empty if you want to use default)"
                 }
             }
         }

@@ -39,7 +39,7 @@ export class Logger implements vsc.Disposable {
 
     public debug(text: string): void {
         if (this.debugEnabled) {
-            this.log(`DEBUG: ${text}`);
+            this.log(`[DEBUG]: ${text}`);
         }
     }
 

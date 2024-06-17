@@ -80,8 +80,10 @@ export class AzureClient implements vsc.Disposable {
             return client;
         };
 
-        this.client = clientFactory(`https://dev.azure.com/${organization}/${project}/_apis/`);
-        this.teamClient = clientFactory(`https://dev.azure.com/${organization}/${project}/${team}/_apis/`);
+        const baseUrl = this.config.baseUrl || `https://dev.azure.com/${organization}`;
+
+        this.client = clientFactory(`${baseUrl}/${project}/_apis/`);
+        this.teamClient = clientFactory(`${baseUrl}/${project}/${team}/_apis/`);
     }
 
     private getProxyAgentConfiguration() {
@@ -102,7 +104,7 @@ export class AzureClient implements vsc.Disposable {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private logRequest(request: any, returnValue: any, response?: AxiosResponse) {
-        this.logger.debug(`${request.method.toUpperCase()} ${request.path}`);
+        this.logger.debug(`${request.method.toUpperCase()} ${request.host}${request.path}`);
         if (response) {
             this.logger.debug(`Response: ${response.status} ${response.statusText}\n${JSON.stringify(response.data)}`);
         }

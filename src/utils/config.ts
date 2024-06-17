@@ -18,6 +18,7 @@ export class Configuration implements vsc.Disposable {
     public defaultArea: string | undefined;
     public snippets: { [name: string]: string } | undefined;
     public proxy: string | undefined;
+    public baseUrl?: string;
 
     private _onDidChange: vsc.EventEmitter<Configuration>;
     private _eventHandler: vsc.Disposable;
@@ -60,6 +61,11 @@ export class Configuration implements vsc.Disposable {
         this.defaultActivity = config.get('default.activity');
         this.defaultArea = config.get('default.area');
         this.proxy = config.get('proxy') || process.env.https_proxy || process.env.http_proxy;
+        this.baseUrl = config.get('baseUrl');
+
+        if (this.baseUrl) {
+            this.logger.log(`Using baseUrl: ${this.baseUrl}`);
+        }
 
         this.logger.debugEnabled = this.debug;
 
@@ -87,7 +93,7 @@ export class Configuration implements vsc.Disposable {
                         `Error loading snippet '${key}': ${err.message}`,
                         true
                     );
-                    this.logger.debug(`[DEBUG] ${err.stack}`);
+                    this.logger.debug(`${err.stack}`);
                     throw err;
                 })
             );
@@ -114,11 +120,11 @@ export class Configuration implements vsc.Disposable {
 
     private async loadSingleSnippet(url: string) {
         if (url.startsWith('http')) {
-            this.logger.debug(`[DEBUG] Getting ${url}`);
+            this.logger.debug(`Getting ${url}`);
             return Axios.get(url).then((r) => r.data as string);
         } else {
             return new Promise<string>((resolve, reject) => {
-                this.logger.debug(`[DEBUG] Reading ${url}`);
+                this.logger.debug(`Reading ${url}`);
 
                 let filePath = url;
                 if (vsc.workspace.workspaceFolders !== undefined && !path.isAbsolute(url)) {
