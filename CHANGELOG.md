@@ -3,6 +3,10 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.4]
+### Added
+- Fix work item link generation for custom domain
+
 ## [0.6.3]
 ### Added
 - Experimental support for custom domain (addresses [#49](https://github.com/ipatalas/vscode-sprint-planner/issues/49))

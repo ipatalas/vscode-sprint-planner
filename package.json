@@ -3,9 +3,9 @@
     "displayName": "Azure DevOps planner",
     "description": "Azure DevOps planner",
     "publisher": "ipatalas",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "engines": {
-        "vscode": "^1.31.0"
+        "vscode": "^1.63.0"
     },
     "categories": [
         "Other",
