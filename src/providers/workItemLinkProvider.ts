@@ -40,6 +40,8 @@ export class WorkItemLinkProvider implements vsc.DocumentLinkProvider {
         const organization = this.config.organization!;
         const project = this.config.project!;
 
-        return vsc.Uri.parse(`https://dev.azure.com/${organization}/${project}/_workitems/edit/${id}`);
+        const baseUrl = this.config.baseUrl || `https://dev.azure.com/${organization}`;
+
+        return vsc.Uri.parse(`${baseUrl}/${project}/_workitems/edit/${id}`);
     }
 }
