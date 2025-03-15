@@ -3,6 +3,10 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.5]
+### Changed
+- Updated icon because got an email from the marketplace team that it's too similar to another extension
+
 ## [0.6.4]
 ### Added
 - Fix work item link generation for custom domain
