@@ -1,9 +1,9 @@
 {
     "name": "vscode-sprint-planner",
-    "displayName": "Azure DevOps planner",
-    "description": "Azure DevOps planner",
+    "displayName": "Sprint Planner",
+    "description": "This extension integrates with Microsoft Azure DevOps.",
     "publisher": "ipatalas",
-    "version": "0.6.5",
+    "version": "0.6.6",
     "engines": {
         "vscode": "^1.63.0"
     },
@@ -33,7 +33,7 @@
                     ".plan"
                 ],
                 "aliases": [
-                    "Azure DevOps planner"
+                    "Sprint Planner"
                 ],
                 "configuration": "./language-configuration.json"
             }
@@ -68,7 +68,7 @@
             }
         },
         "configuration": {
-            "title": "Azure DevOps planner",
+            "title": "Sprint Planner",
             "properties": {
                 "planner.azure-devops.organization": {
                     "title": "Organization",

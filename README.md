@@ -3,9 +3,10 @@
 
 [![Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-$4-orange?logo=buy-me-a-coffee&style=flat)](https://www.buymeacoffee.com/0t1sqOM)
 
-# Azure DevOps planner
+# Sprint Planner for Azure DevOps
 
-This extension features ability to export a planning session into Azure DevOps system. Planning in Azure DevOps itself is hard, way too much clicking. It's so much easier to just type all the tasks in a simple text form and then just export them.
+Sprint Planner is an extension for Visual Studio Code that helps manage sprints in projects hosted on Microsoft Azure DevOps. This extension is developed independently and is not affiliated with or endorsed by Microsoft.
+This extension features the ability to export a planning session into the Azure DevOps system. Planning in Azure DevOps itself is hard, way too much clicking. It's so much easier to just type all the tasks in a simple text form and then just export them.
 
 ## Usage
 
