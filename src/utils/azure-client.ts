@@ -359,6 +359,8 @@ export interface TaskInfo {
     estimation?: number;
     userStoryUrl: string;
     stackRank?: number;
+    assignee?: string;
+    tags?: string[];
 }
 
 export interface WorkItemRequestParams {

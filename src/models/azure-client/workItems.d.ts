@@ -21,6 +21,8 @@ export interface WorkItemFields {
     'Microsoft.VSTS.Common.Activity':             string;
     'Microsoft.VSTS.Scheduling.RemainingWork':    number;
     'Microsoft.VSTS.Scheduling.OriginalEstimate': number;
+    'System.AssignedTo':                          string;
+    'System.Tags':                                string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[key: string]: any;
 }

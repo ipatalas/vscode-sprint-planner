@@ -118,7 +118,7 @@ export class SyncTasksCommand extends LockableCommand {
 
         const id = task.id ? ` [#${task.id}]` : '';
 
-        return `- ${task.title}${estimation}${id}`;
+        return `- ${task.title}${estimation}${task.assignee}${task.tags}${id}`;
     }
 
     private extractTaskId(url: string): number | null {

@@ -39,6 +39,12 @@ export class WorkItemRequestBuilder {
 				this.addOperation('/fields/Microsoft.VSTS.Scheduling.OriginalEstimate', task.estimation)
 			]);
 		}
+        if (task.assignee){
+            request.push(this.addOperation('/fields/System.AssignedTo', task.assignee));
+        }
+        if (task.tags){
+            request.push(this.addOperation('/fields/System.Tags', task.tags.join(';')));
+        }
 
 		return request;
 	}

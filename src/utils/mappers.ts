@@ -26,7 +26,9 @@ export class TaskInfoMapper {
             activity: workItem.fields['Microsoft.VSTS.Common.Activity'],
             title: workItem.fields['System.Title'],
             estimation: originalEstimation === remainingWork ? remainingWork : undefined,
-            stackRank: workItem.fields['Microsoft.VSTS.Common.BacklogPriority'] || workItem.fields['Microsoft.VSTS.Common.StackRank']
+            stackRank: workItem.fields['Microsoft.VSTS.Common.BacklogPriority'] || workItem.fields['Microsoft.VSTS.Common.StackRank'],
+            assignee: workItem.fields['System.AssignedTo'],
+            tags: workItem.fields['System.Tags'].split(';')
         };
     }
 }
@@ -39,7 +41,9 @@ export class TaskMapper {
             activity: task.activity,
             description: task.description,
             estimation: task.estimation,
-            stackRank: task.stackRank
+            stackRank: task.stackRank,
+            assignee: task.assignee,
+            tags: task.tags
         };
     }
 }

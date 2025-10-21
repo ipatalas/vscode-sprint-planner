@@ -184,7 +184,9 @@ export class PublishCommand extends LockableCommand {
             activity: task.activity || this.config.defaultActivity || '',
             estimation: task.estimation,
             userStoryUrl: userStory.url,
-            stackRank: stackRank
+            stackRank: stackRank,
+            assignee: task.assignee,
+            tags: task.tags
         };
     }
 }
