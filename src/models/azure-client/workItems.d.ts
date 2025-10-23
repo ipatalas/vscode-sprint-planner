@@ -21,7 +21,7 @@ export interface WorkItemFields {
     'Microsoft.VSTS.Common.Activity':             string;
     'Microsoft.VSTS.Scheduling.RemainingWork':    number;
     'Microsoft.VSTS.Scheduling.OriginalEstimate': number;
-    'System.AssignedTo':                          string;
+    'System.AssignedTo':                      AssignedTo;
     'System.Tags':                                string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[key: string]: any;
@@ -35,4 +35,16 @@ export interface Relation {
 
 export interface Attributes {
 	isLocked: boolean;
+}
+
+export interface AssignedTo {
+    displayName: string;
+    url: string;
+    id: string;
+    _links?: {
+        avatar?: {
+            href: string;
+        };
+    };
+    uniqueName?: string;
 }

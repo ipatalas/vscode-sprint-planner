@@ -1,72 +1,73 @@
-@apiVersionParam = api-version=5.0
-@apiVersionPreviewParam = api-version=5.1-preview.2
+{{
+    apiVersionParam = "api-version=7.1"
+    apiVersionPreviewParam = "api-version=7.1-preview.3"
+}}
 
 
 # Get current iteration
 # @name currentIteration
 GET {{baseUrl}}/work/teamsettings/iterations?$timeframe=current&{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
-
+Authorization: Basic {{token}}
+{{
+  iterationId = response.parsedBody.value[0].id
+}}
 ###
-@iterationId = {{currentIteration.response.body.$.value[0].id}}
-
-### Get iteration info
 GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}?{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
-
-
-### Get iteration work items
+Authorization: Basic {{token}}
+###
+# @disabled
 # User Story is an item with rel == null
 GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}/workitems?{{apiVersionPreviewParam}}
-Authorization: Basic PAT {{token}}
-
-### Get work item
+Authorization: Basic {{token}}
+###
 GET {{baseUrl}}/wit/workItems/1?$expand=Relations
-Authorization: Basic PAT {{token}}
-
-### Get titles of User stories
+Authorization: Basic {{token}}
+###
 GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
-Authorization: Basic PAT {{token}}
-
-### Get titles of User stories
+Authorization: Basic {{token}}
+###
 GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&$expand=Relations,Links
-Authorization: Basic PAT {{token}}
-
-### Get tasks info
-GET {{baseUrl}}/wit/workitems?ids=66&{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
-
-### Get areas
+Authorization: Basic {{token}}
+###
+GET {{baseUrl}}/wit/workitems?ids=2&{{apiVersionParam}}
+Authorization: Basic {{token}}
+###
 GET {{baseUrl}}/wit/classificationNodes/Areas?$depth=10&{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
+Authorization: Basic {{token}}
+###
+GET {{baseUrl}}/wit/tags?{{apiVersionParam}}
+Authorization: Basic {{token}}
+###
+# @name GetTeam
+GET {{orgUrl}}/teams?{{apiVersionPreviewParam}}
+Authorization: Basic {{token}}
 
-### Get tags
-GET {{baseUrl}}/wit/tags?api-version=6.0-preview.1
-Authorization: Basic PAT {{token}}
-
-### Get project info
-GET {{orgUrl}}/projects/Scrum?api-version=6.0
-Authorization: Basic PAT {{token}}
-
-### Get team members
+{{
+    teamId = response.parsedBody.value[0].id
+    projectId = response.parsedBody.value[0].projectId
+}}
+###
+GET {{orgUrl}}/projects/{{projectId}}/teams/{{teamId}}/members?{{apiVersionParam}}
+Authorization: Basic {{token}}
+###
+GET {{orgUrl}}/projects/Scrum?{{apiVersionParam}}
+Authorization: Basic {{token}}
+###
 GET {{orgUrl}}/projects/Scrum/teams/Scrum%20Team/members
-Authorization: Basic PAT {{token}}
-
+Authorization: Basic {{token}}
 ###
 
 GET {{baseUrl}}/wit/workitemrelationtypes?{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
-
-### Get all possible values for Activity
+Authorization: Basic {{token}}
+###
 GET {{baseUrl}}/wit/workitemtypes/Task/fields/Microsoft.VSTS.Common.Activity?$expand=All&{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
-
+Authorization: Basic {{token}}
 ###
 # Microsoft.VSTS.Scheduling.RemainingWork
 # Microsoft.VSTS.Scheduling.OriginalEstimate
 
 POST {{baseUrl}}/wit/workitems/$Task?{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
+Authorization: Basic {{token}}
 Content-Type: application/json-patch+json
 
 [
@@ -117,11 +118,10 @@ Content-Type: application/json-patch+json
 
 # Add work item: https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/create?view=azure-devops-rest-5.0
 # Add link https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0#add_a_link
-
-### Update task
+###
 # https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0
 PATCH {{baseUrl}}/wit/workitems/66?{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
+Authorization: Basic {{token}}
 Content-Type: application/json-patch+json
 
 [
@@ -156,11 +156,10 @@ Content-Type: application/json-patch+json
         "value": "Tag1; Tag2"
     }
 ]
-
-### Create User story
+###
 
 POST {{baseUrl}}/wit/workitems/$User%20Story?{{apiVersionParam}}
-Authorization: Basic PAT {{token}}
+Authorization: Basic {{token}}
 Content-Type: application/json-patch+json
 
 [

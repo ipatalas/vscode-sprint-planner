@@ -1,4 +1,3 @@
-import { constants } from 'os';
 import * as Constants from '../constants';
 import { IterationTextLine, Task, UserStory } from '../models/task';
 

@@ -5,3 +5,4 @@
 /responses
 yarn.lock
 team-extension.log
+.env

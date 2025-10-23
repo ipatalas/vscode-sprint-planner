@@ -14,6 +14,11 @@ export const UserStoryPrefix = 'US#';
 export const UserStoryRegex = /^US#(?<id>\d+|new)( - (?<title>.*))?/;
 export const EndOfUserStoryRegex = /^(---|\s*)$/;
 
+export const TagPrefix = '#';
+export const TagRegex = /\s#/;
+export const TeamMemberPrefix = '@';
+export const TeamMemberRegex = /\s@/;
+
 export const TaskPrefixRegex = /^\s*[-*]\s*/;
 export const TaskEstimationRegex = /\s*,\s*((?<estimation_m>\d+)m|(?<estimation>\d+(?:\.\d+)?)h?)/;
 export const TaskAssigneeRegex = /\s*,?\s*@(?<assignee>(\S+))/;

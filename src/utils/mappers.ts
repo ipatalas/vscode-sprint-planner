@@ -3,17 +3,17 @@ import { Task } from '../models/task';
 import { TaskInfo, UserStoryInfo } from './azure-client';
 
 export class UserStoryInfoMapper {
-	public static fromWorkItemInfo(workItem: WorkItemInfo): UserStoryInfo {
-		return (<UserStoryInfo>{
-			id: workItem.id,
-			url: workItem.url,
-			title: workItem.fields['System.Title'],
-			areaPath: workItem.fields['System.AreaPath'],
-			teamProject: workItem.fields['System.TeamProject'],
-			iterationPath: workItem.fields['System.IterationPath'],
-			taskUrls: (workItem.relations) && workItem.relations.filter(r => r.rel === 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
-		});
-	}
+    public static fromWorkItemInfo(workItem: WorkItemInfo): UserStoryInfo {
+        return (<UserStoryInfo>{
+            id: workItem.id,
+            url: workItem.url,
+            title: workItem.fields['System.Title'],
+            areaPath: workItem.fields['System.AreaPath'],
+            teamProject: workItem.fields['System.TeamProject'],
+            iterationPath: workItem.fields['System.IterationPath'],
+            taskUrls: (workItem.relations) && workItem.relations.filter(r => r.rel === 'System.LinkTypes.Hierarchy-Forward').map(r => r.url) || []
+        });
+    }
 }
 
 export class TaskInfoMapper {
@@ -27,8 +27,8 @@ export class TaskInfoMapper {
             title: workItem.fields['System.Title'],
             estimation: originalEstimation === remainingWork ? remainingWork : undefined,
             stackRank: workItem.fields['Microsoft.VSTS.Common.BacklogPriority'] || workItem.fields['Microsoft.VSTS.Common.StackRank'],
-            assignee: workItem.fields['System.AssignedTo'],
-            tags: workItem.fields['System.Tags'].split(';')
+            assignee: workItem.fields['System.AssignedTo']?.uniqueName,
+            tags: workItem.fields['System.Tags'].split(';').map(t => t.trim())
         };
     }
 }
