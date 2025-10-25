@@ -144,11 +144,14 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
+        "vscode:prepublish": "npm run package",
+        "compile": "npm run check-types && node esbuild.js",
+        "compile-tests": "tsc -p ./",
+        "watch": "npm run check-types && node esbuild.js --watch",
+        "package": "npm run check-types && node esbuild.js --production",
+        "check-types": "tsc --noEmit",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test",
+        "test": "npm run compile && npm run compile-tests && node ./node_modules/vscode/bin/test",
         "lint": "eslint -c .eslintrc --ext .ts src"
     },
     "devDependencies": {
@@ -159,6 +162,7 @@
         "@types/pretty-hrtime": "^1.0.0",
         "@typescript-eslint/eslint-plugin": "^4.10.0",
         "@typescript-eslint/parser": "^4.10.0",
+        "esbuild": "^0.25.5",
         "eslint": "^7.15.0",
         "expect.js": "0.3.1",
         "mocha": "^7.1.1",
@@ -168,8 +172,8 @@
     "dependencies": {
         "axios": "^0.21.1",
         "didyoumean2": "^3.0.0",
-        "pretty-hrtime": "^1.0.3",
+        "https-proxy-agent": "^5.0.0",
         "lodash.sortby": "^4.7.0",
-        "https-proxy-agent": "^5.0.0"
+        "pretty-hrtime": "^1.0.3"
     }
 }
