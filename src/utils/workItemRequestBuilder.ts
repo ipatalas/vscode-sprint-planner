@@ -43,7 +43,7 @@ export class WorkItemRequestBuilder {
             request.push(this.addOperation('/fields/System.AssignedTo', task.assignee));
         }
         if (task.tags){
-            request.push(this.addOperation('/fields/System.Tags', task.tags.join(';')));
+            request.push(this.replaceOperation('/fields/System.Tags', task.tags.join('; ')));
         }
 
 		return request;
@@ -70,7 +70,13 @@ export class WorkItemRequestBuilder {
 			value
 		};
 	}
-
+    private replaceOperation(path: string, value: any): TaskOperation {
+        return {
+            op: 'replace',
+            path,
+            value
+        };
+    }
 	private userStoryLink(url: string) {
 		return {
 			rel: 'System.LinkTypes.Hierarchy-Reverse',
