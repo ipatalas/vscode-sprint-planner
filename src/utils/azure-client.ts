@@ -221,10 +221,6 @@ export class AzureClient implements vsc.Disposable {
     }
 
 
-    // public async GetTeamMembers(): Promise<string[]> {
-    //     const finish = this.logger.perf('Getting team members...');
-    //     const results = await this.teamClient.get<AssignedTo>('')
-    // }
 
 
     public async getProjectAreas(): Promise<string[]> {
