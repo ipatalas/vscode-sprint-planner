@@ -28,7 +28,7 @@ export class TaskInfoMapper {
             estimation: originalEstimation === remainingWork ? remainingWork : undefined,
             stackRank: workItem.fields['Microsoft.VSTS.Common.BacklogPriority'] || workItem.fields['Microsoft.VSTS.Common.StackRank'],
             assignee: workItem.fields['System.AssignedTo']?.uniqueName,
-            tags: workItem.fields['System.Tags'].split(';').map(t => t.trim())
+            tags: workItem.fields['System.Tags']?.split(';').map(t => t.trim()) || []
         };
     }
 }
