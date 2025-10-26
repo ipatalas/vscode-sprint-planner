@@ -119,7 +119,7 @@ export class SyncTasksCommand extends LockableCommand {
 
         const id = task.id ? ` [#${task.id}]` : '';
         const assignee = task.assignee ? ` @${task.assignee}` : '';
-        const tags = task.tags ? ` #${task.tags.join(' #')}` : '';
+        const tags = task.tags?.length ? ` #${task.tags.join(' #')}` : '';
 
         return `- ${task.title}${estimation}${assignee}${tags}${id}`;
     }
