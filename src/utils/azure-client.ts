@@ -206,7 +206,7 @@ export class AzureClient implements vsc.Disposable {
         if (team) {
 
             const finish = this.logger.perf('Getting team members');
-            const results = await this.orgClient.get<TeamMemberResult>(`/projects/${team.projectId}/teams/${team.id}/members`);
+            const results = await this.orgClient.get<TeamMemberResult>(`/projects/${team.projectId}/teams/${team.id}/members`, { params: { ... this._apiVersion } });
             finish();
 
             return results.data.value.map(tm => (
