@@ -44,10 +44,7 @@
                 "1": { "name": "string.unquoted" },
                 "2": { "name": "constant.numeric" },
                 "3": { "name": "entity.name.function" },
-                "4": { "name": "entity.name.function" },
-                "5": { "name": "entity.name.tag" },
-                "6": { "name": "entity.name.tag" },
-                "7": { "name": "entity.name.tag" }
+                "5": { "name": "entity.name.tag" }
             }
         }
     }
