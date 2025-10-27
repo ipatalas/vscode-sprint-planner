@@ -69,8 +69,11 @@ export class SyncTasksCommand extends LockableCommand {
                         vsc.window.showErrorMessage(err.response?.data?.message || err.message);
                     }
                     this.logger.log(inspect(err.response?.data, { depth: 3 }));
-                    return Promise.resolve();
+                } else if (err instanceof Error) {
+                    vsc.window.showErrorMessage(`An error occured, see extension's output channel for details`);
+                    this.logger.log(err.message);
                 }
+                return Promise.resolve();
             } finally {
                 this.unlock();
             }
