@@ -1,50 +1,52 @@
 {
-	"scopeName": "source.planner",
-	"patterns": [{ "include": "#expression" }],
-	"repository": {
-		"expression": {
-			"patterns": [
-				{ "include": "#activity" },
-				{ "include": "#iteration-id" },
-				{ "include": "#area" },
-				{ "include": "#user-story" },
-				{ "include": "#task-description" },
-				{ "include": "#task" }
-			]
-		},
-		"activity": {
-			"match": "^\\w+:$",
-			"name": "storage.type"
-		},
-		"iteration-id": {
-			"match": "^IT#\\h{8}(\\-\\h{4}){3}\\-\\h{12}",
-			"name": "entity.name.function"
-		},
-		"area": {
-			"match": "^(Area: )(.*)",
+    "scopeName": "source.planner",
+    "patterns": [{ "include": "#expression" }],
+    "repository": {
+        "expression": {
+            "patterns": [
+                { "include": "#activity" },
+                { "include": "#iteration-id" },
+                { "include": "#area" },
+                { "include": "#user-story" },
+                { "include": "#task-description" },
+                { "include": "#task" }
+            ]
+        },
+        "activity": {
+            "match": "^\\w+:$",
+            "name": "storage.type"
+        },
+        "iteration-id": {
+            "match": "^IT#\\h{8}(\\-\\h{4}){3}\\-\\h{12}",
+            "name": "entity.name.function"
+        },
+        "area": {
+            "match": "^(Area: )(.*)",
             "captures": {
-                "1": {"name": "entity.name.function"},
-                "2": {"name": "string.quoted"}
+                "1": { "name": "entity.name.function" },
+                "2": { "name": "string.quoted" }
             }
-		},
-		"user-story": {
-			"match": "^US(#\\d+|#new)",
-			"name": "entity.name.function",
-			"captures": {
-				"1": { "name": "entity.name.tag" }
-			}
-		},
-		"task-description": {
-			"match": "^\t.*",
-			"name": "comment.line"
-		},
-		"task": {
-			"match": "^(?<task>[-*] .*?)(?:, ?(?<estimation>\\d+(?:\\.\\d{1,2})?h?|\\d+m))?(?:\\s*\\[(?<task_id>#\\d+)\\])?$",
-			"captures": {
-				"1": { "name": "string.unquoted" },
-				"2": { "name": "constant.numeric" },
-				"3": { "name": "entity.name.tag" }
-			}
-		}
-	}
+        },
+        "user-story": {
+            "match": "^US(#\\d+|#new)",
+            "name": "entity.name.function",
+            "captures": {
+                "1": { "name": "entity.name.function" }
+            }
+        },
+        "task-description": {
+            "match": "^\t.*",
+            "name": "comment.line"
+        },
+        "task": {
+            "match": "^(?<task>[-*] .*?)(?:, ?(?<estimation>\\d+(?:\\.\\d{1,2})?h?|\\d+m))?(?<assignee>\\s+@(\\S+))?(?<tags>\\s+(#\\S+(?:\\s+#\\S+)*))?(?:\\s*\\[(?<task_id>#\\d+)\\])?$",
+            "captures": {
+                "1": { "name": "string.unquoted" },
+                "2": { "name": "constant.numeric" },
+                "3": { "name": "entity.name.function" },
+                "5": { "name": "entity.name.tag" },
+                "7": { "name": "comment.line" }
+            }
+        }
+    }
 }

@@ -10,6 +10,7 @@ import { LockableCommand } from './lockableCommand';
 
 import sortBy = require('lodash.sortby');
 import { inspect } from 'util';
+import axios from 'axios';
 
 export class SyncTasksCommand extends LockableCommand {
     constructor(
@@ -61,15 +62,18 @@ export class SyncTasksCommand extends LockableCommand {
 
                 return Promise.resolve();
             } catch (err) {
-                if (err) {
-                    if (err.response.status === 404) {
+                if (axios.isAxiosError(err)) {
+                    if (err.response?.status === 404) {
                         vsc.window.showErrorMessage('User story not found or you don\'t have permission to read it');
                     } else {
                         vsc.window.showErrorMessage(err.response?.data?.message || err.message);
                     }
-                    this.logger.log(inspect(err.response.data, { depth: 3 }));
-                    return Promise.resolve();
+                    this.logger.log(inspect(err.response?.data, { depth: 3 }));
+                } else if (err instanceof Error) {
+                    vsc.window.showErrorMessage(`An error occured, see extension's output channel for details`);
+                    this.logger.log(err.message);
                 }
+                return Promise.resolve();
             } finally {
                 this.unlock();
             }
@@ -117,8 +121,10 @@ export class SyncTasksCommand extends LockableCommand {
         }
 
         const id = task.id ? ` [#${task.id}]` : '';
+        const assignee = task.assignee ? ` @${task.assignee}` : '';
+        const tags = task.tags?.length ? ` #${task.tags.join(' #')}` : '';
 
-        return `- ${task.title}${estimation}${id}`;
+        return `- ${task.title}${estimation}${assignee}${tags}${id}`;
     }
 
     private extractTaskId(url: string): number | null {
