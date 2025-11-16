@@ -13,4 +13,4 @@ insert_final_newline = false
 
 [*.plan]
 indent_style = tab
-indent_size = 2`
+indent_size = 2
