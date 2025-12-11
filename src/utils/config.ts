@@ -134,7 +134,7 @@ export class Configuration implements vsc.Disposable {
                     );
                 }
 
-                fs.readFile(filePath, { encoding: 'UTF8' }, (err, data) => {
+                fs.readFile(filePath, { encoding: 'utf8' }, (err: NodeJS.ErrnoException | null, data: string) => {
                     if (err) {
                         reject(err);
                     } else {

@@ -150,7 +150,7 @@
         "watch": "npm run check-types && node esbuild.js --watch",
         "package": "npm run check-types && node esbuild.js --production",
         "check-types": "tsc --noEmit",
-        "test": "npm run compile && npm run compile-tests && node ./out/test/runTest.js",
+        "test": "npm run compile && npm run compile-tests && node ./out/test/index.js",
         "lint": "eslint -c .eslintrc --ext .ts src"
     },
     "devDependencies": {

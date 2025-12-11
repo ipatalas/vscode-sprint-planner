@@ -1,23 +1,52 @@
-//
-// PLEASE DO NOT MODIFY / DELETE UNLESS YOU KNOW WHAT YOU ARE DOING
-//
-// This file is providing the test runner to use when running extension tests.
-// By default the test runner in use is Mocha based.
-//
-// You can provide your own test runner if you want to override it by exporting
-// a function run(testRoot: string, clb: (error:Error) => void) that the extension
-// host can call to run the tests. The test runner is expected to use console.log
-// to report the results back to the caller. When the tests are finished, return
-// a possible error to the callback or null if none.
+import * as path from 'path';
+import * as fs from 'fs';
+import Mocha = require('mocha');
 
-import * as testRunner from 'vscode/lib/testrunner';
+function getTestFiles(dir: string): string[] {
+	const files: string[] = [];
+	const items = fs.readdirSync(dir);
 
-// You can directly control Mocha options by configuring the test runner below
-// See https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically#set-options
-// for more info
-testRunner.configure({
-    ui: 'bdd', 		// the TDD UI is being used in extension.test.ts (suite, test, etc.)
-    useColors: true // colored output from test results
-});
+	for (const item of items) {
+		const fullPath = path.join(dir, item);
+		const stat = fs.statSync(fullPath);
 
-module.exports = testRunner;
+		if (stat.isDirectory()) {
+			files.push(...getTestFiles(fullPath));
+		} else if (item.endsWith('.test.js')) {
+			files.push(fullPath);
+		}
+	}
+
+	return files;
+}
+
+export async function run(): Promise<void> {
+	// Create the mocha test
+	const mocha = new Mocha({
+		ui: 'bdd',
+		color: true
+	});
+
+	const testsRoot = path.resolve(__dirname, '..');
+
+	const files = getTestFiles(testsRoot);
+
+	// Add files to the test suite
+	files.forEach(f => mocha.addFile(f));
+
+	return new Promise<void>((resolve, reject) => {
+		try {
+			// Run the mocha test
+			mocha.run(failures => {
+				if (failures > 0) {
+					reject(new Error(`${failures} tests failed.`));
+				} else {
+					resolve();
+				}
+			});
+		} catch (err) {
+			console.error(err);
+			reject(err);
+		}
+	});
+}
