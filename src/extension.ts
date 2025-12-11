@@ -20,6 +20,8 @@ import { SyncTasksCommand } from './commands/syncTasks';
 import { AreaCompletionProvider } from './providers/areaCompletionProvider';
 import { AreaDiagnostics } from './providers/areaDiagnostics';
 import { AreaCodeActionProvider } from './providers/areaCodeActionProvider';
+import { TeamMemberCompletionProvider } from './providers/teamMemberCompletionProvider';
+import { TagCompletionProvider } from './providers/tagCompletionProvider';
 
 const documentSelector = [
 	{ language: LanguageId, scheme: 'file' },
@@ -54,6 +56,8 @@ export function activate(context: vsc.ExtensionContext): void {
 		vsc.languages.registerCompletionItemProvider(documentSelector, new IterationCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new UserStoryCompletionProvider(sessionStore, logger), '#'),
 		vsc.languages.registerCompletionItemProvider(documentSelector, new AreaCompletionProvider(sessionStore, logger), ' '),
+        vsc.languages.registerCompletionItemProvider(documentSelector, new TagCompletionProvider(sessionStore, logger), '#'),
+        vsc.languages.registerCompletionItemProvider(documentSelector, new TeamMemberCompletionProvider(sessionStore, logger), '@'),
 		vsc.languages.registerCodeLensProvider(documentSelector, new UserStoryCodeLensProvider()),
 		vsc.languages.registerCodeActionsProvider(documentSelector, new ActivityCodeActionProvider(sessionStore)),
 		vsc.languages.registerCodeActionsProvider(documentSelector, new AreaCodeActionProvider(sessionStore)),

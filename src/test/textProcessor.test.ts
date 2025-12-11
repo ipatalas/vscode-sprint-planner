@@ -23,7 +23,7 @@ describe('Given TextProcessor', function () {
     it.only('when calling getUserStory for existing US', () => {
         const lines = `US#13 - User Story Title (just informational)
 Development:
-- Discussion of the idea, 1h [#101]
+- Discussion of the idea, 1h @john@doe.com #TEST #TOTO [#101]
 - Create metrics for User Story, 4h [#102]
 	Description of the task, leading whitespaces will be trimmed
 	It can be multiline as well, emojis more than welcome 👌😎
@@ -48,7 +48,9 @@ Testing:
             estimation: 1,
             title: 'Discussion of the idea',
             line: 2,
-            id: 101
+            id: 101,
+            assignee: 'john@doe.com',
+            tags: ['TEST', 'TOTO']
         });
 
         expect(results!.tasks[1]).to.be.eql({

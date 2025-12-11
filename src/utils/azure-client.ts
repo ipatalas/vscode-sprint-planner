@@ -4,6 +4,7 @@ import * as vsc from 'vscode';
 import { IterationsResult } from '../models/azure-client/iterations';
 import { IterationWorkItemsResult } from '../models/azure-client/iterationsWorkItems';
 import { WorkItemInfoResult, WorkItemInfo } from '../models/azure-client/workItems';
+import { TeamMemberResult, TeamResult } from '../models/azure-client/team';
 import { FieldDefinition } from '../models/azure-client/fields';
 import { Logger } from './logger';
 import { Stopwatch } from './stopwatch';
@@ -12,14 +13,19 @@ import { WorkItemRequestBuilder } from './workItemRequestBuilder';
 import { TaskInfoMapper, UserStoryInfoMapper } from './mappers';
 import { AreaDefinition } from '../models/azure-client/areas';
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import { TagResult } from '../models/azure-client/tag';
 
 export class AzureClient implements vsc.Disposable {
     private _apiVersionPreview = {
-        'api-version': '5.0-preview.1'
+        'api-version': '7.1-preview.3'
     };
+    private _apiVersion = {
+        'api-version': '7.1'
+    }
 
     private client!: AxiosInstance;
     private teamClient!: AxiosInstance;
+    private orgClient!: AxiosInstance;
     private _eventHandler: vsc.Disposable;
     private _interceptors: number[] = [];
 
@@ -62,7 +68,7 @@ export class AzureClient implements vsc.Disposable {
                     password: this.config.token || ''
                 },
                 headers: {
-                    'Accept': 'application/json; api-version=5.0'
+                    'Accept': 'application/json; api-version=7.1'
                 },
                 proxy: false,
                 ...proxyConfiguration,
@@ -84,6 +90,7 @@ export class AzureClient implements vsc.Disposable {
 
         this.client = clientFactory(`${baseUrl}/${project}/_apis/`);
         this.teamClient = clientFactory(`${baseUrl}/${project}/${team}/_apis/`);
+        this.orgClient = clientFactory(`${baseUrl}/_apis/`);
     }
 
     private getProxyAgentConfiguration() {
@@ -155,7 +162,7 @@ export class AzureClient implements vsc.Disposable {
         const finish = this.logger.perf('Getting user stories for iteration...');
         const result = await this.teamClient.get<IterationWorkItemsResult>(`/work/teamsettings/iterations/${iterationId}/workitems`, {
             params: {
-                ...this._apiVersionPreview
+                ...this._apiVersion
             }
         });
 
@@ -177,6 +184,44 @@ export class AzureClient implements vsc.Disposable {
 
         return result.data.allowedValues;
     }
+
+    public async getTags(): Promise<string[]> {
+        const finish = this.logger.perf('Getting tags...');
+        const result = await this.client.get<TagResult>('/wit/tags');
+
+        finish();
+        return result.data.value.map(td => (`${td.name}`));
+    }
+
+    public async getTeamMembers(): Promise<TeamMemberInfo[]> {
+        const finish = this.logger.perf('Getting team id...');
+        const results = await this.orgClient.get<TeamResult>('/teams', {
+            params: {
+                ...this._apiVersionPreview
+            }
+        });
+        finish();
+
+        const team = results.data.value.find((t) => t.name === this.config.team);
+        if (team) {
+
+            const finish = this.logger.perf('Getting team members');
+            const results = await this.orgClient.get<TeamMemberResult>(`/projects/${team.projectId}/teams/${team.id}/members`, { params: { ... this._apiVersion } });
+            finish();
+
+            return results.data.value.map(tm => (
+                <TeamMemberInfo>{
+                    id: tm.identity.id,
+                    displayName: tm.identity.displayName,
+                    email: tm.identity.uniqueName
+                }
+            ));
+        }
+        return [];
+    }
+
+
+
 
     public async getProjectAreas(): Promise<string[]> {
         const finish = this.logger.perf('Getting project areas...');
@@ -359,6 +404,14 @@ export interface TaskInfo {
     estimation?: number;
     userStoryUrl: string;
     stackRank?: number;
+    assignee?: string;
+    tags?: string[];
+}
+
+export interface TeamMemberInfo {
+    displayName: string;
+    email: string;
+    id: string;
 }
 
 export interface WorkItemRequestParams {

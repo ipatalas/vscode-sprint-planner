@@ -1,6 +1,6 @@
 import * as vsc from 'vscode';
 import * as Constants from './constants';
-import { UserStoryInfo, AzureClient, IterationInfo } from './utils/azure-client';
+import { UserStoryInfo, AzureClient, IterationInfo, TeamMemberInfo } from './utils/azure-client';
 import { Logger } from './utils/logger';
 import { Stopwatch } from './utils/stopwatch';
 import { Configuration } from './utils/config';
@@ -12,11 +12,15 @@ export class SessionStore implements ISessionStore {
     private currentIteration?: IterationInfo;
     private customIteration?: IterationInfo;
     private fetchingActivityTypes = false;
+    private fetchingTags = false;
+    private fetchingTeamMembers = false;
 
     public activityTypes?: string[];
     public iterations?: IterationInfo[];
     public userStories?: UserStoryInfo[] = undefined;
     public areas?: string[];
+    public tags?: string[];
+    public teamMembers?: TeamMemberInfo[];
 
     constructor(private azureClient: AzureClient, private config: Configuration, private logger: Logger) {
     }
@@ -135,6 +139,66 @@ export class SessionStore implements ISessionStore {
         return Promise.resolve();
     }
 
+    async ensureHasTags(): Promise<void> {
+        if (this.tags !== undefined) {
+            return Promise.resolve();
+        }
+
+        if (!this.config.isValid) {
+            return Promise.reject(MissingUrlOrToken);
+        }
+
+        if (this.fetchingTags) {
+            return Promise.reject();
+        }
+
+        this.fetchingTags = true;
+
+        try {
+            const total = Stopwatch.startNew();
+            this.tags = await this.azureClient.getTags();
+            total.stop();
+
+            this.logger.log(`Tags fetched in ${total.toString()} (1 request)`);
+        } catch (err) {
+            this.fetchingTags = false;
+            return Promise.reject(err);
+        }
+
+        this.fetchingTags = false;
+        return Promise.resolve();
+    }
+
+    async ensureHasTeamMembers(): Promise<void> {
+        if (this.teamMembers !== undefined) {
+            return Promise.resolve();
+        }
+
+        if (!this.config.isValid) {
+            return Promise.reject(MissingUrlOrToken);
+        }
+
+        if (this.fetchingTeamMembers) {
+            return Promise.reject();
+        }
+
+        this.fetchingTeamMembers = true;
+
+        try {
+            const total = Stopwatch.startNew();
+            this.teamMembers = await this.azureClient.getTeamMembers();
+            total.stop();
+
+            this.logger.log(`Team members fetched in ${total.toString()} (1 request)`);
+        } catch (err) {
+            this.fetchingTeamMembers = false;
+            return Promise.reject(err);
+        }
+
+        this.fetchingTeamMembers = false;
+        return Promise.resolve();
+    }
+
     public async determineIteration(): Promise<IterationInfo> {
         this.setCustomIteration();
 
@@ -154,11 +218,15 @@ export interface ISessionStore {
     readonly iterations?: IterationInfo[];
     readonly userStories?: UserStoryInfo[];
     readonly areas?: string[];
+    readonly tags?: string[];
+    readonly teamMembers?: TeamMemberInfo[];
 
     ensureHasActivityTypes(): Promise<void>;
     ensureHasIterations(): Promise<void>;
     ensureHasUserStories(): Promise<void>;
     ensureHasAreas(): Promise<void>;
+    ensureHasTags(): Promise<void>;
+    ensureHasTeamMembers(): Promise<void>;
 
     determineIteration(): Promise<IterationInfo>;
 }

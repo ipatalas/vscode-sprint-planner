@@ -39,6 +39,12 @@ export class WorkItemRequestBuilder {
 				this.addOperation('/fields/Microsoft.VSTS.Scheduling.OriginalEstimate', task.estimation)
 			]);
 		}
+        if (task.assignee){
+            request.push(this.addOperation('/fields/System.AssignedTo', task.assignee));
+        }
+        if (task.tags){
+            request.push(this.replaceOperation('/fields/System.Tags', task.tags.join('; ')));
+        }
 
 		return request;
 	}
@@ -64,7 +70,13 @@ export class WorkItemRequestBuilder {
 			value
 		};
 	}
-
+    private replaceOperation(path: string, value: any): TaskOperation {
+        return {
+            op: 'replace',
+            path,
+            value
+        };
+    }
 	private userStoryLink(url: string) {
 		return {
 			rel: 'System.LinkTypes.Hierarchy-Reverse',
