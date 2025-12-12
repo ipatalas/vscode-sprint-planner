@@ -155,27 +155,27 @@
         "lint": "eslint -c .eslintrc --ext .ts src"
     },
     "devDependencies": {
-        "@types/expect.js": "^0.3.29",
-        "@types/glob": "^8.1.0",
-        "@types/lodash.sortby": "^4.7.6",
-        "@types/mocha": "^8.2.3",
-        "@types/node": "16.x",
-        "@types/pretty-hrtime": "^1.0.0",
+        "@types/expect.js": "^0.3.32",
+        "@types/glob": "^9.0.0",
+        "@types/lodash.sortby": "^4.7.9",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.19.2",
+        "@types/pretty-hrtime": "^1.0.3",
         "@types/vscode": "^1.63.0",
-        "@typescript-eslint/eslint-plugin": "^5.0.0",
-        "@typescript-eslint/parser": "^5.0.0",
+        "@typescript-eslint/eslint-plugin": "^8.49.0",
+        "@typescript-eslint/parser": "^8.49.0",
         "@vscode/test-electron": "^2.1.5",
-        "esbuild": "^0.25.5",
-        "eslint": "^8.0.0",
+        "esbuild": "^0.27.1",
+        "eslint": "^9.39.2",
         "expect.js": "0.3.1",
-        "glob": "^8.1.0",
-        "mocha": "^9.1.0",
-        "typescript": "^4.5.0"
+        "glob": "^13.0.0",
+        "mocha": "^11.7.5",
+        "typescript": "^5.9.3"
     },
     "dependencies": {
-        "axios": "^0.21.1",
-        "didyoumean2": "^3.0.0",
-        "https-proxy-agent": "^5.0.0",
+        "axios": "^1.13.2",
+        "didyoumean2": "^7.0.4",
+        "https-proxy-agent": "^7.0.6",
         "lodash.sortby": "^4.7.0",
         "pretty-hrtime": "^1.0.3"
     }
