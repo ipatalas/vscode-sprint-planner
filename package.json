@@ -150,11 +150,13 @@
         "watch": "npm run check-types && node esbuild.js --watch",
         "package": "npm run check-types && node esbuild.js --production",
         "check-types": "tsc --noEmit",
-        "test": "npm run compile && npm run compile-tests && node ./out/test/index.js",
+        "pretest": "npm run compile-tests",
+        "test": "node ./out/test/runTest.js",
         "lint": "eslint -c .eslintrc --ext .ts src"
     },
     "devDependencies": {
         "@types/expect.js": "^0.3.29",
+        "@types/glob": "^8.1.0",
         "@types/lodash.sortby": "^4.7.6",
         "@types/mocha": "^8.2.3",
         "@types/node": "16.x",
@@ -166,6 +168,7 @@
         "esbuild": "^0.25.5",
         "eslint": "^8.0.0",
         "expect.js": "0.3.1",
+        "glob": "^8.1.0",
         "mocha": "^9.1.0",
         "typescript": "^4.5.0"
     },
