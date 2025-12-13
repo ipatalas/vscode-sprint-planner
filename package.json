@@ -5,7 +5,7 @@
     "publisher": "ipatalas",
     "version": "0.6.6",
     "engines": {
-        "vscode": "^1.63.0"
+        "vscode": "^1.85.0"
     },
     "categories": [
         "Other",
@@ -15,10 +15,6 @@
         "type": "git",
         "url": "https://github.com/ipatalas/vscode-sprint-planner"
     },
-    "activationEvents": [
-        "onCommand:sprintplanner.publish",
-        "onLanguage:planner"
-    ],
     "icon": "images/logo128.png",
     "main": "./out/extension.js",
     "contributes": {
@@ -152,7 +148,7 @@
         "check-types": "tsc --noEmit",
         "pretest": "npm run compile-tests",
         "test": "node ./out/test/runTest.js",
-        "lint": "eslint -c .eslintrc --ext .ts src"
+        "lint": "eslint --ext .ts src"
     },
     "devDependencies": {
         "@types/expect.js": "^0.3.32",
@@ -161,9 +157,11 @@
         "@types/mocha": "^10.0.10",
         "@types/node": "^22.19.2",
         "@types/pretty-hrtime": "^1.0.3",
-        "@types/vscode": "^1.63.0",
+        "@types/vscode": "^1.85.0",
         "@typescript-eslint/eslint-plugin": "^8.49.0",
         "@typescript-eslint/parser": "^8.49.0",
+        "@eslint/js": "^9.0.0",
+        "typescript-eslint": "^8.49.0",
         "@vscode/test-electron": "^2.1.5",
         "esbuild": "^0.27.1",
         "eslint": "^9.39.2",

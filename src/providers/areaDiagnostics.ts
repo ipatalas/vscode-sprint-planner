@@ -14,8 +14,8 @@ export class AreaDiagnostics implements vsc.Disposable {
     }
 
     dispose(): void {
-        this.collection && this.collection.dispose();
-        this.handler && this.handler.dispose();
+        this.collection?.dispose();
+        this.handler?.dispose();
         this.decorations.forEach(d => d.dispose());
     }
 

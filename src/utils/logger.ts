@@ -31,6 +31,8 @@ export class Logger implements vsc.Disposable {
                 this.isLineStillOpen = false;
             };
         }
+
+        return undefined;
     }
 
     public show(): void {

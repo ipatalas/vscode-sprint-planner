@@ -101,7 +101,7 @@ export class Configuration implements vsc.Disposable {
 
         try {
             await Promise.all(promises);
-        } catch (err) {
+        } catch {
             const seeDetailsAction = 'See details';
             vsc.window
                 .showErrorMessage(

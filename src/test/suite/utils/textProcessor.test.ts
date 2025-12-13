@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-explicit-any
-const expect = require('expect.js') as (target?: any) => Expect.Root;
-import { TextProcessor } from '../../utils/textProcessor';
+import expect from 'expect.js';
+import { TextProcessor } from '../../../utils/textProcessor';
 
 describe('Given TextProcessor', function () {
     it('when calling getUserStoryLineIndices', function () {

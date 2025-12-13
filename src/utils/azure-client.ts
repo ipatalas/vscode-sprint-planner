@@ -21,7 +21,7 @@ export class AzureClient implements vsc.Disposable {
     };
     private _apiVersion = {
         'api-version': '7.1'
-    }
+    };
 
     private client!: AxiosInstance;
     private teamClient!: AxiosInstance;
