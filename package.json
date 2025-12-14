@@ -3,7 +3,7 @@
     "displayName": "Sprint Planner",
     "description": "This extension integrates with Microsoft Azure DevOps.",
     "publisher": "ipatalas",
-    "version": "0.6.6",
+    "version": "0.7.0",
     "engines": {
         "vscode": "^1.85.0"
     },
