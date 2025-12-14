@@ -3,9 +3,9 @@
     "displayName": "Sprint Planner",
     "description": "This extension integrates with Microsoft Azure DevOps.",
     "publisher": "ipatalas",
-    "version": "0.6.6",
+    "version": "0.7.0",
     "engines": {
-        "vscode": "^1.63.0"
+        "vscode": "^1.85.0"
     },
     "categories": [
         "Other",
@@ -15,10 +15,6 @@
         "type": "git",
         "url": "https://github.com/ipatalas/vscode-sprint-planner"
     },
-    "activationEvents": [
-        "onCommand:sprintplanner.publish",
-        "onLanguage:planner"
-    ],
     "icon": "images/logo128.png",
     "main": "./out/extension.js",
     "contributes": {
@@ -144,32 +140,41 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test",
-        "lint": "eslint -c .eslintrc --ext .ts src"
+        "vscode:prepublish": "npm run package",
+        "compile": "npm run check-types && node esbuild.js",
+        "compile-tests": "tsc -p ./",
+        "watch": "npm run check-types && node esbuild.js --watch",
+        "package": "npm run check-types && node esbuild.js --production",
+        "check-types": "tsc --noEmit",
+        "pretest": "npm run compile-tests",
+        "test": "node ./out/test/runTest.js",
+        "lint": "eslint --ext .ts src"
     },
     "devDependencies": {
-        "@types/expect.js": "^0.3.29",
-        "@types/lodash.sortby": "^4.7.6",
-        "@types/mocha": "^7.0.2",
-        "@types/node": "^10.12.21",
-        "@types/pretty-hrtime": "^1.0.0",
-        "@typescript-eslint/eslint-plugin": "^4.10.0",
-        "@typescript-eslint/parser": "^4.10.0",
-        "eslint": "^7.15.0",
+        "@types/expect.js": "^0.3.32",
+        "@types/glob": "^9.0.0",
+        "@types/lodash.sortby": "^4.7.9",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.19.2",
+        "@types/pretty-hrtime": "^1.0.3",
+        "@types/vscode": "^1.85.0",
+        "@typescript-eslint/eslint-plugin": "^8.49.0",
+        "@typescript-eslint/parser": "^8.49.0",
+        "@eslint/js": "^9.0.0",
+        "typescript-eslint": "^8.49.0",
+        "@vscode/test-electron": "^2.1.5",
+        "esbuild": "^0.27.1",
+        "eslint": "^9.39.2",
         "expect.js": "0.3.1",
-        "mocha": "^7.1.1",
-        "typescript": "^3.9.7",
-        "vscode": "^1.1.37"
+        "glob": "^13.0.0",
+        "mocha": "^11.7.5",
+        "typescript": "^5.9.3"
     },
     "dependencies": {
-        "axios": "^0.21.1",
-        "didyoumean2": "^3.0.0",
-        "pretty-hrtime": "^1.0.3",
+        "axios": "^1.13.2",
+        "didyoumean2": "^7.0.4",
+        "https-proxy-agent": "^7.0.6",
         "lodash.sortby": "^4.7.0",
-        "https-proxy-agent": "^5.0.0"
+        "pretty-hrtime": "^1.0.3"
     }
 }

@@ -21,7 +21,7 @@ export class AzureClient implements vsc.Disposable {
     };
     private _apiVersion = {
         'api-version': '7.1'
-    }
+    };
 
     private client!: AxiosInstance;
     private teamClient!: AxiosInstance;
@@ -308,7 +308,7 @@ export class AzureClient implements vsc.Disposable {
         const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
         finish();
 
-        return result.data.value.map(TaskInfoMapper.fromWorkItemInfo);
+        return result.data.value.map(item => TaskInfoMapper.fromWorkItemInfo(item, this.config.process));
     }
 
     public createOrUpdateTask(task: TaskInfo): Promise<number> {

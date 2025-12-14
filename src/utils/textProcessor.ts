@@ -18,7 +18,7 @@ export class TextProcessor {
     public static getIteration(allLines: string[], currentLine: number): IterationTextLine | undefined {
         const iterationInfo = TextProcessor.getIterationInfo(allLines, currentLine);
         if (!iterationInfo) {
-            return;
+            return undefined;
         }
 
         return iterationInfo;
@@ -34,6 +34,8 @@ export class TextProcessor {
                 };
             }
         }
+
+        return undefined;
     }
 
     private static getIterationID(line: string) {
@@ -74,6 +76,8 @@ export class TextProcessor {
                 };
             }
         }
+
+        return undefined;
     }
 
     public static getAreasIndices(allLines: string[], userStoryLine?: number): number[] {

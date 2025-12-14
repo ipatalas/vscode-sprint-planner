@@ -68,5 +68,5 @@ export function activate(context: vsc.ExtensionContext): void {
 }
 
 // this method is called when your extension is deactivated
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+ 
 export function deactivate(): void {}

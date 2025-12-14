@@ -3,6 +3,20 @@ All notable changes to the "vscode-sprint-planner" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+
+## [0.7.0]
+### Added
+- Merged [#53](https://github.com/ipatalas/vscode-sprint-planner/pull/53):
+  - Added team member completion provider for better developer experience
+  - Updated Azure DevOps API version to 7.1 (from 5.0/5.1)
+  - Improved task formatting with better spacing for assignees and tags
+  - Added new interfaces for Tags and Team Members
+### Changed
+- Bumped all packages to latest versions
+- Extension is now bundled and 60% smaller (1MB -> 400KB)
+### Fixed
+- Fixed part of [#32](https://github.com/ipatalas/vscode-sprint-planner/issues/32) related to not pulling estimate field for Scrum process type
+
 ## [0.6.6]
 ### Changed
 - Updated logo, title and description to comply with Microsoft guidelines

@@ -8,7 +8,7 @@ const ConfigurationKey = 'planner.azure-devops';
 const SnippetsConfigurationKey = 'planner.azure-devops.snippets';
 
 export class Configuration implements vsc.Disposable {
-    public process: string | undefined;
+    public process: 'Agile' | 'Scrum' | undefined;
     public organization: string | undefined;
     public project: string | undefined;
     public team: string | undefined;
@@ -101,7 +101,7 @@ export class Configuration implements vsc.Disposable {
 
         try {
             await Promise.all(promises);
-        } catch (err) {
+        } catch {
             const seeDetailsAction = 'See details';
             vsc.window
                 .showErrorMessage(
@@ -134,7 +134,7 @@ export class Configuration implements vsc.Disposable {
                     );
                 }
 
-                fs.readFile(filePath, { encoding: 'UTF8' }, (err, data) => {
+                fs.readFile(filePath, { encoding: 'utf8' }, (err: NodeJS.ErrnoException | null, data: string) => {
                     if (err) {
                         reject(err);
                     } else {

@@ -8,7 +8,7 @@ import { Configuration } from '../utils/config';
 import { TaskMapper } from '../utils/mappers';
 import { LockableCommand } from './lockableCommand';
 
-import sortBy = require('lodash.sortby');
+import sortBy from 'lodash.sortby';
 import { inspect } from 'util';
 import axios from 'axios';
 

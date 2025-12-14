@@ -24,9 +24,9 @@ export class UserStoryCompletionProvider implements vsc.CompletionItemProvider {
 					});
 				}
 			} catch (err) {
-				if (err) {
+				if (err instanceof Error) {
 					vsc.window.showErrorMessage(err.message);
-					this.logger.log(err);
+					this.logger.log(err.message);
 				}
 			}
 		}

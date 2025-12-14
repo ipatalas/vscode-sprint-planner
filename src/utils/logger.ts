@@ -9,7 +9,7 @@ export class Logger implements vsc.Disposable {
     public debugEnabled = false;
 
     constructor() {
-        this.logger = vsc.window.createOutputChannel('Azure DevOps planner');
+        this.logger = vsc.window.createOutputChannel('Sprint planner');
     }
 
     public log(text: string, appendLine = true): ((text: string) => void) | undefined {
@@ -31,6 +31,8 @@ export class Logger implements vsc.Disposable {
                 this.isLineStillOpen = false;
             };
         }
+
+        return undefined;
     }
 
     public show(): void {
