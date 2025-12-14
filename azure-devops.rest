@@ -7,67 +7,73 @@
 # Get current iteration
 # @name currentIteration
 GET {{baseUrl}}/work/teamsettings/iterations?$timeframe=current&{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 {{
   iterationId = response.parsedBody.value[0].id
 }}
 ###
+GET {{orgUrl}}/_apis/projects/Scrum?{{apiVersionParam}}
+Authorization: Basic PAT {{token}}
+###
+GET {{orgUrl}}/_apis/projects/4101923e-4ebe-4f0e-be03-7c7fe94136bb/properties
+Authorization: Basic PAT {{token}}
+
+###
 GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 # @disabled
 # User Story is an item with rel == null
 GET {{baseUrl}}/work/teamsettings/iterations/{{iterationId}}/workitems?{{apiVersionPreviewParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/workItems/1?$expand=Relations
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&fields=System.Title,System.AreaPath,System.TeamProject,System.IterationPath
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/workitems?ids=1&{{apiVersionParam}}&$expand=Relations,Links
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/workitems?ids=2&{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/classificationNodes/Areas?$depth=10&{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/tags?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 # @name GetTeam
-GET {{orgUrl}}/teams?{{apiVersionPreviewParam}}
-Authorization: Basic {{token}}
-
+GET {{orgUrl}}/_apis/teams?{{apiVersionPreviewParam}}
+Authorization: Basic PAT {{token}}
 {{
     teamId = response.parsedBody.value[0].id
     projectId = response.parsedBody.value[0].projectId
 }}
 ###
 GET {{orgUrl}}/projects/{{projectId}}/teams/{{teamId}}/members?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{orgUrl}}/projects/Scrum?{{apiVersionParam}}
 Authorization: Basic {{token}}
 ###
 GET {{orgUrl}}/projects/Scrum/teams/Scrum%20Team/members
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 
 GET {{baseUrl}}/wit/workitemrelationtypes?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 GET {{baseUrl}}/wit/workitemtypes/Task/fields/Microsoft.VSTS.Common.Activity?$expand=All&{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 ###
 # Microsoft.VSTS.Scheduling.RemainingWork
 # Microsoft.VSTS.Scheduling.OriginalEstimate
 
 POST {{baseUrl}}/wit/workitems/$Task?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 Content-Type: application/json-patch+json
 
 [
@@ -121,7 +127,7 @@ Content-Type: application/json-patch+json
 ###
 # https://docs.microsoft.com/en-us/rest/api/azure/devops/wit/work%20items/update?view=azure-devops-rest-5.0
 PATCH {{baseUrl}}/wit/workitems/66?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 Content-Type: application/json-patch+json
 
 [
@@ -159,7 +165,7 @@ Content-Type: application/json-patch+json
 ###
 
 POST {{baseUrl}}/wit/workitems/$User%20Story?{{apiVersionParam}}
-Authorization: Basic {{token}}
+Authorization: Basic PAT {{token}}
 Content-Type: application/json-patch+json
 
 [
