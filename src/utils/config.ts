@@ -8,7 +8,7 @@ const ConfigurationKey = 'planner.azure-devops';
 const SnippetsConfigurationKey = 'planner.azure-devops.snippets';
 
 export class Configuration implements vsc.Disposable {
-    public process: string | undefined;
+    public process: 'Agile' | 'Scrum' | undefined;
     public organization: string | undefined;
     public project: string | undefined;
     public team: string | undefined;

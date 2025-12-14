@@ -308,7 +308,7 @@ export class AzureClient implements vsc.Disposable {
         const result = await this.client.get<WorkItemInfoResult>('/wit/workitems', { params });
         finish();
 
-        return result.data.value.map(TaskInfoMapper.fromWorkItemInfo);
+        return result.data.value.map(item => TaskInfoMapper.fromWorkItemInfo(item, this.config.process));
     }
 
     public createOrUpdateTask(task: TaskInfo): Promise<number> {
