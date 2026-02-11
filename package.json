@@ -171,7 +171,7 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "axios": "^1.13.2",
+        "axios": "^1.13.5",
         "didyoumean2": "^7.0.4",
         "https-proxy-agent": "^7.0.6",
         "lodash.sortby": "^4.7.0",
